@@ -32,11 +32,18 @@ sub gendata
     my $main = shift;
     my $user = $main->{user};
     my $userid = useridbyuser($main, $user);
-    my $acc = $main->{dbcon}->getsimplequeryhash("select p.summ,c.name
-                                                    from PersonalAccounts as p, currency as c
-                                                        where c.CurrId=p.CurrId
-                                                        and p.enabled=1
-                                                        and p.userid='$userid'") unless $user eq 'everyone';
+    my $acc = $main->{dbcon}->getsimplequeryhash("
+                select
+                    p.summ,
+                    c.name
+                from
+                    PersonalAccounts as p,
+                    currency as c
+                where
+                    c.CurrId=p.CurrId
+                    and p.enabled=1
+                    and p.userid='$userid'
+                ") unless $user eq 'everyone';
     $main->{userinfo}->{summ} = $acc->{summ} || 0;
     $main->{userinfo}->{CurrName} = $acc->{name} || 'WME';
     $main->{userinfo}->{id} = $main->{id};

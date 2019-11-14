@@ -78,7 +78,14 @@ sub checkvalues
             return $main;
         }
 
-        my $arr = $main->{dbcon}->getsimplequeryhash("select userid from user where login = '$main->{form}->{loginname}'");
+        my $arr = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        userid
+                    from
+                        user
+                    where
+                        login = '$main->{form}->{loginname}'
+                    ");
 
         if(not $arr or $arr <= 0)
         {
@@ -120,8 +127,8 @@ sub trylogin
         {
             if(checkenv($arr,$uservar,$cookies))
             {
-                #    $main->{errline} .= &errline(0,"Пользователь $arr->{login} успешно вошел в систему!
-                #        В последний раз $arr->{time}");
+                # $main->{errline} .= &errline(0,"Пользователь $arr->{login} успешно вошел в систему!
+                #                       В последний раз $arr->{time}");
                 # $main->{errline} .= &errline(0,"  <br>session = $cookies->{session}<br> "  );
                 # $main->{errline} .= &errline(0,"REFERER $main->{referer} ...");
                 # $main->{errline} .= &errline(0,"Location: $main->{referer}\n\n");
@@ -139,7 +146,11 @@ sub trylogin
 sub checkpass
 {
     my $main = shift;
-    my $query = "select passwd, salt, login, userid
+    my $query = "select
+                    passwd,
+                    salt,
+                    login,
+                    userid
                 FROM
                     user
                 WHERE
@@ -206,21 +217,24 @@ sub create_session
 
     # Добавляем запись в таблицу сессий
 
-    my $query = "INSERT INTO session
-             SET session = '$session',
-                 userid = $arr->{userid},
-                 time = CURRENT_TIMESTAMP,
-                 host ='$uservar->{remote_host}',
-                 ip = '$uservar->{remote_addr}',
-                 forwarded = '$uservar->{forwarded}'";
+    my $query = "INSERT INTO
+                    session
+                 SET session = '$session',
+                     userid = $arr->{userid},
+                     time = CURRENT_TIMESTAMP,
+                     host ='$uservar->{remote_host}',
+                     ip = '$uservar->{remote_addr}',
+                     forwarded = '$uservar->{forwarded}'";
 
-    $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete from session
-                            where
-                            userid = '$arr->{userid}' and
-                            host ='$uservar->{remote_host}' and
-                            ip = '$uservar->{remote_addr}' and
-                            forwarded = '$uservar->{forwarded}';
-                            ");
+    $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+        delete from
+            session
+        where
+            userid = '$arr->{userid}' and
+            host ='$uservar->{remote_host}' and
+            ip = '$uservar->{remote_addr}' and
+            forwarded = '$uservar->{forwarded}';
+        ");
     $main->{dbcon}->insertsimplequery($main->{dbhlr}, $query);
     $main->{set_header} = "Set-Cookie: session=$session; expires=Friday, 25-Dec-2020 23:59:59 GMT; path=/; domain=$main->{urlbase};\n\n";
     return $main;
@@ -230,10 +244,12 @@ sub update_session
 {
     my $main = shift;
     my $session = shift;
-    my $query = "UPDATE session
+    my $query = "UPDATE
+                    session
                 SET
                     time = CURRENT_TIMESTAMP
-                WHERE session = '$session' ";
+                WHERE
+                    session = '$session' ";
     $main->{dbcon}->insertsimplequery($main->{dbhlr}, $query);
     return 1;
 }
@@ -246,8 +262,10 @@ sub delete_old_session
 
     if($session)
     {
-        my $query = "delete from session
-                        WHERE session = '$session' ";
+        my $query = "delete from
+                        session
+                    WHERE
+                        session = '$session' ";
         $main->{dbcon}->insertsimplequery($main->{dbhlr}, $query);
         return 1;
     }

@@ -44,20 +44,55 @@ my $s = insertsimplequery($dbh, "create database $main->{db};");
 
 if($main->{version} eq '5')
 {
-    $main->{query} = "create user '$main->{siteuser}'\@'$main->{host}' identified by '$main->{siteuserpass}';";
+    $main->{query} = "
+        create
+            user '$main->{siteuser}'\@'$main->{host}'
+        identified by
+            '$main->{siteuserpass}';";
     my $s = insertsimplequery($dbh, $main->{query});
-    $main->{query} = "update mysql.user set password=PASSWORD('$main->{siteuserpass}') where user='$main->{siteuser}';";
+    $main->{query} = "
+        update
+            mysql.user
+        set
+            password=PASSWORD('$main->{siteuserpass}')
+        where
+            user='$main->{siteuser}';";
     my $s = insertsimplequery($dbh, $main->{query});
-    $main->{query} = "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP on $main->{db}.* to '$main->{siteuser}'\@'$main->{host}';";
+    $main->{query} = "
+        GRANT
+            SELECT,
+            INSERT,
+            UPDATE,
+            DELETE,
+            CREATE,
+            DROP
+        on
+            $main->{db}.*
+        to
+            '$main->{siteuser}'\@'$main->{host}';";
     my $s = insertsimplequery($dbh, $main->{query});
     $main->{query} = "flush privileges;";
     my $s = insertsimplequery($dbh, $main->{query});
 }
 elsif($main->{version} eq '4')
 {
-    $main->{query} = "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, alter
-                        ON $main->{db}.* to '$main->{siteuser}'\@'$main->{host}'
-                        identified by '$main->{siteuserpass}' with grant option; ";
+    $main->{query} = "
+        GRANT
+            SELECT,
+            INSERT,
+            UPDATE,
+            DELETE,
+            CREATE,
+            DROP,
+            alter
+        ON
+            $main->{db}.*
+        to
+            '$main->{siteuser}'\@'$main->{host}'
+        identified by
+            '$main->{siteuserpass}'
+        with
+            grant option; ";
     my $s = insertsimplequery($dbh, $main->{query});
     $main->{query} = "flush privileges;";
     my $s = insertsimplequery($dbh, $main->{query});
