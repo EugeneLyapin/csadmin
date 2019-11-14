@@ -13,6 +13,7 @@ Counter Strike 1.6 Web Control panel
 * Add/delete counter strike modes and maps
 
 ## Prerequisites
+Packages:
 * Perl5
 * MySQL server and client
 * Apache2+mod_perl
