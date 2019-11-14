@@ -13,7 +13,7 @@ use Tt::Auth;
 use HTTP::Request::Common qw(POST);
 
 our @EXPORT = qw(
-        genpaydata
+            genpaydata
         );
 
 sub genpaydata
@@ -58,6 +58,7 @@ sub genpaydata
         details => 'r',
         paccdetails => 'r'
     };
+
     $main = AuthUserActionHash($main, $object, 'ObjectClass', $action);
     $main = checkcurdate($main);
 
@@ -66,6 +67,7 @@ sub genpaydata
         checkInvId($main);
         delpayment($main);
     }
+
     if($main->{pay}->{addmoneytopacc})
     {
         checkInvId($main);
@@ -128,10 +130,12 @@ sub delpayment
     my $main = shift;
     my $ureg = "and userid='$main->{pay}->{userid}'" if $main->{pay}->{userid} > 0;
     my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
-                        delete from payments
+                        delete from
+                            payments
                         where
-                        payments.InvId=$main->{pay}->{InvId}
-                        $ureg and pflag=1") if $main->{pay}->{InvId};
+                            payments.InvId=$main->{pay}->{InvId}
+                            $ureg and pflag=1
+                        ") if $main->{pay}->{InvId};
     return;
 }
 
@@ -150,80 +154,86 @@ sub showpayments
     $main->{pay}->{action} = 'empty' unless ( $main->{pay}->{action} eq 'details'
                         || $main->{pay}->{action} eq 'paccdetails');
     $main->{rcurr} = $main->{dbcon}->getsimplequery("select * from currency;");
-    $main->{pacc} = $main->{dbcon}->getsimplequeryhash("select
-            *, (select name from currency where CurrId=p.CurrId) as currname
-        from
-            PersonalAccounts as p
-            where userid='$main->{pay}->{userid}';");
+    $main->{pacc} = $main->{dbcon}->getsimplequeryhash("
+                        select *,
+                        (select name from currency where CurrId=p.CurrId) as currname
+                        from
+                            PersonalAccounts as p
+                        where
+                            userid='$main->{pay}->{userid}';
+                        ");
 
-    $main->{rpay} = $main->{dbcon}->getsimplequery("select payments.InvId,
-                                        stype.description,
-                                        ostype.description,
-                                        u.login,
-                                        t.description,
-                                        g.description,
-                                        p.description,
-                                        l.description,
-                                        payments.description as pdescription,
-                                        payments.numslots,
-                                        payments.summ,
-                                        payments.ctime,
-                                        payments.ptime,
-                                        payments.pflag,
-                                        payments.sid,
-                                        curr.name as currname,
-                                        t.tarifid,
-                                        g.gameid,
-                                        l.locationid,
-                                        p.periodid,
-                                        stype.stypeid,
-                                        ostype.ostypeid
-                                FROM
-                                    tarif as t,
-                                    period as p,
-                                    location as l,
-                                    game as g,
-                                    payments as payments,
-                                    ostype as ostype,
-                                    srvtype as stype,
-                                    user as u,
-                                    currency as curr
-                                where
-                                    curr.CurrId=payments.CurrId
-                                    and stype.stypeid=payments.stypeid
-                                    and ostype.ostypeid=payments.ostypeid
-                                    and payments.userid=u.userid
-                                    and t.tarifid=payments.tarifid
-                                    and g.gameid=payments.gameid
-                                    and l.locationid=payments.locationid
-                                    and p.periodid=payments.periodid
-                                    and payments.pflag=1
-                                    $ureg
-                                    $regstr
-                                    ");
+    $main->{rpay} = $main->{dbcon}->getsimplequery("
+                        select
+                            payments.InvId,
+                            stype.description,
+                            ostype.description,
+                            u.login,
+                            t.description,
+                            g.description,
+                            p.description,
+                            l.description,
+                            payments.description as pdescription,
+                            payments.numslots,
+                            payments.summ,
+                            payments.ctime,
+                            payments.ptime,
+                            payments.pflag,
+                            payments.sid,
+                            curr.name as currname,
+                            t.tarifid,
+                            g.gameid,
+                            l.locationid,
+                            p.periodid,
+                            stype.stypeid,
+                            ostype.ostypeid
+                        FROM
+                            tarif as t,
+                            period as p,
+                            location as l,
+                            game as g,
+                            payments as payments,
+                            ostype as ostype,
+                            srvtype as stype,
+                            user as u,
+                            currency as curr
+                        where
+                            curr.CurrId=payments.CurrId
+                            and stype.stypeid=payments.stypeid
+                            and ostype.ostypeid=payments.ostypeid
+                            and payments.userid=u.userid
+                            and t.tarifid=payments.tarifid
+                            and g.gameid=payments.gameid
+                            and l.locationid=payments.locationid
+                            and p.periodid=payments.periodid
+                            and payments.pflag=1
+                            $ureg
+                            $regstr
+                        ");
 
-    $main->{rpaccpay} = $main->{dbcon}->getsimplequery("select
-                    payments.InvId, u.userid, u.userid,
-                                        u.login, u.userid, u.userid, u.userid, u.userid,
-                                        payments.description as pdescription, u.userid,
-                                        payments.summ,
-                                        payments.ctime,
-                                        payments.ptime,
-                                        payments.pflag, u.userid,
-                                        curr.name as currname, u.userid, u.userid,
-                                        u.userid, u.userid,u.userid, u.userid
-                                FROM
-                                    payments as payments,
-                                    user as u,
-                                    currency as curr
-                                where
-                                    curr.CurrId=payments.CurrId
-                                    and payments.userid=u.userid
-                                    and payments.paccflag=1
-                                    $ureg
-                                    and payments.pflag=1
-                                    $regstr
-                                    ");
+    $main->{rpaccpay} = $main->{dbcon}->getsimplequery("
+                            select
+                                payments.InvId, u.userid, u.userid,
+                                u.login, u.userid, u.userid, u.userid, u.userid,
+                                payments.description as pdescription, u.userid,
+                                payments.summ,
+                                payments.ctime,
+                                payments.ptime,
+                                payments.pflag, u.userid,
+                                curr.name as currname, u.userid, u.userid,
+                                u.userid, u.userid,u.userid, u.userid
+                            FROM
+                                payments as payments,
+                                user as u,
+                                currency as curr
+                            where
+                                curr.CurrId=payments.CurrId
+                                and payments.userid=u.userid
+                                and payments.paccflag=1
+                                $ureg
+                                and payments.pflag=1
+                                $regstr
+                            ");
 
     return $main if $main->{pay}->{action} eq 'details';
     return $main if $main->{pay}->{action} eq 'paccdetails';
@@ -231,14 +241,17 @@ sub showpayments
     $ureg = undef;
     $ureg = "and p.userid='$main->{pay}->{userid}'" if $main->{pay}->{userid} > 0;
 
-    $main->{rpaylog} =  $main->{dbcon}->getsimplequery("select
-            p.time, p.event,p.summ,p.dkflag, u.login, curr.name as curname
-            from paylog as p, currency as curr, user as u
-            where
-            curr.CurrId=p.CurrId $ureg
-            and u.userid=p.userid
-            and  ( cast(p.time as date) between '$main->{pdates}->{from}' and '$main->{pdates}->{to}' )
-            order by p.time desc; ");
+    $main->{rpaylog} =  $main->{dbcon}->getsimplequery("
+                            select
+                                p.time, p.event,p.summ,p.dkflag, u.login, curr.name as curname
+                                from paylog as p, currency as curr, user as u
+                            where
+                                curr.CurrId=p.CurrId $ureg
+                                and u.userid=p.userid
+                                and  ( cast(p.time as date) between '$main->{pdates}->{from}' and '$main->{pdates}->{to}' )
+                            order by
+                                p.time desc;
+                            ");
     $main->{log_visible} = 0;
     $main->{log_visible} = 1 if $main->{rpaylog} >0;
     $main->{paid} = 0;
@@ -272,15 +285,24 @@ sub dopayment
         $main->{res}->{SignatureValue} = $ctx->hexdigest;
         $main = genrequest($main);
 
-        my $rcurr = $main->{dbcon}->getsimplequeryhash("select CurrId from currency where name='$main->{res}->{IncCurrLabel}';");
+        my $rcurr = $main->{dbcon}->getsimplequeryhash("
+                        select
+                            CurrId
+                        from
+                            currency
+                        where
+                            name='$main->{res}->{IncCurrLabel}';
+                        ");
         my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
-                        update payments set
+                    update
+                        payments
+                    set
                         CurrId='$rcurr->{CurrId}'
-                        where InvId=$main->{res}->{InvId}
+                    where
+                        InvId=$main->{res}->{InvId}
                     ");
         last;
     }
-
 
     if ( $main->{res}->{error} )
     {
@@ -309,7 +331,6 @@ sub tryuseraccount
     $main->{pay}->{action} = 'dopayment';
     $main->{errline} =  "Заказ оплачен";
     $main->{linecolor} =  "green";
-
 
     foreach my $s (keys %{$main->{rpay}})
     {
@@ -342,17 +363,27 @@ sub tryuseraccount
         last unless $main->{status_flag} eq 'ok';
         my $rcurr = $main->{dbcon}->getsimplequeryhash("select CurrId from currency where name='$main->{res}->{IncCurrLabel}';");
         my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
-                                                update payments
-                                            set
-                                                pflag=0,
-                                                CurrId='$rcurr->{CurrId}',
-                                                ptime = CURRENT_TIMESTAMP
-                                            where
-                                                InvId=$main->{res}->{InvId}
-                                                and summ='$main->{res}->{OutSum}'
-                                                and pflag=1") if $main->{res}->{InvId};
+                    update
+                        payments
+                    set
+                        pflag=0,
+                        CurrId='$rcurr->{CurrId}',
+                        ptime = CURRENT_TIMESTAMP
+                    where
+                        InvId=$main->{res}->{InvId}
+                        and summ='$main->{res}->{OutSum}'
+                        and pflag=1
+                    ") if $main->{res}->{InvId};
 
-        my $p = $main->{dbcon}->getsimplequeryhash("select pflag from payments where InvId=$main->{res}->{InvId};");
+        my $p = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        pflag
+                    from
+                        payments
+                    where
+                        InvId=$main->{res}->{InvId};
+                    ");
+
         $main->{errline} .= " Error when update payments ... " if $p->{pflag};
         $main->{success} .= "Done... Updated payments" unless $p->{pflag};
         $main->{status_flag} = 'ok' unless $p->{pflag};
@@ -360,7 +391,6 @@ sub tryuseraccount
     }
 
     return $main;
-
 }
 
 sub genrequest
@@ -387,6 +417,5 @@ sub genrequest
     $main->{res}->{result} = $res->as_string;
     return $main;
 }
-
 
 1;

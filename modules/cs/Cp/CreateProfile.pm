@@ -37,22 +37,20 @@ our @EXPORT = qw(
         );
 
 
-
-
 sub checkdata
 {
     my $main = shift;
 
     if($main->{profile}->{game}
-    && $main->{profile}->{login}
-    && $main->{profile}->{srvtype}
-    && $main->{profile}->{pass1}
-    && $main->{profile}->{pass2}
-    && $main->{profile}->{tarif}
-    && $main->{profile}->{ostype}
-    && $main->{profile}->{slots}
-    && $main->{profile}->{period}
-    && $main->{profile}->{location})
+        && $main->{profile}->{login}
+        && $main->{profile}->{srvtype}
+        && $main->{profile}->{pass1}
+        && $main->{profile}->{pass2}
+        && $main->{profile}->{tarif}
+        && $main->{profile}->{ostype}
+        && $main->{profile}->{slots}
+        && $main->{profile}->{period}
+        && $main->{profile}->{location})
     {
         return(1) if($main->{profile}->{pass1} eq $main->{profile}->{pass2});
     }
@@ -102,11 +100,11 @@ sub addPersonalAccount
                 from PersonalAccounts where userid='$userid';") ;
     $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into PersonalAccounts
                     set
-                    pid = '$pid',
-                    userid = '$userid',
-                    enabled = 1,
-                    summ = 0,
-                    CurrId=(select CurrId from currency where name='WME');
+                        pid = '$pid',
+                        userid = '$userid',
+                        enabled = 1,
+                        summ = 0,
+                        CurrId=(select CurrId from currency where name='WME');
                     ") unless $acc->{pid};
     return $main;
 }
@@ -121,9 +119,10 @@ sub addfakeuser
     my ($pwd,$salt) = cryptpass($main->{profile}->{pass1});
     $main->{dbcon}->insertuser($main->{profile}->{login},$pwd, $salt, $main->{profile}->{email}, $g->{gid});
     $main->{dbcon}->insertsimplequery($main->{dbhlr},"update user set
-    role='<rhash><role fakerole=\"1\" users=\"1\" /></rhash>',
-    weight='$g->{weight}'
-    where login='$main->{profile}->{login}';");
+            role='<rhash><role fakerole=\"1\" users=\"1\" /></rhash>',
+            weight='$g->{weight}'
+        where
+            login='$main->{profile}->{login}';");
     my $userid = $main->{dbcon}->getuserid($main->{profile}->{login});
     my $ipaddr;
     my $ipid = getipid($main);
@@ -156,10 +155,12 @@ sub addnewuser
     $g->{weight} =0 unless $g->{weight} > 0;
     my ($pwd,$salt) = cryptpass($main->{profile}->{pass1});
     $main->{dbcon}->insertuser($main->{profile}->{login},$pwd, $salt, $main->{profile}->{email}, $g->{gid});
-    $main->{dbcon}->insertsimplequery($main->{dbhlr},"update user set
-    role='<rhash><role fakerole=\"1\" users=\"1\" /></rhash>',
-    weight='$g->{weight}'
-    where login='$main->{profile}->{login}';");
+    $main->{dbcon}->insertsimplequery($main->{dbhlr},"update user
+        set
+            role='<rhash><role fakerole=\"1\" users=\"1\" /></rhash>',
+            weight='$g->{weight}'
+        where
+            login='$main->{profile}->{login}';");
     my $userid = $main->{dbcon}->getuserid($main->{profile}->{login});
     addPersonalAccount($main, $userid);
     my $u = $main->{dbcon}->getsimplequeryhash("select userid from user where login='$main->{profile}->{login}';");
@@ -302,7 +303,6 @@ sub createuserprofile
     $main = genpayment($main) if $main->{status_flag} eq 'fail';
     $main->{success} = errline(0,'Заказ успешно создан') if $main->{status_flag} eq 'ok';
     return $main;
-
 }
 
 sub UserProfileForm
@@ -338,7 +338,6 @@ sub UserProfileForm
     $main->{rsrvtype} = $main->{dbcon}->getsimplequery("select stypeid,description from srvtype");
     $main->{rgame} = $main->{dbcon}->getsimplequery("select gameid,name,hids from game");
     return $main;
-
 }
 
 sub extendserver
@@ -350,6 +349,7 @@ sub extendserver
         $main->{errline} = errline(0,"Сервер $main->{profile}->{sid} включен ... ");
         return $main;
     }
+
     setsrvstatus($main,'enable',$main->{res}->{sid}, 'enabled') ;
     my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
                                             update srv set
@@ -617,13 +617,14 @@ sub changecfg
     my $ftpstatus = shift;
     my ($status,$s);
     return(0) if(not $line or not defined($sid));
-    my $csid = $main->{dbcon}->getsimplequery("select
-                                    sid
-                                FROM
-                                    $table
-                                where
-                                    sid='$sid'
-                                    ");
+    my $csid = $main->{dbcon}->getsimplequery("
+                    select
+                        sid
+                    FROM
+                        $table
+                    where
+                        sid='$sid'
+                    ");
 
     foreach my $s (keys %{$csid})
     {
@@ -635,20 +636,24 @@ sub changecfg
     }
     else
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "insert into $table
-            (sid,value) values(
-                '$sid',
-                ?);",$line);
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                insert into
+                    $table(sid,value)
+                values(
+                    '$sid',
+                    ?);", $line);
 
     }
 
     my $userid = useridbysid($main, $sid);
-    my $rv = $main->{dbcon}->getsimplequeryhash("select s.name, c.path
-                                FROM
-                                    srvconfigs as s, configcategory as c
-                                where
-                                    s.ctable = '$table' and s.category=c.cid
-                                    ");
+    my $rv = $main->{dbcon}->getsimplequeryhash("
+                select
+                    s.name, c.path
+                FROM
+                    srvconfigs as s, configcategory as c
+                where
+                    s.ctable = '$table' and s.category=c.cid
+                ");
     my $cpath = $rv->{path};
     my $cname = $rv->{name};
     my $fpath = "u$userid/s$sid/$cpath";
@@ -682,6 +687,5 @@ sub ChangeServerAfterPayment
     $main = try_user_account($main);
     return $main;
 }
-
 
 1;

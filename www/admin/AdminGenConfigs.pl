@@ -90,14 +90,35 @@ sub configform
     my $pcid = shift;
     my $line;
 
-    my $cid = $main->{dbcon}->getsimplequery("select cid,name from srvconfigs; ");
-    my $catid = $main->{dbcon}->getsimplequery("select cid,name from configcategory; ");
+    my $cid = $main->{dbcon}->getsimplequery("
+                select
+                    cid,
+                    name
+                from
+                    srvconfigs;
+                ");
+    my $catid = $main->{dbcon}->getsimplequery("
+                    select
+                        cid,
+                        name
+                    from
+                        configcategory;
+                    ");
 
-    my $rconfig = $main->{dbcon}->getsimplequeryhash("select cid,name,category,description,value,ctable
-                        from
-                            srvconfigs
-                        where
-                            cid='$pcid' LIMIT 1");
+    my $rconfig = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        cid,
+                        name,
+                        category,
+                        description,
+                        value,
+                        ctable
+                    from
+                        srvconfigs
+                    where
+                        cid='$pcid'
+                    LIMIT 1
+                    ");
 
     my $configinfo = $rconfig;
 
@@ -137,13 +158,13 @@ A
     $line .= sprintf <<A;
             <table width=400>
 
-                    <tr><td>
-                    <fieldset><legend>Параметры файла $configinfo->{name}:</legend>
+            <tr><td>
+            <fieldset><legend>Параметры файла $configinfo->{name}:</legend>
             <table valign=top><tr valign=top><td border=0 width=80 valign=top>
             <tr><td>Название:</td><td><input type="text" style='width:200px' name="name" value="$configinfo->{name}"></td></tr>
-                        <tr><td>Имя таблицы:</td><td><input type="text" name="ctable" style='width:200px' value="$configinfo->{ctable}"></td></tr>
-                        <tr><td>Описание:</td><td><input type="text" name="description" style='width:300px' value="$configinfo->{description}"></td></tr>
-                        <tr><td>Категория</td>
+                <tr><td>Имя таблицы:</td><td><input type="text" name="ctable" style='width:200px' value="$configinfo->{ctable}"></td></tr>
+                <tr><td>Описание:</td><td><input type="text" name="description" style='width:300px' value="$configinfo->{description}"></td></tr>
+                <tr><td>Категория</td>
             <td>
 A
 
@@ -206,7 +227,9 @@ sub changeconfiginfo
     my $pcid = shift;
 
     return if not($pcid);
-    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update srvconfigs
+    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                update
+                    srvconfigs
                 set
                     name='$form->{name}',
                     category='$form->{category}',
@@ -214,7 +237,7 @@ sub changeconfiginfo
                     ctable='$form->{ctable}',
                     value= ?
                 where
-                    cid=$form->{cid}",$form->{value});
+                    cid=$form->{cid}", $form->{value});
 
     return($s);
 }
@@ -226,8 +249,11 @@ sub addconfig
 
     return if($pcid);
 
-    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "insert into srvconfigs
-                (name,category,description,ctable,value) values(
+    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+            insert into
+                srvconfigs
+                (name,category,description,ctable,value)
+            values(
                 '$form->{name}',
                 '$form->{category}',
                 '$form->{description}',
@@ -242,12 +268,19 @@ sub getcfg
 {
     my $main = shift;
 
-    my $rcfg = $main->{dbcon}->getsimplequery("select s.cid as cid,s.name as name,c.name as category,s.description as description,s.ctable as ctable
-                        from
-                            srvconfigs as s, configcategory as c
-                        where
-                            c.cid = s.category
-                        ;");
+    my $rcfg = $main->{dbcon}->getsimplequery("
+                    select
+                        s.cid as cid,
+                        s.name as name,
+                        c.name as category,
+                        s.description as description,
+                        s.ctable as ctable
+                    from
+                        srvconfigs as s, configcategory as c
+                    where
+                        c.cid = s.category;
+                    ");
+
     my ($line,$mrcfg);
 
     $line .= sprintf <<A;

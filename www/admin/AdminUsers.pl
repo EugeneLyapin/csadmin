@@ -85,14 +85,14 @@ sub gendata
 
     if($action eq 'editprofile')
     {
-    print "Location: AdminGetProfile.pl?userid=$userid&action=editprofile\n\n" if $userid;
+        print "Location: AdminGetProfile.pl?userid=$userid&action=editprofile\n\n" if $userid;
     }
 
     if($action eq 'enablegroup' or $action  eq 'disablegroup')
     {
-        #    $main = checkusergroupweight($main, $userid);
-        #    $main = checkgroupweight($main);
-        #    $main = getaclhash($main, $userid);
+        #$main = checkusergroupweight($main, $userid);
+        #$main = checkgroupweight($main);
+        #$main = getaclhash($main, $userid);
         my $gname = $main->{form}->{gname};
         $main->{aclh}->{role}->{$gname} = 1 if $action eq 'enablegroup';
         delete $main->{aclh}->{role}->{$gname} if $action eq 'disablegroup';
@@ -127,8 +127,22 @@ sub gendata
     if($action eq 'lock' or$action eq 'unlock' )
     {
         $main = checkusergroupweight($main, $userid);
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update user set locked=1 where userid='$userid'") if $action eq 'lock';
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update user set locked=0 where userid='$userid'") if $action eq 'unlock';
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    user
+                set
+                    locked=1
+                where
+                    userid='$userid'
+                ") if $action eq 'lock';
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    user
+                set
+                    locked=0
+                where
+                    userid='$userid'
+                ") if $action eq 'unlock';
     }
     if($action eq 'showall')
     {
@@ -145,10 +159,24 @@ sub setmaxweight
     my $w = 0;
     foreach my $s (keys %{$main->{aclh}->{role}})
     {
-        my $q = $main->{dbcon}->getsimplequeryhash("select weight from groups where gname = '$s'");
+        my $q = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        weight
+                    from
+                        groups
+                    where
+                        gname = '$s'
+                    ");
         $w = $q->{weight} if $q->{weight} > $w;
     }
-    my $q = $main->{dbcon}->getsimplequeryhash("update user set weight='$w' where userid='$userid'");
+    my $q = $main->{dbcon}->getsimplequeryhash("
+                update
+                    user
+                set
+                    weight='$w'
+                where
+                    userid='$userid'
+                ");
 
 }
 
@@ -160,13 +188,15 @@ sub enableuser
     my $status = 1;
     $status = 0 if($action eq 'disable');
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                user
-            set
-                enabled = '$status'
-            where
-                userid='$userid'
-                and login != '$main->{global}->{superuser}'");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    user
+                set
+                    enabled = '$status'
+                where
+                    userid='$userid'
+                    and login != '$main->{global}->{superuser}'
+                ");
     return $s;
 }
 
@@ -176,8 +206,14 @@ sub deleteuser
     my $userid = shift;
     $main->{errline} .= errline(1, "You can not delete SUPERUSER") if $main->{global}->{superuser} eq $main->{form}->{login};
     return $main if $main->{errline};
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete
-                from user where userid='$userid' and login != '$main->{global}->{superuser}'");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                delete
+                from
+                    user
+                where
+                    userid='$userid'
+                    and login != '$main->{global}->{superuser}'
+                ");
     return $main;
 }
 
@@ -213,11 +249,15 @@ sub saveuser
         return $main;
     }
     return $main unless $userid;
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                user
-            set
-                login = '$main->{form}->{login}'
-            where userid='$userid' and login != '$main->{global}->{superuser}'");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    user
+                set
+                    login = '$main->{form}->{login}'
+                where
+                    userid='$userid'
+                    and login != '$main->{global}->{superuser}'
+                ");
     return $main;
 }
 
@@ -226,9 +266,13 @@ sub userform
 {
     my $main = shift;
     my $userid = shift;
-    my $muid = $main->{dbcon}->getsimplequery("select
-                                    userid, login
-                                from user;");
+    my $muid = $main->{dbcon}->getsimplequery("
+                select
+                    userid,
+                    login
+                from
+                    user;
+                ");
 
     for my $ss (sort keys %{$muid})
     {
@@ -249,7 +293,16 @@ sub getuserinfo
     my $userid = shift;
     my $mgid;
     return $main unless $userid;
-    my $gid = $main->{dbcon}->getsimplequery("select gid,gname,description from groups where enabled=1");
+    my $gid = $main->{dbcon}->getsimplequery("
+                select
+                    gid,
+                    gname,
+                    description
+                from
+                    groups
+                where
+                    enabled=1
+                ");
     foreach my $ss (keys %{$gid})
     {
         $mgid->{$ss}->{gid} = $gid->{$ss}->[0];
@@ -257,12 +310,18 @@ sub getuserinfo
         $mgid->{$ss}->{description} = substr($gid->{$ss}->[2],0,50);
         $mgid->{$ss}->{description} = join(' ',$mgid->{$ss}->{description}, '...') if(length($mgid->{$ss}->{description}) == 50);
     }
-    my $ruserid = $main->{dbcon}->getsimplequeryhash("select
-                        userid,login,enabled,role, locked
+    my $ruserid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        userid,
+                        login,
+                        enabled,
+                        role,
+                        locked
                     from
                         user
                     where
-                        userid='$userid';");
+                        userid='$userid';
+                    ");
 
     $main->{userinfo} = $ruserid;
     $main->{mgid} = $mgid;
@@ -279,8 +338,14 @@ sub changeaclhash
     $main->{aclh} = createroothash($main) unless ( ishash $main->{aclh});
     my $rhash = $main->{aclh} || undef;
     $main->{form}->{rhash} = genhashtoxml($main, $rhash);
-    $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update user set role = ?
-                    where userid='$userid' and locked=0;", $main->{form}->{rhash});
+    $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+            update
+                user
+            set
+                role = ?
+            where
+                userid='$userid'
+                and locked=0;", $main->{form}->{rhash});
     return $main;
 }
 
@@ -289,11 +354,14 @@ sub savenewuser
         my $main = shift;
         my ($pwd,$salt) = cryptpass($main->{form}->{pass1});
         $main->{dbcon}->insertuser($main->{form}->{login},$pwd, $salt, $main->{form}->{email}, '0');
-        $main->{dbcon}->insertsimplequery($main->{dbhlr},"update user
+        $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                user
             set
                 role='<rhash><role fakerole=\"1\" /></rhash>' ,
                 weight=0
             where
-                login='$main->{form}->{login}';");
+                login='$main->{form}->{login}';
+            ");
     return $main;
 }

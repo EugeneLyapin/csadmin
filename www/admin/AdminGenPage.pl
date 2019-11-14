@@ -67,7 +67,14 @@ sub gendata
         changegroup => 'w',
         showall => 'r'
     };
-    my $q = $main->{dbcon}->getsimplequeryhash("select name from page where pageid='$pid'") if $pid;
+    my $q = $main->{dbcon}->getsimplequeryhash("
+                select
+                    name
+                from
+                    page
+                where
+                    pageid='$pid'
+                ") if $pid;
     my $pname = $q->{name} || $main->{id};
     $pname = 'ObjectClass' if $action eq 'newpage';
     $main->{p}->{pname} =$pname;
@@ -90,8 +97,22 @@ sub gendata
     if($action eq 'lockpage' or $action eq 'unlockpage')
     {
         checkw($main, $pid);
-        $s = $main->{dbcon}->getsimplequery("update page set locked=1 where pageid='$pid'") if($action eq 'lockpage');
-        $s = $main->{dbcon}->getsimplequery("update page set locked=0 where pageid='$pid'") if($action eq 'unlockpage');
+        $s = $main->{dbcon}->getsimplequery("
+                update
+                    page
+                set
+                    locked=1
+                where
+                    pageid='$pid'
+                ") if($action eq 'lockpage');
+        $s = $main->{dbcon}->getsimplequery("
+                update
+                    page
+                set
+                    locked=0
+                where
+                    pageid='$pid'
+                ") if($action eq 'unlockpage');
         if ( $main->{p}->{pageform} eq  1)
         {
             $main = pageform($main, $pid);
@@ -146,11 +167,15 @@ sub enablepage
 
     return if(!($pageid ));
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                page
-            set
-                enabled = '$status'
-            where pageid='$pageid' and ( locked=0 or locked is NULL);");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    page
+                set
+                    enabled = '$status'
+                where
+                    pageid='$pageid'
+                    and ( locked=0 or locked is NULL);
+                ");
     return $s;
 }
 
@@ -162,11 +187,14 @@ sub deletepage
 
     return unless $pageid;
 
-    my $s = $main->{dbcon}->getsimplequery("delete
-            from
-                page
-            where
-                pageid='$pageid' and ( locked=0 or locked is NULL ); ");
+    my $s = $main->{dbcon}->getsimplequery("
+                delete
+                from
+                    page
+                where
+                    pageid='$pageid'
+                    and ( locked=0 or locked is NULL );
+                ");
     return $s;
 }
 
@@ -177,11 +205,15 @@ sub chowner
     return $main if $main->{p}->{owner} eq $main->{p}->{oldowner};
     $main->{eventhash}->{chowner} = 'chowner';
     $main = AuthUserActionHash( $main, 'page', $main->{p}->{pname}, 'chowner' );
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                page
-            set
-                owner='$main->{p}->{owner}'
-            where pageid='$pageid' and ( locked=0 or locked is NULL) ;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    page
+                set
+                    owner='$main->{p}->{owner}'
+                where
+                    pageid='$pageid'
+                    and ( locked=0 or locked is NULL) ;
+                ");
     return $s;
 }
 
@@ -199,12 +231,39 @@ sub pageform
     $pageid = $pageid || $rpid->{pageid};
     $main->{p}->{pageid} = $pageid;
     $main->{p}->{raction} = 'newpage' unless $pageid;
-    $mpageid = $main->{dbcon}->getsimplequery("select pageid,name,description,pttid,cheader,enabled,gids,locked,owner from page; ") if($pageid);
-    my $rpage = $main->{dbcon}->getsimplequery("select pageid,name,description,pttid,cheader,value,ftemplate,enabled,gids,locked,owner
+    $mpageid = $main->{dbcon}->getsimplequery("
+                    select
+                        pageid,
+                        name,
+                        description,
+                        pttid,
+                        cheader,
+                        enabled,
+                        gids,
+                        locked,
+                        owner
+                    from
+                        page;
+                    ") if($pageid);
+    my $rpage = $main->{dbcon}->getsimplequery("
+                    select
+                        pageid,
+                        name,
+                        description,
+                        pttid,
+                        cheader,
+                        value,
+                        ftemplate,
+                        enabled,
+                        gids,
+                        locked,
+                        owner
                     from
                         page
                     where
-                        pageid='$pageid'");
+                        pageid='$pageid'
+                    ");
+
     for my $s (sort keys %{$rpage})
     {
         if($s)
@@ -224,7 +283,13 @@ sub pageform
     }
 
     my $muid;
-    my $p_uid = $main->{dbcon}->getsimplequery("select userid, login from user;");
+    my $p_uid = $main->{dbcon}->getsimplequery("
+                    select
+                        userid,
+                        login
+                    from
+                        user;
+                    ");
 
     for my  $ss (sort keys %{$p_uid})
     {
@@ -275,18 +340,20 @@ sub changepageinfo
         $main->{form}->{gids} .= "$main->{form}->{$b};" if($b =~ /^chbox/);
     }
 
-    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update page
-            set
-                name='$main->{form}->{name}',
-                pttid='$main->{form}->{pttid}',
-                cheader='$main->{form}->{cheader}',
-                description='$main->{form}->{description}',
-                ftemplate='$main->{form}->{ftemplate}',
-                gids='$main->{form}->{gids}',
-                value= ?
-            where
-                pageid='$pageid'
-                and locked=0",$main->{form}->{value});
+    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                update
+                    page
+                set
+                    name='$main->{form}->{name}',
+                    pttid='$main->{form}->{pttid}',
+                    cheader='$main->{form}->{cheader}',
+                    description='$main->{form}->{description}',
+                    ftemplate='$main->{form}->{ftemplate}',
+                    gids='$main->{form}->{gids}',
+                    value= ?
+                where
+                    pageid='$pageid'
+                    and locked=0",$main->{form}->{value});
     return $main;
 }
 
@@ -302,18 +369,20 @@ sub addpage
         $main->{form}->{gids} .= "$main->{form}->{$b};" if($b =~ /^chbox/);
     }
 
-    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "insert into page
-            set
-                name='$main->{form}->{name}',
-                pttid='$main->{form}->{pttid}',
-                cheader='$main->{form}->{cheader}',
-                description='$main->{form}->{description}',
-                ftemplate='$main->{form}->{ftemplate}',
-                enabled='1',
-                locked=0,
-                ObjectClass='page',
-                owner='$userid',
-                value=? ;",$main->{form}->{value});
+    my $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                insert into
+                    page
+                set
+                    name='$main->{form}->{name}',
+                    pttid='$main->{form}->{pttid}',
+                    cheader='$main->{form}->{cheader}',
+                    description='$main->{form}->{description}',
+                    ftemplate='$main->{form}->{ftemplate}',
+                    enabled='1',
+                    locked=0,
+                    ObjectClass='page',
+                    owner='$userid',
+                    value=? ;",$main->{form}->{value});
 
     return $main;
 
@@ -326,17 +395,20 @@ sub getpages
     my $line;
     my $pgid;
 
-    my $pageid = $main->{dbcon}->getsimplequery("select
-                    pageid,
-                    name,
-                    description,
-                    pttid,
-                    cheader,
-                    enabled,
-                    gids,
-                    locked,
-                    owner
-                from page; ");
+    my $pageid = $main->{dbcon}->getsimplequery("
+                    select
+                        pageid,
+                        name,
+                        description,
+                        pttid,
+                        cheader,
+                        enabled,
+                        gids,
+                        locked,
+                        owner
+                    from
+                        page;
+                    ");
     for my  $ss (sort keys %{$pageid})
     {
         if($ss)
@@ -361,7 +433,14 @@ sub checkw
 {
     my $main = shift;
     my $pid = shift;
-    my $s = $main->{dbcon}->getsimplequeryhash("select owner as userid from page where pageid='$pid'");
+    my $s = $main->{dbcon}->getsimplequeryhash("
+                select
+                    owner as userid
+                from
+                    page
+                where
+                    pageid='$pid'
+                ");
     $main = checkusergroupweight($main, $s->{userid});
     return $main;
 }

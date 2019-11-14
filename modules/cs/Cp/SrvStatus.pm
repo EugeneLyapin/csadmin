@@ -21,7 +21,6 @@ our @EXPORT = qw(
             setsrvstatus
         );
 
-
 sub genareasrvstatus
 {
     my $main = shift;
@@ -56,11 +55,16 @@ sub genareasrvstatus
         }
 
     $main->{srvinfo} = $m;
-    my $acc = $main->{dbcon}->getsimplequeryhash("select p.summ,c.name
-                            from PersonalAccounts as p, currency as c
-                            where c.CurrId=p.CurrId
-                            and p.enabled=1
-                            and p.userid='$main->{srvinfo}->{userid}'");
+    my $acc = $main->{dbcon}->getsimplequeryhash("
+                select
+                    p.summ,c.name
+                from
+                    PersonalAccounts as p, currency as c
+                where
+                    c.CurrId=p.CurrId
+                    and p.enabled=1
+                    and p.userid='$main->{srvinfo}->{userid}'
+                ");
     $main->{srvinfo}->{summ} = $acc->{summ};
     $main->{srvinfo}->{CurrName} = $acc->{name};
     return $main;
@@ -113,7 +117,15 @@ sub createarrsrv
     $m->{ostypeid} = $srv->{$s}->[30];
     $m->{userid} = $srv->{$s}->[31];
 
-    my $srvtimes = $main->{dbcon}->getsimplequeryhash("select sid,etime from srvtimes where sid='$m->{srv_sid}'");
+    my $srvtimes = $main->{dbcon}->getsimplequeryhash("
+                        select
+                            sid,
+                            etime
+                        from
+                            srvtimes
+                        where
+                            sid='$m->{srv_sid}'
+                        ");
     $m->{etime} = sprintf( "%.0f",  $m->{hours}*3600 - ( $srvtimes->{etime} + $m->{ltime} )) if $m->{'enabled'};
     $m->{etime_hours} = sprintf( "%.0f", $m->{etime}/3600 )  if $m->{'enabled'};
     $m->{etime_days} = sprintf( "%.0f", $m->{etime_hours}/24 ) if $m->{'enabled'};
@@ -200,7 +212,14 @@ sub changesrvname
     my $sid = shift;
 
     return(0) if(not defined($srvname) or not defined($sid));
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srv set name='$srvname' where sid=$sid");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    srv
+                set
+                    name='$srvname'
+                where
+                    sid=$sid
+                ");
     return($s);
 }
 
@@ -210,12 +229,13 @@ sub changemapid
     my $mapname = shift;
     my $sid = shift;
     return(0) if(not defined($mapname) or not defined($sid));
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                srv as s, map as m set s.mapid=m.mapid
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    srv as s, map as m set s.mapid=m.mapid
                 where
-                m.name='$mapname'
-                and
-                sid=$sid");
+                    m.name='$mapname'
+                    and sid=$sid
+                ");
     return($s);
 
 }
@@ -239,29 +259,63 @@ sub changeaction
     ### may be it would be usefull
     return $main if $main->{errline} =~ /FTP/ and $action eq 'start';
     $main->{errline} .= srvaction($main,$action);
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                                                srv
-                                            set
-                                                start_time = CURRENT_TIMESTAMP,
-                                                stop_time = NULL,
-                                                status=$status
-                                            where
-                                                sid=$sid
-                                            ") if $status eq 1;
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    srv
+                set
+                    start_time = CURRENT_TIMESTAMP,
+                    stop_time = NULL,
+                    status=$status
+                where
+                    sid=$sid
+                ") if $status eq 1;
 
     if ( $status eq 0 )
     {
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srv set stop_time = CURRENT_TIMESTAMP, status=$status where sid=$sid");
-        $s = $main->{dbcon}->getsimplequeryhash("select
-                                ( UNIX_TIMESTAMP(stop_time)-UNIX_TIMESTAMP(start_time) ) as etime
-                            from
-                                srv
-                            where sid=$sid;");
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    srv
+                set
+                    stop_time = CURRENT_TIMESTAMP,
+                    status=$status
+                where
+                    sid=$sid
+                ");
+        $s = $main->{dbcon}->getsimplequeryhash("
+                select
+                    ( UNIX_TIMESTAMP(stop_time)-UNIX_TIMESTAMP(start_time) ) as etime
+                from
+                    srv
+                where
+                    sid=$sid;
+                ");
+
         return $main if $s->{etime} < 0;
-        my $se = $main->{dbcon}->getsimplequeryhash("select etime from srvtimes where sid=$sid");
-        my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srvtimes set etime=etime+$s->{etime} where sid=$sid") if $se->{etime};
-        my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into srvtimes set sid=$sid, etime=$s->{etime}" ) unless $se->{etime};
+        my $se = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        etime
+                    from
+                        srvtimes
+                    where
+                        sid=$sid
+                    ");
+        my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                    update
+                        srvtimes
+                    set
+                        etime=etime+$s->{etime}
+                    where
+                        sid=$sid
+                    ") if $se->{etime};
+        my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                    insert into
+                        srvtimes
+                    set
+                        sid=$sid,
+                        etime=$s->{etime}
+                    ") unless $se->{etime};
     }
+    
     logdb($main, "changeaction sid: $sid, action: $action, status: $status .. done");
 
     return $main;
@@ -273,20 +327,22 @@ sub genhldsconfig
     my $DIR = $main->{ftpc}->{dir};
     my $userid = $main->{userid};
     my $sid = $main->{sid};
-    my $srv = $main->{dbcon}->getsimplequeryhash("select srv.sid,
-                        srv.name,
-                        srv.numslots,
-                        map.name as mapname,
-                        srv.HLDSport,
-                        srv.HLTVport,
-                        i.ipaddr
-                    from map as map,
-                         srv as srv, iplist as i
-                    where
-                        i.ipid=srv.ipid
-                        and map.mapid=srv.mapid
-                        and srv.sid=$sid
-                         ");
+    my $srv = $main->{dbcon}->getsimplequeryhash("
+                select
+                    srv.sid,
+                    srv.name,
+                    srv.numslots,
+                    map.name as mapname,
+                    srv.HLDSport,
+                    srv.HLTVport,
+                    i.ipaddr
+                from map as map,
+                     srv as srv, iplist as i
+                where
+                    i.ipid=srv.ipid
+                    and map.mapid=srv.mapid
+                    and srv.sid=$sid
+                ");
 
     $DIR .= "\\u$userid\\s$sid\\";
     my $fpath = "u$userid/s$sid";
@@ -385,28 +441,87 @@ sub setsrvstatus
         my $ac = 'stop';
         $ac = 'start' if $status;
         srvaction($main,$ac);
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srv set status=1, start_time=CURRENT_TIMESTAMP, stop_time = NULL where sid=$sid and enabled=1") if $status;
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    srv
+                set
+                    status=1,
+                    start_time=CURRENT_TIMESTAMP,
+                    stop_time = NULL
+                where
+                    sid=$sid
+                    and enabled=1
+                ") if $status;
 
         if ( $status eq 0 )
         {
-            $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srv set stop_time = CURRENT_TIMESTAMP, status=$status where sid=$sid");
-            $s = $main->{dbcon}->getsimplequeryhash("select
-                                ( UNIX_TIMESTAMP(stop_time)-UNIX_TIMESTAMP(start_time) ) as etime
-                            from
-                                srv
-                            where sid=$sid;");
+            $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                    update
+                        srv
+                    set
+                        stop_time = CURRENT_TIMESTAMP,
+                        status=$status
+                    where
+                        sid=$sid
+                    ");
+            $s = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        ( UNIX_TIMESTAMP(stop_time)-UNIX_TIMESTAMP(start_time) ) as etime
+                    from
+                        srv
+                    where
+                        sid=$sid;
+                    ");
             return $main if $s->{etime} < 0;
-            my $se = $main->{dbcon}->getsimplequeryhash("select etime from srvtimes where sid=$sid");
-            my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srvtimes set etime=etime+$s->{etime} where sid=$sid") if $se->{etime};
-            my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into srvtimes set sid=$sid, etime=$s->{etime}" ) unless $se->{etime};
+            my $se = $main->{dbcon}->getsimplequeryhash("
+                        select
+                            etime
+                        from
+                            srvtimes
+                        where
+                            sid=$sid
+                        ");
+            my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                        update
+                            srvtimes
+                        set
+                            etime=etime+$s->{etime}
+                        where
+                            sid=$sid
+                        ") if $se->{etime};
+            my $n = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                        insert into
+                            srvtimes
+                        set
+                            sid=$sid,
+                            etime=$s->{etime}
+                        ") unless $se->{etime};
         }
 
         return $main;
     }
 
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update srv set $col = '$status' where sid='$sid'") if $col eq 'enabled';
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete from srvtimes where sid='$sid'") if $action eq 'disable';
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into srvtimes set sid='$sid',etime=0") if $action eq 'enable';
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                srv
+            set
+                $col = '$status'
+            where
+                sid='$sid'
+            ") if $col eq 'enabled';
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            delete from
+                srvtimes
+            where
+                sid='$sid'
+            ") if $action eq 'disable';
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            insert into
+                srvtimes
+            set
+                sid='$sid',
+                etime=0
+            ") if $action eq 'enable';
     $main->{status_flag} = 'ok';
     logdb($main, "setsrvstatus sid: $sid, action: $action, status: $status .. done");
     return $main;

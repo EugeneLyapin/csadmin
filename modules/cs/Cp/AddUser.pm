@@ -16,7 +16,6 @@ our @EXPORT = qw(
         adduser
         );
 
-
 sub pageform
 {
     my ($main,$users,$groups,$url,$fstatus, $dstatus, $p) = @_;
@@ -39,22 +38,21 @@ sub pageform
         <div class="popup" id="mess"></div>
         <table>
         <form action=$url name=frmValidate method="POST" onsubmit="return checkField()">
-            <input type="hidden" name="action" value="adduser">
-            <input type="hidden" name="srvname" value="Counter strike 1.6 server">
-            <td>login</td><td><input type="text"
-            name="login"
-            onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); chlogin(); checkdblogin()"
-            onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
-            if(n!=this.value) this.value=n;"
-            onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
-            onmouseover="tooltip(this,'Длина логина не более 50 символов')" onmouseout="hide_info(this)"
-            value=""></td></tr>
-            <tr><td>Пароль:</td><td><input type="password" name="pass1" value="" onchange="chpass()"
-            onmouseover="tooltip(this,'Длина пароля не менее 8 символов и не более 50 символов')" onmouseout="hide_info(this)"
-            ></td></tr>
-            <tr><td>Повторите пароль:</td><td><input type="password" name="pass2" value=""  onchange="chpass()"></td></tr>
-            <tr><td>e-mail</td><td><input type="text" name="email" value=""></td></tr>
-
+        <input type="hidden" name="action" value="adduser">
+        <input type="hidden" name="srvname" value="Counter strike 1.6 server">
+        <td>login</td><td><input type="text"
+        name="login"
+        onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); chlogin(); checkdblogin()"
+        onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+        if(n!=this.value) this.value=n;"
+        onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+        onmouseover="tooltip(this,'Длина логина не более 50 символов')" onmouseout="hide_info(this)"
+        value=""></td></tr>
+        <tr><td>Пароль:</td><td><input type="password" name="pass1" value="" onchange="chpass()"
+        onmouseover="tooltip(this,'Длина пароля не менее 8 символов и не более 50 символов')" onmouseout="hide_info(this)"
+        ></td></tr>
+        <tr><td>Повторите пароль:</td><td><input type="password" name="pass2" value=""  onchange="chpass()"></td></tr>
+        <tr><td>e-mail</td><td><input type="text" name="email" value=""></td></tr>
 A
     $line .= &geninbox("Группа", 'gid', $groups, $g, 0, 100);
     my $sbutton = &getsavebutton('submit');
@@ -69,9 +67,7 @@ A
 AA
 
     return($line);
-
 }
-
 
 sub checkdata
 {
@@ -99,8 +95,6 @@ sub checkdata
     return ($status,$line)
 }
 
-
-
 sub adduser
 {
     my $main = shift;
@@ -122,6 +116,3 @@ sub adduser
 
 
 1;
-
-
-

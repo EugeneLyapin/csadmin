@@ -7,40 +7,40 @@ use base qw( Exporter );
 use CGI qw/:standard/;
 use Tt::Pgen;
 
-our @EXPORT = qw( getsrvhw
+our @EXPORT = qw(
+            getsrvhw
             linksrvhw
             );
 
 sub getmhid
 {
     my $main = shift;
-    my $mhid = $main->{dbcon}->getsimplequery("select
-            h.hid ,
-            h.name,
-            l.description,
-            o.description,
-            ip.ipaddr,
-            h.mcpu,
-            h.cpuslots,
-            h.ftpport,
-            h.sshport,
-            h.price,
-            h.enabled
-
-         from hw as h,
-            location as l,
-            iplist as ip,
-            ostype as o
-        where
-            ip.role = 'main'
-            and o.ostypeid = h.ostype
-            and h.locationid = l.locationid
-            and h.hid = ip.hid;");
-
+    my $mhid = $main->{dbcon}->getsimplequery("
+                select
+                    h.hid ,
+                    h.name,
+                    l.description,
+                    o.description,
+                    ip.ipaddr,
+                    h.mcpu,
+                    h.cpuslots,
+                    h.ftpport,
+                    h.sshport,
+                    h.price,
+                    h.enabled
+                 from
+                    hw as h,
+                    location as l,
+                    iplist as ip,
+                    ostype as o
+                where
+                    ip.role = 'main'
+                    and o.ostypeid = h.ostype
+                    and h.locationid = l.locationid
+                    and h.hid = ip.hid;
+                ");
     return $mhid;
-
 }
-
 
 sub getsrvhw
 {
@@ -198,7 +198,5 @@ A
 
     return $line;
 }
-
-
 
 1;

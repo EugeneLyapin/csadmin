@@ -37,7 +37,6 @@ $main = genarea($main);
 my $line = genfpagedata($main, $p, 'AdminFtp');
 print $line;
 
-
 sub genarea
 {
     my $main = shift;
@@ -84,4 +83,3 @@ sub genarea
     $main = &showmode($main, $ftp);
     return $main;
 }
-

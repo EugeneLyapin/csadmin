@@ -92,10 +92,14 @@ sub gendata
     }
     if($action eq 'delete')
     {
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                delete
                 from
                     GROG
-                where oid='$oid' and locked=0;");
+                where
+                    oid='$oid'
+                    and locked=0;
+                ");
         $main = grogform($main, 'fake');
     }
     if($action eq 'deleteprop')
@@ -138,11 +142,15 @@ sub enablegrog
     $status = 0 if($action eq 'disable');
     return $main unless $oid;
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-            GROG
-        set
-            enabled = '$status'
-        where oid='$oid' and locked=0;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    GROG
+                set
+                    enabled = '$status'
+                where
+                    oid='$oid'
+                    and locked=0;
+                ");
     return $main;
 }
 
@@ -157,11 +165,14 @@ sub lockgrog
 
     return if(!($oid ));
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-            GROG
-        set
-            locked = '$status'
-        where oid='$oid';");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    GROG
+                set
+                    locked = '$status'
+                where
+                    oid='$oid';
+                ");
     return $s;
 }
 
@@ -173,25 +184,42 @@ sub grogform
     my $oid = shift;
     my $groginfo;
 
-    my $moid = $main->{dbcon}->getsimplequery("select oid,name from GROG; ") ;
+    my $moid = $main->{dbcon}->getsimplequery("
+                    select
+                        oid,
+                        name
+                    from
+                        GROG;
+                    ") ;
     for my $ss (sort keys %{$moid})
     {
         $oid = $moid->{$ss}->[0] if $oid eq 'fake';
         last if $oid > 0;
     }
-    my $raid = $main->{dbcon}->getsimplequeryhash("select oid from
+    my $raid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        oid
+                    from
                         GROG
                     where
-                        name='$main->{form}->{name}';") unless $oid;
+                        name='$main->{form}->{name}';
+                    ") unless $oid;
     $oid = $oid || $raid->{oid};
     $main->{form}->{oid} = $oid;
     $main->{form}->{raction} = 'new' unless $oid;
 
-    my $rgrog = $main->{dbcon}->getsimplequery("select oid,name,description,enabled, locked, rhash
-                        from
-                            GROG
-                        where
-                            oid='$oid'") if($oid);
+    my $rgrog = $main->{dbcon}->getsimplequery("
+                    select
+                        oid,
+                        name,
+                        description,
+                        enabled,
+                        locked,
+                        rhash
+                    from
+                        GROG
+                    where
+                        oid='$oid'") if($oid);
 
     for my $s (sort keys %{$rgrog})
     {
@@ -272,8 +300,14 @@ sub changegroginfo
     }
     if($main->{form}->{raction} eq 'deleteprop')
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update GROG set rhash = ?
-                where oid='$oid' and locked=0;", $main->{form}->{rhash});
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                update
+                    GROG
+                set
+                    rhash = ?
+                where
+                    oid='$oid'
+                    and locked=0;", $main->{form}->{rhash});
         return $main;
     }
     return $main unless $main->{form}->{name};
@@ -281,23 +315,28 @@ sub changegroginfo
 
     if($oid > 0)
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update GROG
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                update
+                    GROG
                 set
                     name = '$main->{form}->{name}',
                     description = '$main->{form}->{description}',
                     rhash = ?
                 where
-                    oid='$oid' and locked=0;", $main->{form}->{rhash}) ;
+                    oid='$oid'
+                    and locked=0;", $main->{form}->{rhash}) ;
     }
     else
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "insert into GROG
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                insert into
+                    GROG
                 set
                     name='$main->{form}->{name}',
-                description='$main->{form}->{description}',
-                enabled='1',
-                locked='0',
-                rhash = ? ;",$main->{form}->{rhash});
+                    description='$main->{form}->{description}',
+                    enabled='1',
+                    locked='0',
+                    rhash = ? ;",$main->{form}->{rhash});
     }
     return $main;
 
@@ -331,7 +370,8 @@ sub getGROG
 {
     my $main = shift;
     my $maid;
-    my $aid = $main->{dbcon}->getsimplequery("select
+    my $aid = $main->{dbcon}->getsimplequery("
+                select
                     a.id as oid,
                     p.name as pname,
                     a.name as name,

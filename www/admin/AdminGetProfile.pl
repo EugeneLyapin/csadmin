@@ -133,13 +133,15 @@ sub maskuser
         return;
     }
 
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
                 session as s, user as u
             set
                 s.userid = '$userid'
             where
                 u.userid = s.userid
-                and u.login = 'admin'");
+                and u.login = 'admin'
+            ");
     print "Location: $location\n\n";
     return $s;
 }
@@ -179,29 +181,34 @@ sub enableuser
     my $userid = shift;
     my $status = 1;
     $status = 0 if($action eq 'disable');
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
                     user
                 set
                     enabled = '$status'
                 where
-                    userid='$userid' and login != '$main->{global}->{superuser}'");
+                    userid='$userid'
+                    and login != '$main->{global}->{superuser}'
+                ");
     return $s;
 }
 
 sub getusers
 {
     my $main = shift;
-    $main->{muser} = $main->{dbcon}->getsimplequery("select
-                          u.userid as userid,
-                          u.login,
-                          u.sname,
-                          u.fname,
-                          u.name,
-                          u.email,
-                          u.enabled,
-                          (select count(sid) from srv where userid=u.userid) as count
-                           from user as u;
-            ;");
+    $main->{muser} = $main->{dbcon}->getsimplequery("
+                        select
+                            u.userid as userid,
+                            u.login,
+                            u.sname,
+                            u.fname,
+                            u.name,
+                            u.email,
+                            u.enabled,
+                            (select count(sid) from srv where userid=u.userid) as count
+                        from
+                            user as u;
+                        ");
     $main->{details} = 1;
     return $main;
 }

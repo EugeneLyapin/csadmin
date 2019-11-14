@@ -55,29 +55,41 @@ sub changeuserinfo
     return if(not defined($form->{submit}));
 
     my ($pwd,$salt) = cryptpass($form->{pass1}) if defined($form->{pass1});
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update user set
-        name='$form->{name}',
-        sname='$form->{sname}',
-        fname='$form->{fname}',
-        addon='$form->{addon}',
-        icq='$form->{icq}',
-        vkontakte='$form->{vkontakte}',
-        skype='$form->{skype}',
-        cellphone='$form->{cellphone}',
-        homephone='$form->{homephone}',
-        country='$form->{country}',
-        city='$form->{city}',
-        clan='$form->{clan}',
-        site='$form->{site}',
-        email='$form->{email}',
-        address='$form->{address}',
-        birthdate='$form->{birthdate}'
-        where userid=$form->{userid} and locked=0");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                user
+            set
+                name='$form->{name}',
+                sname='$form->{sname}',
+                fname='$form->{fname}',
+                addon='$form->{addon}',
+                icq='$form->{icq}',
+                vkontakte='$form->{vkontakte}',
+                skype='$form->{skype}',
+                cellphone='$form->{cellphone}',
+                homephone='$form->{homephone}',
+                country='$form->{country}',
+                city='$form->{city}',
+                clan='$form->{clan}',
+                site='$form->{site}',
+                email='$form->{email}',
+                address='$form->{address}',
+                birthdate='$form->{birthdate}'
+            where
+                userid=$form->{userid}
+                and locked=0
+            ");
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update user set
-        passwd='$pwd',
-        salt='$salt'
-        where userid=$form->{userid} and locked=0") if defined($form->{pass1});
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                user
+            set
+                passwd='$pwd',
+                salt='$salt'
+            where
+                userid=$form->{userid}
+                and locked=0
+            ") if defined($form->{pass1});
 
     return($s);
 
@@ -93,12 +105,32 @@ sub edituserprofile
     $userid = &getval($main,'userid');
     $main->{errline} = &checkform($main) if($main->{form}->{userid});
     changeuserinfo($main) unless $main->{errline};
-    my $muser = $main->{dbcon}->getsimplequery("select userid,login,passwd,name,fname,sname,addon,clan,site,birthdate,
-                                                    email,icq,skype,vkontakte,country,city,address,homephone,cellphone
-                                                from
-                                                    user as u
-                                                where
-                                                    u.userid='$userid'");
+    my $muser = $main->{dbcon}->getsimplequery("
+                select
+                    userid,
+                    login,
+                    passwd,
+                    name,
+                    fname,
+                    sname,
+                    addon,
+                    clan,
+                    site,
+                    birthdate,
+                    email,
+                    icq,
+                    skype,
+                    vkontakte,
+                    country,
+                    city,
+                    address,
+                    homephone,
+                    cellphone
+                from
+                    user as u
+                where
+                    u.userid='$userid'
+                ");
 
     foreach my $s (sort keys %{$muser})
     {
@@ -136,4 +168,3 @@ sub edituserprofile
 }
 
 1;
-

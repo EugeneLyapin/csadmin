@@ -59,11 +59,12 @@ sub gendata
     };
 
     $main = AuthUserActionHash( $main, 'config', 'ObjectClass', $action );
-    $main->{arrckey} = $main->{dbcon}->getsimplequery("select
-                                                        ckey, cvalue, locked
-                                                    from
-                                                        config
-                                                    ;");
+    $main->{arrckey} = $main->{dbcon}->getsimplequery("
+                        select
+                            ckey, cvalue, locked
+                        from
+                            config;
+                        ");
 
     return $main;
 }
@@ -72,14 +73,28 @@ sub lockckey
 {
     my $main = shift;
     my $ckey = shift;
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update config set locked=1 where ckey='$ckey'");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    config
+                set
+                    locked=1
+                where
+                    ckey='$ckey'
+                ");
     return;
 }
 sub unlockckey
 {
     my $main = shift;
     my $ckey = shift;
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update config set locked=0 where ckey='$ckey'");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    config
+                set
+                    locked=0
+                where
+                    ckey='$ckey'
+                ");
     return;
 }
 
@@ -95,17 +110,18 @@ sub saveckey
     return 0 if not($ckey);
 
     return if(!($ckey ));
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                                                                config
-                                                            set
-                                                                ckey = '$main->{form}->{ckey}',
-                                                                cvalue = '$main->{form}->{cvalue}'
-                                                            where
-                                                                ckey='$main->{form}->{ckeyold}'
-                                                                and locked=0;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    config
+                set
+                    ckey = '$main->{form}->{ckey}',
+                    cvalue = '$main->{form}->{cvalue}'
+                where
+                    ckey='$main->{form}->{ckeyold}'
+                    and locked=0;
+                ");
     return $s;
 }
-
 
 sub savenewckey
 {
@@ -116,13 +132,14 @@ sub savenewckey
     $main->{form}->{eeee}= 1;
     return 0 if not($ckey);
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into
-                                                                config
-                                                            set
-                                                                ckey = '$ckey',
-                                                                cvalue = '$cvalue',
-                                                                locked=1
-                                                            ;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                insert into
+                    config
+                set
+                    ckey = '$ckey',
+                    cvalue = '$cvalue',
+                    locked=1;
+                ");
     return $s;
 }
 
@@ -133,10 +150,12 @@ sub Delckey
     my $line;
     return if(!($ckey ));
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete from
-                                                                config
-                                                            where
-                                                                ckey='$ckey'
-                                                                and locked=0;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                delete from
+                    config
+                where
+                    ckey='$ckey'
+                    and locked=0;
+                ");
     return $line;
 }

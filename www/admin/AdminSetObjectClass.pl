@@ -115,7 +115,13 @@ sub showtable
 sub showfield
 {
     my $main = shift;
-    my $mt = $main->{dbcon}->getsimplequery("select $main->{form}->{field},ObjectClass from $main->{form}->{table};");
+    my $mt = $main->{dbcon}->getsimplequery("
+                select
+                    $main->{form}->{field},
+                    ObjectClass
+                from
+                    $main->{form}->{table};
+                ");
     $main->{table} = $mt;
     $main->{errline} = errline(1,'No ObjectClass for '.$main->{form}->{table}) unless ishash $mt;
     $main->{objexists} = 1 if ishash $mt;
@@ -129,10 +135,22 @@ sub showfield
 sub showobject
 {
     my $main = shift;
-    my $mt = $main->{dbcon}->getsimplequeryhash("select ObjectClass from $main->{form}->{table}
-                where $main->{form}->{field}='$main->{form}->{object}' ;");
-    my $mo = $main->{dbcon}->getsimplequeryhash("select owner from $main->{form}->{table}
-                where $main->{form}->{field}='$main->{form}->{object}' ;");
+    my $mt = $main->{dbcon}->getsimplequeryhash("
+                select
+                    ObjectClass
+                from
+                    $main->{form}->{table}
+                where
+                    $main->{form}->{field}='$main->{form}->{object}' ;
+                ");
+    my $mo = $main->{dbcon}->getsimplequeryhash("
+                select
+                    owner
+                from
+                    $main->{form}->{table}
+                where
+                    $main->{form}->{field}='$main->{form}->{object}' ;
+                ");
     my $moid = $main->{dbcon}->getsimplequery("select name from GROG;");
     my $mown = $main->{dbcon}->getsimplequery("select userid,login from user;");
     $main->{mt} = $mt;
@@ -167,14 +185,22 @@ sub saveOC
     }
     $main->{errline} .= $errline;
     return $main if $errline;
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update $main->{form}->{table}
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                $main->{form}->{table}
             set
                 ObjectClass='$main->{form}->{OC}'
-            where $main->{form}->{field}='$main->{form}->{object}'");
-    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update $main->{form}->{table}
+            where
+                $main->{form}->{field}='$main->{form}->{object}'
+            ");
+    $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+            update
+                $main->{form}->{table}
             set
                 owner='$main->{form}->{owner}'
-            where $main->{form}->{field}='$main->{form}->{object}'") if $main->{form}->{owner};
+            where
+                $main->{form}->{field}='$main->{form}->{object}'
+            ") if $main->{form}->{owner};
     $main->{form}->{raction} = 'showobject';
     return $main;
 }

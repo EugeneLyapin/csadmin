@@ -1,10 +1,9 @@
-﻿#!/usr/bin/perl
+#!/usr/bin/perl
 
 use strict;
 use FindBin qw($Bin);
 use File::Basename;
 use DBI;
-
 
 my $main;
 use constant { DBFILE => 'linuxdb.sql' };
@@ -35,9 +34,7 @@ if($main->{userftp} =~ /^[Yy]$/)
     $main->{ftphost} = checkval('ftphost','Enter FTP hostname [localhost]:', 'ipaddr' ,'localhost');
     $main->{ftpuser} = checkval('ftpuser',"Enter FTP username [$main->{siteuser}]:", q/^[A-z][A-z0-9\.\-\_]+$/ ,'ftpadmin');
     $main->{ftppass} = checkval('ftppass',"Enter $main->{ftpuser} passwd [10101ppcdb10101]:",q/.*/, '10101ppcdb10101');
-
 }
-
 
 print "args: mysql version = $main->{version}, root = $main->{dbuser}, db = $main->{db}, host = $main->{host}:$main->{port}, user = $main->{dbuser}\n";
 #my $str = putconfig($main);
@@ -45,42 +42,42 @@ print "args: mysql version = $main->{version}, root = $main->{dbuser}, db = $mai
 my $s = insertsimplequery($dbh, "drop database if exists $main->{db};");
 my $s = insertsimplequery($dbh, "create database $main->{db};");
 
-    if($main->{version} eq '5')
-    {
-        $main->{query} = "create user '$main->{siteuser}'\@'$main->{host}' identified by '$main->{siteuserpass}';";
-        my $s = insertsimplequery($dbh, $main->{query});
-        $main->{query} = "update mysql.user set password=PASSWORD('$main->{siteuserpass}') where user='$main->{siteuser}';";
-        my $s = insertsimplequery($dbh, $main->{query});
-        $main->{query} = "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP on $main->{db}.* to '$main->{siteuser}'\@'$main->{host}';";
-        my $s = insertsimplequery($dbh, $main->{query});
-        $main->{query} = "flush privileges;";
-        my $s = insertsimplequery($dbh, $main->{query});
-    }
-    elsif($main->{version} eq '4')
-    {
-        $main->{query} = "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, alter
-            ON $main->{db}.* to '$main->{siteuser}'\@'$main->{host}'
-            identified by '$main->{siteuserpass}' with grant option; ";
-        my $s = insertsimplequery($dbh, $main->{query});
-        $main->{query} = "flush privileges;";
-        my $s = insertsimplequery($dbh, $main->{query});
-    }
+if($main->{version} eq '5')
+{
+    $main->{query} = "create user '$main->{siteuser}'\@'$main->{host}' identified by '$main->{siteuserpass}';";
+    my $s = insertsimplequery($dbh, $main->{query});
+    $main->{query} = "update mysql.user set password=PASSWORD('$main->{siteuserpass}') where user='$main->{siteuser}';";
+    my $s = insertsimplequery($dbh, $main->{query});
+    $main->{query} = "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP on $main->{db}.* to '$main->{siteuser}'\@'$main->{host}';";
+    my $s = insertsimplequery($dbh, $main->{query});
+    $main->{query} = "flush privileges;";
+    my $s = insertsimplequery($dbh, $main->{query});
+}
+elsif($main->{version} eq '4')
+{
+    $main->{query} = "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, alter
+                        ON $main->{db}.* to '$main->{siteuser}'\@'$main->{host}'
+                        identified by '$main->{siteuserpass}' with grant option; ";
+    my $s = insertsimplequery($dbh, $main->{query});
+    $main->{query} = "flush privileges;";
+    my $s = insertsimplequery($dbh, $main->{query});
+}
 
-    createstruct($main);
+createstruct($main);
 
-    $dbh->disconnect;
-    $dbh = getconn($main);
+$dbh->disconnect;
+$dbh = getconn($main);
 
-    $main->{sitename} = checkval('sitename','Site name [www.domain.com]:',q/^[A-z][A-z0-9\.\-\_]+[\.][a-z]{1,4}$/,'www.domain.com');
-    $main->{superuser} = checkval('superuser','Site superuser name [admin]:',q/^[A-z][A-z0-9\.\-\_]+$/,'admin');
+$main->{sitename} = checkval('sitename','Site name [www.domain.com]:',q/^[A-z][A-z0-9\.\-\_]+[\.][a-z]{1,4}$/,'www.domain.com');
+$main->{superuser} = checkval('superuser','Site superuser name [admin]:',q/^[A-z][A-z0-9\.\-\_]+$/,'admin');
 
-    #    insertsimplequery($dbh, "update config set cvalue='$main->{superuser}' where ckey='superuser';");
-    #    insertsimplequery($dbh, "update config set cvalue='$main->{sitename}' where ckey='sitename';");
-    #    insertsimplequery($dbh, "update config set cvalue='http://$main->{sitename}' where ckey='urlsite';");
-    #    insertsimplequery($dbh, "update config set cvalue='$main->{modules}' where ckey='modules';");
-    #    insertsimplequery($dbh, "update config set cvalue='users' where ckey='RegisteredUsersGroup';");
-    #
-    print "=============> Installation successfull!! \n";
+#insertsimplequery($dbh, "update config set cvalue='$main->{superuser}' where ckey='superuser';");
+#insertsimplequery($dbh, "update config set cvalue='$main->{sitename}' where ckey='sitename';");
+#insertsimplequery($dbh, "update config set cvalue='http://$main->{sitename}' where ckey='urlsite';");
+#insertsimplequery($dbh, "update config set cvalue='$main->{modules}' where ckey='modules';");
+#insertsimplequery($dbh, "update config set cvalue='users' where ckey='RegisteredUsersGroup';");
+#
+print "=============> Installation successfull!! \n";
 
 sub putconfig
 {
@@ -246,7 +243,6 @@ sub checkoptions
             $line .= &errline(1,"Unknown argument $o");
         }
     }
-
     return($line);
 }
 
@@ -256,11 +252,10 @@ sub errline
 
     if($error eq '1')
     {
-    $line = "[ОШИБКА]: $line";
+        $line = "[ОШИБКА]: $line";
     }
     return($line);
 }
-
 
 sub getconn
 {
@@ -277,13 +272,13 @@ sub getconn
     #my $dbh = DBI->connect("DBI:mysql:$dbname", $dbuser, $dbpass);
     my $dbh = DBI->connect( $dsn, $dbuser, $dbpass, { PrintError => 0 });
 
-    if( not $dbh) {
+    if( not $dbh)
+    {
         die("Can't connect to database: $DBI::errstr");
     }
 
     return( $dbh);
 }
-
 
 sub insertsimplequery
 {

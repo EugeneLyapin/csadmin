@@ -64,7 +64,14 @@ sub gendata
         unlocktt => 'unlock',
         chowner => 'chowner'
     };
-    my $q = $main->{dbcon}->getsimplequeryhash("select rname from regtemplates where regtid='$rtid'") if $rtid;
+    my $q = $main->{dbcon}->getsimplequeryhash("
+                select
+                    rname
+                from
+                    regtemplates
+                where
+                    regtid='$rtid'
+                ") if $rtid;
     my $pname = $q->{rname} || 'ObjectClass';
     my $tname = $pname eq 'ObjectClass' ? 'template' : 'regtemplates';
     $main = AuthUserActionHash( $main, $tname, $pname, $action ) ;
@@ -72,19 +79,36 @@ sub gendata
     if($action eq 'deltt')
     {
         checkw($main, $rtid);
-        my $dstatus = $main->{dbcon}->getsimplequery("delete
+        my $dstatus = $main->{dbcon}->getsimplequery("
+                        delete
                         from
                             regtemplates
                         where
-                            regtid='$rtid' and locked=0");
+                            regtid='$rtid'
+                            and locked=0
+                        ");
         $main->{tt}->{ttform} = 0;
     }
 
     if($action eq 'locktt' or $action eq 'unlocktt')
     {
         checkw($main, $rtid) if $rtid;
-        $s = $main->{dbcon}->getsimplequery("update regtemplates set locked=1 where regtid='$rtid'") if($action eq 'locktt');
-        $s = $main->{dbcon}->getsimplequery("update regtemplates set locked=0 where regtid='$rtid'") if($action eq 'unlocktt');
+        $s = $main->{dbcon}->getsimplequery("
+                update
+                    regtemplates
+                set
+                    locked=1
+                where
+                    regtid='$rtid'
+                ") if($action eq 'locktt');
+        $s = $main->{dbcon}->getsimplequery("
+                update
+                    regtemplates
+                set
+                    locked=0
+                where
+                    regtid='$rtid'
+                ") if($action eq 'unlocktt');
         if ( $main->{tt}->{ttform} eq  1)
         {
             $main = ttform($main, $rtid);
@@ -127,21 +151,48 @@ sub ttform
     my $errline = shift;
     my $ttinfo;
 
-    my $rrtid = $main->{dbcon}->getsimplequeryhash("select regtid from
-                regtemplates where rname='$main->{form}->{rname}';")
-                unless $main->{form}->{regtid};
+    my $rrtid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        regtid
+                    from
+                        regtemplates
+                    where
+                        rname='$main->{form}->{rname}';
+                    ") unless $main->{form}->{regtid};
     $rtid = $rtid || $rrtid->{regtid};
     $main->{tt}->{regtid} = $rtid;
     $main->{tt}->{raction} = 'newtt' unless $rtid;
 
-    my $rtt = $main->{dbcon}->getsimplequery("select regtid,regname,value,rname,regcatid,locked,owner
-                        from
-                            regtemplates
-                        where
-                            regtid='$rtid'") if $rtid;
+    my $rtt = $main->{dbcon}->getsimplequery("
+                select
+                    regtid,
+                    regname,
+                    value,
+                    rname,
+                    regcatid,
+                    locked,
+                    owner
+                from
+                    regtemplates
+                where
+                    regtid='$rtid'
+                ") if $rtid;
 
-    my $regtid = $main->{dbcon}->getsimplequery("select regtid,rname from regtemplates; ");
-    my $regcatid = $main->{dbcon}->getsimplequery("select id,name,description from regcategories; ");
+    my $regtid = $main->{dbcon}->getsimplequery("
+                    select
+                        regtid,
+                        rname
+                    from
+                        regtemplates;
+                    ");
+    my $regcatid = $main->{dbcon}->getsimplequery("
+                    select
+                        id,
+                        name,
+                        description
+                    from
+                        regcategories;
+                    ");
 
     for my $s (sort keys %{$rtt})
     {
@@ -155,7 +206,13 @@ sub ttform
         $ttinfo->{owner} = $rtt->{$s}->[6];
     }
     my $muid;
-    my $p_uid = $main->{dbcon}->getsimplequery("select userid, login from user;");
+    my $p_uid = $main->{dbcon}->getsimplequery("
+                    select
+                        userid,
+                        login
+                    from
+                        user;
+                    ");
 
     for my  $ss (sort keys %{$p_uid})
     {
@@ -204,18 +261,22 @@ sub changettinfo
     my ($status,$s, $rtid);
     return $main unless $main->{form}->{rname};
 
-    my $csid = $main->{dbcon}->getsimplequeryhash("select
-                                    rname,regtid
-                                FROM
-                                    regtemplates
-                                where
-                                    rname='$main->{form}->{rname}'
-                                    ");
+    my $csid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        rname,
+                        regtid
+                    FROM
+                        regtemplates
+                    where
+                        rname='$main->{form}->{rname}'
+                    ");
     $rtid = $rtid || $csid->{regtid};
     $status = 1 if($csid->{rname});
     if($status)
     {
-        $s = $main->{dbcon}->insert2linequery($main->{dbhlr}, "update regtemplates
+        $s = $main->{dbcon}->insert2linequery($main->{dbhlr}, "
+                update
+                    regtemplates
                 set
                     rname = '$main->{form}->{rname}',
                     regcatid = '$main->{form}->{regcatid}',
@@ -224,20 +285,29 @@ sub changettinfo
                     regname = ?,
                     value = ?
                 where
-                    rname='$main->{form}->{rname}' and locked=0;",$main->{form}->{regname}, $main->{form}->{value});
+                    rname='$main->{form}->{rname}'
+                    and locked=0;",$main->{form}->{regname}, $main->{form}->{value});
     }
     else
     {
-        $s = $main->{dbcon}->insert2linequery($main->{dbhlr}, "insert into regtemplates
-                (rname,regcatid,locked,ObjectClass, regname,value) values(
-                '$main->{form}->{rname}',
-                '$main->{form}->{regcatid}',
-                '0',
-                'template',
-                ?,? );",$main->{form}->{regname}, $main->{form}->{value});
+        $s = $main->{dbcon}->insert2linequery($main->{dbhlr}, "
+                insert into
+                    regtemplates
+                    (rname,regcatid,locked,ObjectClass, regname,value) values(
+                    '$main->{form}->{rname}',
+                    '$main->{form}->{regcatid}',
+                    '0',
+                    'template',
+                    ?,? );",$main->{form}->{regname}, $main->{form}->{value});
 
-    my $hrtid = $main->{dbcon}->getsimplequeryhash("select regtid FROM regtemplates where
-                                    rname='$main->{form}->{rname}'");
+    my $hrtid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        regtid
+                    FROM
+                        regtemplates
+                    where
+                        rname='$main->{form}->{rname}'
+                    ");
         $rtid = $hrtid->{regtid};
     }
     return $rtid;
@@ -248,13 +318,19 @@ sub gett
     my $main = shift;
     my $mrtid;
     return $main if $main->{tt}->{ttform} eq 1;
-    my $rtt = $main->{dbcon}->getsimplequery("select r.regtid as regtid,r.regname as regname,r.value as value,r.rname as rname,c.name as cname,
-                           r.locked as locked
-                        from
-                            regtemplates as r, regcategories as c
-                        where
-                            r.regcatid = c.id;
-                        ");
+    my $rtt = $main->{dbcon}->getsimplequery("
+                select
+                    r.regtid as regtid,
+                    r.regname as regname,
+                    r.value as value,
+                    r.rname as rname,
+                    c.name as cname,
+                    r.locked as locked
+                from
+                    regtemplates as r, regcategories as c
+                where
+                    r.regcatid = c.id;
+                ");
 
     for my  $ss (sort keys %{$rtt})
     {
@@ -282,11 +358,15 @@ sub chowner
     return $main if $main->{tt}->{owner} eq $main->{tt}->{oldowner};
     $main->{eventhash}->{chowner} = 'chowner';
     $main = AuthUserActionHash( $main, $tname, $pname, 'chowner' );
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                regtemplates
-            set
-                owner='$main->{tt}->{owner}'
-            where regtid='$regtid' and ( locked=0 or locked is NULL) ;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    regtemplates
+                set
+                    owner='$main->{tt}->{owner}'
+                where
+                    regtid='$regtid'
+                    and ( locked=0 or locked is NULL) ;
+                ");
     return $s;
 }
 
@@ -294,7 +374,14 @@ sub checkw
 {
     my $main = shift;
     my $rtid = shift;
-    my $s = $main->{dbcon}->getsimplequeryhash("select owner as userid from regtemplates where regtid='$rtid'");
+    my $s = $main->{dbcon}->getsimplequeryhash("
+                select
+                    owner as userid
+                from
+                    regtemplates
+                where
+                    regtid='$rtid'
+                ");
     $main = checkusergroupweight($main, $s->{userid});
     return $main;
 }

@@ -80,7 +80,13 @@ sub gendata
     if ($action eq 'deleteart')
     {
         checkw($main, $artid);
-        my $dstatus = $main->{dbcon}->getsimplequery("delete from articles where id='$artid' and locked=0") ;
+        my $dstatus = $main->{dbcon}->getsimplequery("
+                        delete from
+                            articles
+                        where
+                            id='$artid'
+                            and locked=0
+                        ") ;
     }
     if($action eq 'saveart')
     {
@@ -123,7 +129,14 @@ sub checkw
 {
     my $main = shift;
     my $artid = shift;
-    my $s = $main->{dbcon}->getsimplequeryhash("select owner as userid from articles where id='$artid'");
+    my $s = $main->{dbcon}->getsimplequeryhash("
+                select
+                    owner as userid
+                from
+                    articles
+                where
+                    id='$artid'
+                ");
     $main = checkusergroupweight($main, $s->{userid});
     return $main;
 }
@@ -136,12 +149,13 @@ sub enableart
     my $status = 1;
     $status = 0 if($action eq 'disable');
     return $main unless $artid;
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                                                                articles
-                                                            set
-                                                                pflag = '$status'
-                                                            where
-                                                                id='$artid' and locked=0;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    articles
+                set
+                    pflag = '$status'
+                where
+                    id='$artid' and locked=0;");
     return $main;
 }
 
@@ -154,54 +168,65 @@ sub lockart
     my $status = 1;
     $status = 0 if($action eq 'unlock');
     return unless $artid;
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                                                                articles
-                                                            set
-                                                                locked = '$status'
-                                                            where id='$artid';");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    articles
+                set
+                    locked = '$status'
+                where
+                    id='$artid';
+                ");
     return $s;
 }
 
 
 sub artform
 {
-
     my $main = shift;
     my $artid = shift;
     my $artinfo;
 
-    my $raid = $main->{dbcon}->getsimplequeryhash("select
-                                                    id
-                                                from
-                                                    articles
-                                                where
-                                                    name='$main->{form}->{artname}';
-                                                ") unless $artid;
+    my $raid = $main->{dbcon}->getsimplequeryhash("
+                select
+                    id
+                from
+                    articles
+                where
+                    name='$main->{form}->{artname}';
+                ") unless $artid;
     $artid = $artid || $raid->{id};
     $main->{a}->{artid} = $artid;
     $main->{a}->{raction} = 'newart' unless $artid;
 
-    my $ra = $main->{dbcon}->getsimplequery("select id,name from articles; ") if($artid);
-    my $rart = $main->{dbcon}->getsimplequery("select
-                                                id,
-                                                pageid,
-                                                name,
-                                                description,
-                                                value,
-                                                pflag,
-                                                locked,
-                                                owner
-                                            from
-                                                articles
-                                            where
-                                                id='$artid'
-                                            ") if($artid);
+    my $ra = $main->{dbcon}->getsimplequery("
+                select
+                    id,
+                    name
+                from
+                    articles;
+                ") if($artid);
+    my $rart = $main->{dbcon}->getsimplequery("
+                select
+                    id,
+                    pageid,
+                    name,
+                    description,
+                    value,
+                    pflag,
+                    locked,
+                    owner
+                from
+                    articles
+                where
+                    id='$artid'
+                ") if($artid);
 
-    my $rp = $main->{dbcon}->getsimplequery("select
-                                                pageid,name
-                                            from
-                                                page
-                                            ");
+    my $rp = $main->{dbcon}->getsimplequery("
+                select
+                    pageid,name
+                from
+                    page
+                ");
 
     for my $s (sort keys %{$rart})
     {
@@ -220,7 +245,13 @@ sub artform
     }
 
     my $muid;
-    my $p_uid = $main->{dbcon}->getsimplequery("select userid, login from user;");
+    my $p_uid = $main->{dbcon}->getsimplequery("
+                    select
+                        userid,
+                        login
+                    from
+                        user;
+                    ");
 
     for my  $ss (sort keys %{$p_uid})
     {
@@ -273,55 +304,81 @@ sub changeartinfo
 
     if($artid > 0)
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr},
-                                                    "update articles
-                                                    set
-                                                        name = '$main->{form}->{artname}',
-                                                        pageid = '$main->{form}->{pageid}',
-                                                        description = '$main->{form}->{description}',
-                                                        pflag = '$main->{form}->{pflag}',
-                                                        ChangedBy = '$user',
-                                                        DataChanged = CURRENT_TIMESTAMP,
-                                                        value = ?
-                                                    where
-                                                        id='$artid' and locked=0;", $main->{form}->{value});
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                update
+                    articles
+                set
+                    name = '$main->{form}->{artname}',
+                    pageid = '$main->{form}->{pageid}',
+                    description = '$main->{form}->{description}',
+                    pflag = '$main->{form}->{pflag}',
+                    ChangedBy = '$user',
+                    DataChanged = CURRENT_TIMESTAMP,
+                    value = ?
+                where
+                    id='$artid'
+                    and locked=0;", $main->{form}->{value});
     }
     else
     {
-        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "insert into articles
-                (name,pageid,description,pflag,CreatedBy,owner,DataCreated,locked,value) values(
-                '$main->{form}->{artname}',
-                '$main->{form}->{pageid}',
-                '$main->{form}->{description}',
-                '$main->{form}->{pflag}',
-                '$user',
-                '$user',
-                CURRENT_TIMESTAMP,
-                '0',
-                ? );",$main->{form}->{value});
+        $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+                insert into
+                    articles
+                    (
+                    name,
+                    pageid,
+                    description,
+                    pflag,
+                    CreatedBy,
+                    owner,
+                    DataCreated,
+                    locked,
+                    value
+                    )
+                values(
+                    '$main->{form}->{artname}',
+                    '$main->{form}->{pageid}',
+                    '$main->{form}->{description}',
+                    '$main->{form}->{pflag}',
+                    '$user',
+                    '$user',
+                    CURRENT_TIMESTAMP,
+                    '0',
+                    ? );",$main->{form}->{value});
 
-        my $raid = $main->{dbcon}->getsimplequeryhash("select id from
-                        articles where name='$main->{form}->{artname}';");
+        my $raid = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        id
+                    from
+                        articles
+                    where
+                        name='$main->{form}->{artname}';
+                    ");
         $artid = $raid->{id};
     }
 
     chowner($main, $artid);
     return $main;
-
 }
-
 
 sub getarticles
 {
     my $main = shift;
     my $maid;
-    my $aid = $main->{dbcon}->getsimplequery("select
-                                        a.id as artid, p.name as pname, a.name as name, a.description as description, a.pflag as pflag, a.locked as locked
-                                    from
-                                        articles as a, page as p
-                                    where
-                                        p.pageid=a.pageid
-                                    ;");
+    my $aid = $main->{dbcon}->getsimplequery("
+                select
+                    a.id as artid,
+                    p.name as pname,
+                    a.name as name,
+                    a.description as description,
+                    a.pflag as pflag,
+                    a.locked as locked
+                from
+                    articles as a,
+                    page as p
+                where
+                    p.pageid=a.pageid;
+                ");
 
     for my  $ss (sort keys %{$aid})
     {
@@ -360,12 +417,16 @@ sub chowner
     return $main if $main->{a}->{owner} eq $main->{a}->{oldowner};
     $main->{eventhash}->{chowner} = 'chowner';
     $main = AuthUserActionHash( $main, 'article', 'ObjectClass', 'chowner' );
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
                     articles
                 set
                     owner='$main->{a}->{owner}'
-                where id='$artid' and ( locked=0 or locked is NULL) ;");
+                where
+                    id='$artid'
+                    and ( locked=0 or locked is NULL) ;
+                
+                ");
     return $s;
 }
-
 

@@ -54,16 +54,20 @@ sub gendata
     $main = checkcurdate($main);
     if($action eq 'search')
     {
-        $main->{logdata} = $main->{dbcon}->getlog("select
-                                lid,time,event from log where ( cast(time as date)
+        $main->{logdata} = $main->{dbcon}->getlog("
+                            select
+                                lid,
+                                time,
+                                event
+                            from
+                                log
+                            where
+                                ( cast(time as date)
                             between
                                 '$main->{pdates}->{from}'
                                 and '$main->{pdates}->{to}' )
-                                $ureg order by time desc;");
-        return;
-    }
-    if ($action eq 'delete')
-    {
+                                $ureg order by time desc;
+                            ");
         return;
     }
     return;

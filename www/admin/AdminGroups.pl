@@ -106,8 +106,22 @@ sub gendata
     }
     if($action eq 'lock' or$action eq 'unlock' )
     {
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update groups set locked=1 where gid='$gid'") if $action eq 'lock';
-        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update groups set locked=0 where gid='$gid'") if $action eq 'unlock';
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    groups
+                set
+                    locked=1
+                where
+                    gid='$gid'
+                ") if $action eq 'lock';
+        $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    groups
+                set
+                    locked=0
+                where
+                    gid='$gid'
+                ") if $action eq 'unlock';
         $main = gidform($main,$gid);
     }
     if($action eq 'enable' or$action eq 'disable' )
@@ -149,13 +163,16 @@ sub savegroup
 
     return 0 unless $gid;
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                groups
-            set
-                gname = '$gname',
-                description = '$description',
-                weight = '$weight'
-                where gid='$gid';");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    groups
+                set
+                    gname = '$gname',
+                    description = '$description',
+                    weight = '$weight'
+                where
+                    gid='$gid';
+                ");
     return;
 }
 
@@ -166,16 +183,17 @@ sub savenewgroup
     my $gname = $main->{form}->{"name"};
     my $weight = $main->{weight};
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "insert into
-                groups
-            set
-                gname = '$gname',
-                description = '$description',
-                enabled = 0,
-                locked=0,
-                weight='$weight',
-                ObjectClass='group'
-            ;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                insert into
+                    groups
+                set
+                    gname = '$gname',
+                    description = '$description',
+                    enabled = 0,
+                    locked=0,
+                    weight='$weight',
+                    ObjectClass='group';
+                ");
     return $main;
 }
 
@@ -188,13 +206,25 @@ sub enablegroup
     $status = 0 if($action eq 'disable');
     return 0 if not $gid;
 
-    my $g = $main->{dbcon}->getsimplequeryhash("select gid from user where login ='$main->{global}->{superuser}';");
+    my $g = $main->{dbcon}->getsimplequeryhash("
+                select
+                    gid
+                from
+                    user
+                where
+                    login ='$main->{global}->{superuser}';
+                ");
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "update
-                groups as g
-            set
-                g.enabled = '$status'
-            where g.gid='$gid' and g.gid != '$g->{gid}' and locked=0;");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                update
+                    groups as g
+                set
+                    g.enabled = '$status'
+                where
+                    g.gid='$gid'
+                    and g.gid != '$g->{gid}'
+                    and locked=0;
+                ");
     return $s;
 }
 
@@ -205,7 +235,14 @@ sub delgroup
     my $gid = shift;
     my $line;
     return $main unless $gid;
-    my $mgid = $main->{dbcon}->getsimplequeryhash("select count(gid) as count from user where gid ='$gid';");
+    my $mgid = $main->{dbcon}->getsimplequeryhash("
+                select
+                    count(gid) as count
+                from
+                    user
+                where
+                    gid ='$gid';
+                ");
 
     if($mgid->{count})
     {
@@ -213,9 +250,12 @@ sub delgroup
         return $main;
     }
 
-    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "delete from
-                groups
-            where gid='$gid';");
+    my $s = $main->{dbcon}->insertsimplequery($main->{dbhlr}, "
+                delete from
+                    groups
+                where
+                    gid='$gid';
+                ");
     $main->{errline} .= errline(0, "Группа $main->{form}->{name} (gid:$gid) успешно удалена");
     return $main;
 }
@@ -227,7 +267,8 @@ sub gidform
     my $gid = shift;
     my $gidinfo;my $mrgid;
 
-    my $mgid = $main->{dbcon}->getsimplequery("select
+    my $mgid = $main->{dbcon}->getsimplequery("
+                select
                     gid, gname, description, enabled, CreateStatus
                 from
                     groups where weight <= '$main->{weight}'
@@ -238,18 +279,32 @@ sub gidform
         $gid = $mgid->{$ss}->[0] if $gid eq 'fake';
         last if $gid > 0;
     }
-    my $raid = $main->{dbcon}->getsimplequeryhash("select gid from
-                        groups where gname='$main->{form}->{name}';")
-                        unless $gid;
+    my $raid = $main->{dbcon}->getsimplequeryhash("
+                select
+                    gid
+                from
+                    groups
+                where
+                    gname='$main->{form}->{name}';
+                ") unless $gid;
+
     $gid = $gid || $raid->{gid};
     $main->{form}->{gid} = $gid;
     $main->{form}->{raction} = 'new' unless $gid;
 
-    my $gidinfo = $main->{dbcon}->getsimplequeryhash("select gid,gname as name,description,enabled, locked, acl, weight
-                                            from
-                                                groups
-                                            where
-                                                gid='$gid'") if($gid);
+    my $gidinfo = $main->{dbcon}->getsimplequeryhash("
+                    select
+                        gid,
+                        gname as name,
+                        description,
+                        enabled,
+                        locked,
+                        acl,
+                        weight
+                    from
+                        groups
+                    where
+                        gid='$gid'") if($gid);
     $gidinfo->{lchecked} = 'checked' if($gidinfo->{locked});
     $gidinfo->{echecked} = 'checked' if($gidinfo->{enabled});
 
@@ -270,12 +325,20 @@ sub gidform
     return $main;
 }
 
-
 sub getgroginfo
 {
     my $main = shift;
     my $groginfo;
-    my $mg = $main->{dbcon}->getsimplequery("select oid,name,rhash from GROG where enabled=1;");
+    my $mg = $main->{dbcon}->getsimplequery("
+                select
+                    oid,
+                    name,
+                    rhash
+                from
+                    GROG
+                where
+                    enabled=1;
+                ");
     foreach my $s (keys %{$mg})
     {
         $groginfo->{oid} = $mg->{$s}->[0];
@@ -289,7 +352,6 @@ sub getgroginfo
     $main->{dump_hash} = Dumper($groginfo) || undef;
     $main->{groginfo} = $groginfo;
     return $main;
-
 }
 
 sub getaclhash
@@ -297,7 +359,15 @@ sub getaclhash
     my $main = shift;
     my $gid = shift;
 
-    my $macl = $main->{dbcon}->getsimplequeryhash("select acl from groups where enabled=1 and gid='$gid';");
+    my $macl = $main->{dbcon}->getsimplequeryhash("
+                select
+                    acl
+                from
+                    groups
+                where
+                    enabled=1
+                    and gid='$gid';
+                ");
     my $rhash = $macl->{acl};
     $main->{aclh} = $main->{xml}->XMLin($rhash) if $rhash;
     return $main;
@@ -311,8 +381,14 @@ sub changeaclhash
     $main = createroothash($main) unless ( ishash $main->{aclh});
     my $rhash = $main->{aclh} || undef;
     $main->{form}->{rhash} = genhashtoxml($main, $rhash);
-    $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "update groups set acl = ?
-                    where gid='$gid' and locked=0;", $main->{form}->{rhash});
+    $s = $main->{dbcon}->insert1linequery($main->{dbhlr}, "
+            update
+                groups
+            set
+                acl = ?
+            where
+                gid='$gid'
+                and locked=0;", $main->{form}->{rhash});
     return $main;
 }
 
@@ -332,15 +408,20 @@ sub createroothash
     return $main;
 }
 
-
 sub checkformdata
 {
     my $main = shift;
     my $errline = '';
 
     $errline .= checkval('Group name',$main->{form}->{name}, q/^[A-z0-9\.\-\_]+$/);
-    my $raid = $main->{dbcon}->getsimplequeryhash("select gid from
-                        groups where gname='$main->{form}->{name}';") if $main->{form}->{firstcreated};
+    my $raid = $main->{dbcon}->getsimplequeryhash("
+                select
+                    gid
+                from
+                    groups
+                where
+                    gname='$main->{form}->{name}';
+                ") if $main->{form}->{firstcreated};
     $errline .= errline(1,"Group $main->{form}->{name} already exists!") if $raid->{id};
     $errline .= checkval('Group description',$main->{form}->{description}, q/[\S]/);
     $errline .= errline(1, "Weight must be < 255") if $main->{form}->{weight} > 255;
