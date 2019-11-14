@@ -1,0 +1,7 @@
+www/ajax/* linguist-vendored=false
+www/errors/* linguist-vendored=false
+*.js linguist-vendored=false
+*.css linguist-vendored=false
+static/* linguist-vendored=false
+templates/* linguist-vendored=false
+conf/* linguist-vendored=false
