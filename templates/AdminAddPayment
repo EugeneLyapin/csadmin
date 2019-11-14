@@ -1,0 +1,122 @@
+﻿
+    <br>
+        <table><tr><td>
+        <font size=3 color=>[+ main.errline +]</font>
+        </td></tr></table>
+        <!-- details -->
+    [+ IF main.userdetails +]
+        <form action=[+ main.program +] name="fInvId" method=POST>
+        <table>
+        [+ pid = main.muser.pid +]
+        [+ userid = main.muser.userid +]
+        [+ summ = main.muser.summ +]
+        [+ CurrId = main.muser.CurrId +]
+        [+ pflag = main.muser.enabled +]
+        [+ login = main.muser.login +]
+
+            [+ IF pflag +]
+            [+ pflag_action = 'disable' +]
+                [+ pflag_pic = '/img/i-agree.gif' +]
+            [+ ELSE +]
+            [+ pflag_action = 'enable' +]
+                [+ pflag_pic = '/img/i-stop.gif' +]
+            [+ END +]
+
+        <input type="hidden" name=InvId value=[+ pid +]>
+        <tr><td align=right> <b>Account ID:</b></td> <td>[+ pid +]</td></tr>
+
+        <tr><td align=right> <b>Сумма средств на счете</b></td> <td><input type=text name=summ value=[+ summ +]></td></tr>
+        <tr><td align=right> <b>Пользователь:</b></td> <td>[+ userid +], [+ login +]</td></tr>
+        <tr><td align=right> <b>Включен:</b></td> <td><a href=[+ main.program +]?userid=[+ userid +]&action=[+ pflag_action +]><img src=[+ pflag_pic +]></a></td></tr>
+        <tr><td align=right> <b>Валюта:</b></td>
+    <td>
+            <select name=currency id=currency STYLE="width: 120px">
+        [+ FOREACH ss = main.rcurr +][+ t = ss.key +]
+            [+ selected = '' +]
+            [+ currid = main.rcurr.$t.0 +]
+            [+ name = main.rcurr.$t.1 +]
+            [+ fullname = main.rcurr.$t.2 +]
+                [+ IF currid == CurrId +]
+                [+ selected = 'selected' +]
+                [+ END +]
+            [+ IF name != 'empty' +]
+            <option value=[+ currid +] [+ selected +] >[+ fullname +]</option>
+            [+ END +]
+        [+ END +]
+            </select>
+        </td></tr>
+
+        </table>
+        <input type=hidden name=userid value=[+ userid +]>
+            <p align=center><input name=submit value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+        </form>
+    [+ END +]
+
+
+    [+ IF main.details +]
+    <table class=wrapper>
+    <tr>
+    <th>ID</th>
+    <th>Account ID</th>
+    <th>login</th>
+    <th>Имя</th>
+    <th>email</th>
+    <th>Серверов</th>
+    <th>Активен</th>
+    <th>Сумма</th>
+    <th>Валюта</th>
+    </tr>
+        [+ FOREACH m = main.muser +][+ m = m.key +]
+            [+ userid = main.muser.$m.0 +]
+            [+ login = main.muser.$m.1 +]
+            [+ fname = main.muser.$m.3 +]
+            [+ sname = main.muser.$m.2 +]
+            [+ name = main.muser.$m.4 +]
+            [+ email = main.muser.$m.5 +]
+            [+ srvcount = main.muser.$m.7 +]
+            [+ pid = main.muser.$m.8 +]
+            [+ p_enabled = main.muser.$m.9 +]
+            [+ summ = main.muser.$m.10 +]
+            [+ currname = main.muser.$m.11 +]
+
+            [+ IF p_enabled +]
+                [+ enabled = 'Включен' +]
+                [+ action = 'disable' +]
+                [+ pic = 'i-agree.gif' +]
+            [+ ELSE +]
+                [+ enabled = 'Выключен' +]
+                [+ action = 'enable' +]
+                [+ pic = 'i-stop.gif' +]
+            [+ END +]
+
+        <form action=[+ main.program +] name="userinfo" method=POST>
+        <input type=hidden name=userid value=[+ userid +]>
+        <tr>
+        <td align=left><a href=[+ main.program +]?userid=[+ userid +] >[+ userid +]</a></td>
+        <td align=left>[+ pid +]</td>
+        <td align=left>[+ login +]</td>
+        <td align=left>[+ fname +] [+ sname +] [+ name +]</td>
+        <td align=left>[+ email +]</td>
+        <td align=center><a href=AdminSrvControl.pl?userid=[+ userid +]>[+ srvcount +]</a></td>
+        <td align=center><a href=[+ main.program +]?userid=[+ userid +]&action=[+ action +]><img src=/img/[+ pic +]></a></td>
+        <td align=center>[+ summ +]</td>
+        <td align=center>[+ currname +]</td>
+        </tr>
+        </form>
+        [+ END +]
+    </TABLE>
+    [+ END +]
+
+
+
+
+
+
+
+
+
+
+
+
+

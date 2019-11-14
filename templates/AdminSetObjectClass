@@ -1,0 +1,111 @@
+﻿
+<center>
+
+[+ debug = 0 +]
+
+    [+ main.errline +]
+
+[+ IF main.form.raction == 'showall' +]
+    <table width="500" align=center>
+    <tr><td align=center><fieldset>
+    <legend>Группа объектов (table):</legend>
+        [+ FOREACH t = main.mtables +][+ t = t.key +]
+        [+ tname = main.mtables.$t.0 +]
+        <a href=[+ main.program +]?table=[+ tname +]&action=desctable>[+ tname+]</a> |
+        [+ END +]
+        </fieldset>
+    </td></tr>
+    </table>
+[+ END +]
+
+[+ IF main.form.raction == 'desctable' +]
+    [+ IF main.objexists +]
+    <table width="30" align=center>
+    <tr><td align=center><fieldset>
+    <legend>Группа объектов (fields):</legend>
+        [+ FOREACH t = main.table +][+ t = t.key +]
+        [+ tname = main.table.$t.0 +]
+        <a href=[+ main.program +]?table=[+ main.info.table+]&field=[+ tname +]&action=showfield>[+ tname+]</a> <br>
+        [+ END +]
+        </fieldset>
+    </td></tr>
+    </table>
+    [+ END +]
+[+ END +]
+
+[+ IF main.form.raction == 'showfield' and main.objexists +]
+    <table width="500" align=center>
+    <tr><td align=center><fieldset>
+    <legend>Свойства объектов:</legend>
+        [+ FOREACH t = main.table +][+ t = t.key +]
+        [+ tname = main.table.$t.0 +]
+        [+ oclass = main.table.$t.1 +]
+        <a href=[+ main.program +]?table=[+ main.info.table +]&field=[+ main.info.field +]&object=[+ tname +]&action=showobject>[+ tname +]</a> |
+        [+ END +]
+        </fieldset>
+    </td></tr>
+    </table>
+[+ END +]
+</center>
+
+[+ IF main.form.raction == 'showobject' and main.objexists +]
+        [+ oclass = main.mt.ObjectClass +]
+    <table align=center>
+    <tr><td align=center>
+    <br>
+    [+ main.info.path +]
+    <br>
+    <fieldset>
+
+    <legend>Свойства объекта (Object Class):</legend>
+    <table>
+    <tr>
+        <form action=[+ main.program +] method="POST">
+        <input type=hidden name=field value="[+ main.info.field +]">
+        <input type=hidden name=object value="[+ main.info.object +]">
+        <input type=hidden name=table value="[+ main.info.table +]">
+        <input type=hidden name=oclass value="[+ main.mt.ObjectClass +]">
+        <td>[+ main.info.object +] </td>
+        <td><select name=OC id=OC STYLE="width: 100px"  onchange="hideconfig()">
+            [+ FOREACH s = main.groginfo +][+ s = s.key +]
+            [+ name = main.groginfo.$s.0 +]
+            [+ IF name == oclass +]
+            [+ sflag = 'selected' +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+                <option value=[+ name +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+        </select>
+        </td>
+        </tr>
+        [+ IF main.mo.owner +]
+        <tr>
+        <td>owner</td>
+        <td><select name=owner id=owner STYLE="width: 100px"  onchange="hideconfig()">
+            [+ FOREACH s = main.mown +][+ s = s.key +]
+            [+ val = main.mown.$s.0 +]
+            [+ login = main.mown.$s.1 +]
+            [+ IF val == main.mo.owner +]
+            [+ sflag = 'selected' +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+                <option value=[+ val +] [+ sflag +]>[+ login +]</option>
+            [+ END +]
+        </select>
+        </td>
+        </tr>
+    [+ END +]
+        </td>
+        </tr>
+        </table>
+        </fieldset>
+    </td></tr>
+        <tr>
+         <td colspan=2 align=center><input name=save value='save' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+        </tr>
+        </form>
+    </table>
+[+ END +]
+</center>

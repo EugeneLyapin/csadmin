@@ -1,0 +1,183 @@
+﻿        <br>
+        [+ main.errline +]
+        [+ IF not main.action or main.action == 'showall' +]
+
+        <table class="wrapper">
+        <tbody><tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Локация</th>
+        <th>IP-адрес</th>
+        <th>Слотов</th>
+        <th>Статус</th>
+        <th>Ping</th>
+        <th colspan="2">Свойства</th>
+        </tr>
+
+        <form action="[+ main.program +]" name="msid" method="post">
+        [+ FOREACH ss = main.msid +][+ t = ss.key +]
+
+            [+ hid = main.msid.$t.hid +]
+            [+ name = main.msid.$t.name +]
+            [+ location = main.msid.$t.location +]
+            [+ ostype = main.msid.$t.ostype +]
+            [+ ipaddr = main.msid.$t.ipaddr +]
+            [+ cpuslots = main.msid.$t.cpuslots +]
+            [+ enabled = main.msid.$t.enabled +]
+        [+ IF enabled +]
+        [+ action_enabled = 'disable' +]
+        [+ pic_enabled = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ action_enabled = 'enable' +]
+        [+ pic_enabled = '/img/i-stop.gif' +]
+        [+ END +]
+
+            <input name="hid" value="[+ hid +]" type="hidden">
+            <tr>
+            <td><a href="[+ main.program +]?hid=[+ hid +]&action=details">[+ hid +]</a></td>
+            <td>[+ name +]</td>
+            <td>[+ location +]</td>
+            <td>[+ ipaddr +]</td>
+            <td align="center">[+ cpuslots +]</td>
+            <td align="center"><a href="[+ main.program +]?hid=[+ hid +]&action=[+ action_enabled +]"><img src="[+ pic_enabled +]" style="border: 0px none ; background-color: transparent;"></a></td>
+            <td></td>
+            <td>
+            <select name="action-[+ hid +]" id="action" style="width: 120px;">
+            <option value="empty">----------------</option>
+            <option value="stats">Статистика</option>
+
+            <option value="details">Подробнее</option>
+            <option value="new">Добавить сервер</option>
+            <option value="delete">Удалить сервер</option>
+
+            </select></td>
+            <td align="center">
+            &nbsp;&nbsp;<input name="submitaction-[+ hid +]" value="Go" style="border: 0px none ; background-color: transparent;" src="/img/bullet9.gif" border="0" type="image">
+            &nbsp;<a href=[+ main.program +]?hid=[+ hid +]&action=details><img src=/img/i-edit.gif></a>
+            &nbsp;<a href=[+ main.program +]?hid=[+ hid +]&action=delete><img src=/img/i-delete.gif></a>
+            </td>
+
+            </tr>
+            [+ END +]
+        </form>
+        </table>
+        <p>
+            <a href=[+ main.program +]?action=new><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+
+    [+ END +]
+
+        [+ IF main.action == 'details' +]
+
+        [+ hid = main.mhid.hid +]
+        [+ name = main.mhid.name +]
+        [+ ostype = main.mhid.ostype +]
+        [+ ipaddr = main.mhid.ipaddr +]
+        [+ cpuslots = main.mhid.cpuslots +]
+        [+ price = main.mhid.price +]
+        [+ sshport = main.mhid.sshport +]
+        [+ ftpport = main.mhid.ftpport +]
+        [+ mcpu = main.mhid.mcpu +]
+        [+ locationid = main.mhid.locationid +]
+        [+ enabled = main.mhid.enabled +]
+
+            [+ IF enabled +]
+                [+ action = 'disable' +]
+                [+ pic = '/img/i-agree.gif' +]
+            [+ ELSE +]
+                [+ action = 'enable' +]
+                [+ pic = '/img/i-stop.gif' +]
+            [+ END +]
+    <br>
+    <form action="[+ main.program +]" name="save" method="post">
+    <table border="1">
+    <tbody><tr>
+    <td>
+
+    <table>
+    <tbody><tr><td>ID</td><td><input name="hid" value="[+ hid +]" type="hidden">[+ hid +]</td></tr>
+    <tr><td>Название</td><td><input style="width: 200px;" name="name" value="[+ name +]" type="text"></td></tr>
+    <tr><td>Локация</td><td>
+        <select name="locationid" id="locationid" style="width: 200px;" onchange="hideconfig()">
+        [+ FOREACH s = main.rlocation +][+ s = s.key +]
+        [+ lid = main.rlocation.$s.0 +]
+        [+ lname = main.rlocation.$s.1 +]
+        [+ sflag = '' +]
+        [+ IF lid == locationid +]
+            [+ sflag = 'selected' +]
+        [+ END +]
+        <option value="[+ lid +]" [+ sflag +]>[+ lname +]</option>
+        [+ END +]
+        </select><input name="filename" value="Москва" type="hidden"></td></tr>
+        <tr><td>Платформа</td><td>
+            <select name="ostypeid" id="ostypeid" style="width: 200px;" onchange="hideconfig()">
+        [+ FOREACH s = main.rostype +][+ s = s.key +]
+        [+ oid = main.rostype.$s.0 +]
+        [+ oname = main.rostype.$s.1 +]
+        [+ sflag = '' +]
+        [+ IF oid == ostype +]
+            [+ sflag = 'selected' +]
+        [+ END +]
+        <option value="[+ oid +]" [+ sflag +]>[+ oname +]</option>
+        [+ END +]
+        </select><input name="filename" value="Windows" 2008="" server="" type="hidden"></td></tr>
+    <tr><td>IP адрес</td><td><input name="mainipaddr" value="[+ ipaddr +]" type="text"></td></tr>
+    </tbody></table>
+        </td><td>
+    <table>
+    <tbody><tr><td>Количество ядер</td><td><input style="width: 30px;" name="mcpu" value="[+ mcpu +]" type="text"></td></tr>
+    <tr><td>Слотов на ядро</td><td><input style="width: 30px;" name="cpuslots" value="[+ cpuslots +]" type="text"></td></tr>
+    <tr><td>FTP port</td><td><input style="width: 30px;" name="ftpport" value="[+ ftpport +]" type="text"></td></tr>
+    <tr><td>SSH port</td><td><input style="width: 30px;" name="sshport" value="[+ sshport +]" type="text"></td></tr>
+    <tr><td>Стоимость в месяц</td><td><input style="width: 100px;" name="price" value="[+ price +]" type="text"></td></tr>
+    </tbody></table>
+    </td></tr>
+
+    </tbody></table>
+
+
+    <table border="0">
+    <tbody><tr>
+    <td>
+
+    <table border="1">
+    <tbody><tr><td width="200">Статус</td>
+    <td>
+    <a href="[+ main.program +]?hid=[+ hid +]&action=[+ action +]&edithw=1"><img src="[+ pic +]" style="border: 0px none ; background-color: transparent;"></a>
+    </td></tr>
+    <tr><td>Web port</td><td>OK</td></tr>
+    <tr><td>Ssh port</td><td>OK</td></tr>
+
+    </tbody></table>
+    </td><td>
+    <table border="1">
+    <tbody><tr><th colspan="3">Дополнительные IP-адреса</th></tr>
+        [+ FOREACH s = main.ripaliases +][+ s = s.key +]
+        [+ addr = main.ripaliases.$s.addr +]
+        <tr>
+        <td>[+ addr +]</td>
+        <td align=center>
+        &nbsp;<a href=[+ main.program +]?hid=[+ hid +]&ipaddr=[+ addr +]&action=deletealias><img style="background-color:transparent;border:3px;" src=/img/i-delete.gif></a>
+        </td>
+        </tr>
+        [+ END +]
+        [+ IF main.newalias == 1 +]
+        <tr><td><input type=text name=inputaddipalias value="" style="width:100px"></td><td></td></tr>
+        [+ END +]
+
+    <tr><td colspan="2" align="center">
+        &nbsp;<input name="addipalias" value="addipalias" style="border: 3px none ; background-color: transparent;" src="/img/admin/db_add.png" border="0" type="image">
+        <br>
+        <input style="border: 0px none ;" name="addipalias" value="Добавить" type="submit" id=addipalias></td></tr>
+
+    </tbody></table>
+    </td></tr>
+    </tbody></table>
+    <input name="action-[+ hid +]" value="details" type="hidden">
+            <p align="center">
+            <input name="changehid" value="Save" style="border: 0px none ; background-color: transparent; color: transparent;" src="/img/admin/document-save.png" border="0" type="image"></p>
+        <center>Сохранить изменения</center>
+
+    </form>
+        [+ END +]
+
+

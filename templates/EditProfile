@@ -1,0 +1,81 @@
+﻿    <br>
+    [+ main.errline +]
+            <div class="popup" id="mess"></div>
+        <form action=[+ main.program +] name=frmValidate method=post><br>
+        <input type=hidden name=login value=[+ main.userinfo.login.value +]>
+        <table><tr><td>
+                <fieldset>
+                <legend>Аккаунт</legend>
+
+                <table width=200>
+                <tr><td>Логин:</td><td><b> [+ main.userinfo.login.value +]</b></td>
+                        <tr><td>Почта</td><td><input type="text"
+                        name="email" style='width:[+ main.userinfo.email.strlen +]'
+                        onmouseover="tooltip(this,'Введите email в виде: doom@doom.ru')" onmouseout="hide_info(this)"
+                        value="[+ main.userinfo.email.value +]">
+                        </td></tr>
+                        <tr><td>Новый пароль:</td><td><input type="password" name="pass1" value=""
+                        onmouseover="tooltip(this,'Длина пароля не менее 8 символов и не более 50 символов')" onmouseout="hide_info(this)">
+                        </td></tr>
+                        <tr><td>Еще разок:</td><td><input type="password" name="pass2" value=""></td></tr>
+                        </table>
+                </fieldset>
+                <fieldset>
+                <legend>Личная информация</legend>
+                <table width=200>
+                <tr><td>Фамилия: </td>
+                <td><input type=text style='width:[+ main.userinfo.login.strlen +]' name=sname value="[+ main.userinfo.login.value +]"></td></tr>
+                <tr><td>Имя: </td>
+                <td><input type=text style='width:[+ main.userinfo.name.strlen +]' name=name value="[+ main.userinfo.name.value +]"></td></tr>
+                <tr><td>Отчество: </td>
+                <td><input type=text style='width:[+ main.userinfo.fname.strlen +]' name=fname value="[+ main.userinfo.fname.value +]"></td></tr>
+                <tr><td>Дата рождения: </td>
+                <td><input type=text style='width:[+ main.userinfo.birthdate.strlen +]' name=birthdate value="[+ main.userinfo.birthdate.value +]"></td></tr>
+
+                </table>
+                </fieldset>
+                <fieldset>
+                <legend>Контактная информация</legend>
+                <table>
+                <tr><td>ICQ: </td>
+                <td>  <input type=text style='width:[+ main.userinfo.icq.strlen +]' name=icq value="[+ main.userinfo.icq.value +]"> </td></tr>
+                <tr><td>Вконтакте: </td>
+                <td>  <input type=text style='width:[+ main.userinfo.vkontakte.strlen +]' name=vkontakte value="[+ main.userinfo.vkontakte.value +]">  </td></tr>
+                <tr><td>Мобильный телефон: </td>
+                <td>   <input type=text style='width:[+ main.userinfo.cellphone.strlen +]' name=cellphone value="[+ main.userinfo.cellphone.value +]"> </td></tr>
+                <tr><td>Домашний телефон: </td>
+                <td>   <input type=text style='width:[+ main.userinfo.homephone.strlen +]' name=homephone value="[+ main.userinfo.homephone.value +]">   </td></tr>
+                <tr><td>Страна: </td>
+                <td> <input type=text style='width:[+ main.userinfo.country.strlen +]' name=country value="[+ main.userinfo.country.value +]">  </td></tr>
+                <tr><td>Город: </td>
+                <td> <input type=text style='width:[+ main.userinfo.city.strlen +]' name=city value="[+ main.userinfo.city.value +]"> </td></tr>
+                <tr><td>Адрес: </td>
+                <td>
+                <textarea name=address rows=5 cols=12 style='border:2px solid #ccc; width:200px'>[+ main.userinfo.address.value +]</textarea>
+
+                </td></tr>
+                </table>
+                </fieldset>
+
+        </td><td>
+
+
+                <fieldset>
+                <legend>Дополнительная информация</legend>
+                <table width=200>
+                <tr><td>Сайт: </td>
+                <td><input type=text style='width:[+ main.userinfo.site.strlen +]' name=site value="[+ main.userinfo.site.value +]"></td>
+
+                </tr><tr><td>Название клана: </td>
+                <td><input type=text style='width:[+ main.userinfo.clan.strlen +]' name=clan value="[+ main.userinfo.clan.value +]"></td></tr>
+                <tr><td>Дополнительная информация: </td><td>
+                <textarea name=addon rows=12 cols=12 style='border:2px solid #ccc; width:200px'>[+ main.userinfo.addon.value +]</textarea>
+                </td></tr>
+                </table>
+                </fieldset>
+
+    </td></tr></table>
+    <input type=hidden name=userid value=[+ main.userinfo.userid.value +]>
+            <p align=center><input name=submit value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+        <center>Сохранить изменения</center>
+    </form>

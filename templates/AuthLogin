@@ -1,0 +1,28 @@
+﻿[+ main.errline +]
+    <table width=300 align=center><tr><td>
+    <fieldset>
+    <br>
+    <table width=300 align=center border=0>
+        <form action="/[+ main.program +]" method="post" id="loginform" name=loginform>
+    <tr align=center>
+    <td align=right><img style="background-color:transparent;border:0px;"  src=/img/admin/preferences-desktop-user-password.png></td>
+        <td align=left><input type="text" id="query" name="loginname" /> Логин</td>
+        <td rowspan=3><input name=submitlogin value='Enter' style="background-color:transparent;border:0px;" type=image border=0 src=/img/admin/browser-go.png>
+        <center><input type="submit" style='border: 0px' name=submitlogin value="Войти" />
+        </td>
+    </tr>
+    <tr>
+        <td align=right><img style="background-color:transparent;border:0px;" src=/img/admin/181.png></td>
+        <td align=left><input type="password" id="query" name="loginpass" /> Пароль </td>
+    </tr>
+    <tr>
+        <td align=right colspan=2>
+    <input type="hidden" name=request_uri value="[+ main.referer +]" />
+        <span class="links"><a href="/forgetpass/">Забыли пароль?</a>
+                              | <a href="/registration/">Регистрация</a></span>
+        </td>
+    </tr>
+    </table>
+    </form>
+    </fieldset>
+    </td></tr></table>

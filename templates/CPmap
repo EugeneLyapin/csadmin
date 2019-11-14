@@ -1,0 +1,122 @@
+﻿        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+    <select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+    [+ FOREACH s = main.srvs +][+ s = s.key +]
+        [+ val = main.srvs.$s.0 +]
+        [+ name = main.srvs.$s.1 +]
+        [+ IF val == main.srvid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+        [+ END +]
+    </select>
+    &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    </form>
+    <br/>
+    <hr>
+    [+ main.errline +]
+    <br/>
+    <table><tr><td>
+    <fieldset><legend>Список установленных карт</legend>
+     <table class=wrapper><tr>
+     <th>Название</th>
+     <th>mapcycle.txt</th>
+     <th>maps.ini</th>
+     <th>Действие</th>
+     </tr>
+        [+ FOREACH m = main.umaps +][+ m = m.key +]
+        [+ mapname = main.umaps.$m.value +]
+        <tr class=wrapper>
+        <td>[+ main.umaps.$m.value +]</td>
+
+        [+ IF main.umaps.$m.txtflag +]
+        [+ mapaction = 'disable' +]
+        [+ mappic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ mapaction = 'enable' +]
+        [+ mappic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        <td align=center>
+        <a href=[+ main.program +]?sid=[+ main.srvid +]&mapname=[+ main.umaps.$m.value +]&file=mapcycle_txt&action=[+ mapaction +]>
+        <img src=[+ mappic +]></a></td>
+
+        [+ IF main.umaps.$m.iniflag +]
+        [+ mapaction = 'disable' +]
+        [+ mappic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ mapaction = 'enable' +]
+        [+ mappic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        <td align=center><a href=[+ main.program +]?sid=[+ main.srvid +]&mapname=[+ mapname +]&file=maps_ini&action=[+ mapaction +]>
+        <img src=[+ mappic +]></a></td>
+
+        <td align=center><a href=[+ main.program +]?sid=[+ main.srvid +]&mapname=[+ mapname +]&action=delete>
+        <img src=/img/i-delete.gif></a></td>
+        </tr>
+        [+ END +]
+        </table>
+        </fieldset>
+    </td>
+    <td>
+        <fieldset>
+        <table><tr>
+        <td> Выберите карту
+        <br/>
+    <form action="[+ main.program +]" name=selectmapform method=post>
+
+    <select name=mapid id=mapid STYLE="width: 200px"  onchange="hideconfig()">
+    [+ FOREACH m = main.rmaps +][+ m = m.key +]
+    [+ mapval = main.rmaps.$m.0 +]
+    [+ mapname = main.rmaps.$m.1 +]
+    [+ IF mapval == main.mapid +]
+    [+ sflag = 'selected' +]
+    [+ ELSE +]
+    [+ sflag = '' +]
+    [+ END +]
+
+    <option value=[+ mapval +] [+ sflag +]>[+ mapname +]</option>
+    [+ END +]
+    </select>
+    &nbsp;&nbsp;
+    <input name=selectmap value='selectmap' style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <input name=srvid type=hidden value=[+ main.srvid +]>
+    </form>
+    </td></tr></table>
+    </fieldset>
+    <br>
+    <table width=100><tr><td>
+
+    <fieldset>
+    <table>
+    <tr class=wrapper>
+    <th align=center>Карта: ID [+ main.mapid +], <b>[+ main.rmapid.name +]</b></th>
+    </tr><tr><td>
+    <form action="[+ main.program +]" name=addmapform method=post>
+    <br>
+    <input type="checkbox" name="cbaddtomapcycle_txt" value="addtomapcycle_txt" checked>Добавить в цикл карт<br>
+
+    <input type="checkbox" name="cbaddtomaps_ini" value="addtomaps_ini">Добавить в голосования<br>
+    <input type=hidden name=mapid value=[+ main.mapid +]>
+    <input type=hidden name=srvid value=[+ main.srvid +]>
+    <input type=hidden name=mapname value=[+ main.rmapid.name +]>
+    <tr>
+    <td>
+    <img style="background-color:transparent;border:0px;" src=/image.pl?file=/img/maps/[+ main.rmapid.pic +]&size=3>
+    </td>
+
+    </tr>
+    <tr><td align=center>
+    <input name=addmap value=Add style="background-color:transparent;border:0px;" type=image border=0 src=/img/admin/map_add.png >
+     <br><input style="border: 0px" name=addmap type=submit value="Добавить">
+    </td></tr>
+    </form>
+    </table>
+    </fieldset>
+    </td></tr></table>
+
+    </td></tr></table>

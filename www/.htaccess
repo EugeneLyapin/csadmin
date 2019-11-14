@@ -1,0 +1,36 @@
+Options -Indexes
+DirectoryIndex show.pl
+AddDefaultCharset UTF-8
+Options +FollowSymLinks
+RewriteEngine On
+
+RedirectMatch ^/about/partners/$ /index.pl?id=about\&post=partners
+RedirectMatch ^/login[\/]?$ /AuthLogin.pl
+RedirectMatch ^/logout[\/]?$ /AuthLogin.pl?action=logout
+RedirectMatch ^/exit[\/]?$ /AuthLogin.pl?action=logout
+RedirectMatch ^/admin[\/]?$ /admin/AdminGenPage.pl
+RedirectMatch ^/registration[\/]?$ /registration.pl
+RedirectMatch ^/forgetpass[\/]?$ /registration.pl
+RedirectMatch ^/help/$ /index.pl?id=faq\&post=wiki
+RedirectMatch ^/$ /about/info
+RedirectMatch ^/(\w+)[\/]?$ /index.pl?id=about\&post=info
+RedirectMatch ^/([\w\d]+)/([\w\_\-\d]+)[\/]?$ /index.pl?id=about\&post=$2
+ErrorDocument 404 /errors/notfound.html
+
+<Files *.txt>
+    ForceType text/plain
+</Files>
+<Files *.pm>
+    order deny,allow
+    deny from all
+</Files>
+
+<Files *.sql>
+    order deny,allow
+    deny from all
+</Files>
+
+<Files install.pl>
+    order deny,allow
+    deny from all
+</Files>

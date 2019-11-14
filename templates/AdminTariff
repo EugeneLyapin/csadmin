@@ -1,0 +1,230 @@
+﻿
+        <br>
+        [+ main.errline +]
+        [+ IF main.action == 'details' +]
+
+    [+ FOREACH ss = main.rtarif +][+ t = ss.key +]
+
+        [+ tarifid = main.rtarif.$t.0 +]
+
+        [+ description = main.rtarif.$t.1 +]
+        [+ ctime = main.rtarif.$t.2 +]
+        [+ mtime = main.rtarif.$t.3 +]
+        [+ FTP_enabled = main.rtarif.$t.4 +]
+        [+ MOD_enabled = main.rtarif.$t.5 +]
+        [+ game = main.rtarif.$t.6 +]
+            [+ HLTV_price = main.rtarif.$t.7 +]
+            [+ Amxbans_price = main.rtarif.$t.8 +]
+            [+ Psychostats_price = main.rtarif.$t.9 +]
+            [+ Psychostats_enabled = main.rtarif.$t.10 +]
+            [+ Amxbans_enabled = main.rtarif.$t.11 +]
+            [+ HLTV_enabled = main.rtarif.$t.12 +]
+            [+ diskquota = main.rtarif.$t.13 +]
+            [+ gameid = main.rtarif.$t.14 +]
+
+
+        [+ IF FTP_enabled +]
+        [+ FTP_action = 'disable' +]
+        [+ FTP_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ FTP_action = 'enable' +]
+        [+ FTP_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        [+ IF MOD_enabled +]
+        [+ MOD_action = 'disable' +]
+        [+ MOD_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ MOD_action = 'enable' +]
+        [+ MOD_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        [+ IF HLTV_enabled +]
+        [+ HLTV_action = 'disable' +]
+        [+ HLTV_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ HLTV_action = 'enable' +]
+        [+ HLTV_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        [+ IF Amxbans_enabled +]
+        [+ Amxbans_action = 'disable' +]
+        [+ Amxbans_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ Amxbans_action = 'enable' +]
+        [+ Amxbans_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        [+ IF Psychostats_enabled +]
+        [+ Psychostats_action = 'disable' +]
+        [+ Psychostats_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ Psychostats_action = 'enable' +]
+        [+ Psychostats_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        <form action=[+ main.program +] name="ftarifid" method=POST>
+        <input type="hidden" name=tarifid value=[+ tarifid +]>
+        <table border=0>
+        <tr>
+        <td>
+        <table class=wrapper>
+            <tr><td>ID</td><td>[+ tarifid +]</td></tr>
+            <tr><td>Название</td><td><input  style="width: 100px" type=text name=description value="[+ description +]"></td></tr>
+
+
+            <tr><td>
+            Сервер
+            </td>
+                <td>
+                    <select name=gameid id=action STYLE="width: 180px">
+
+                    [+ FOREACH g = main.rgame +][+ gd = g.key +]
+                    [+ ggameid = main.rgame.$gd.0 +]
+                    [+ gname = main.rgame.$gd.1 +]
+                    [+ selectpos = '' +]
+                    [+ IF ggameid == gameid +]
+                    [+ selectpos = 'selected' +]
+                    [+ END +]
+                    <option value=[+ ggameid +] [+selectpos+]>[+ gname +]</option>
+                    [+ END +]
+                </select>
+                </td>
+            </tr>
+
+            <tr><td>Доступ к MOD</td>
+                <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&MOD=[+ MOD_action +]&show=saveform><img src=[+ MOD_pic +]></a></td>
+            </tr>
+            <tr><td>Доступ к FTP</td>
+            <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&FTP=[+ FTP_action +]&show=saveform><img src=[+ FTP_pic +]></a></td>
+            </tr>
+            <tr><td>Объем в МБ</td><td><input  style="width: 100px" type=text name=diskquota value="[+ diskquota +]"></td></tr>
+            <tr><th colspan=2 align=center>Дополнительно</th></tr>
+            <tr>
+            <td colspan=2>
+            <table class=wrapper>
+                <tr><td>HLTV</td>
+                <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&HLTV=[+ HLTV_action +]&show=saveform><img src=[+ HLTV_pic +]></a></td>
+                <td><input  style="width: 50px" type=text name=HLTV_price value="[+ HLTV_price +]"></td></tr>
+                <tr><td>Amxbans</td>
+                <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&Amxbans=[+ Amxbans_action +]&show=saveform><img src=[+ Amxbans_pic +]></a></td>
+                <td><input  style="width: 50px" type=text name=Amxbans_price value="[+ Amxbans_price +]"></td></tr>
+                <tr><td>Psychostats</td>
+                <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&Psychostats=[+ Psychostats_action +]&show=saveform><img src=[+ Psychostats_pic +]></a></td>
+                <td><input  style="width: 50px" type=text name=Psychostats_price value="[+ Psychostats_price +]"></td></tr>
+            </table>
+            </td>
+            </tr>
+        </table>
+        </td>
+        <td>
+        <table class=wrapper>
+
+            <tr>
+            <th rowspan=2>x</th>
+            <th rowspan=2>Интервал</th>
+            <th colspan=2>Цена за слот</th></tr>
+            <tr><th>Public</th><th>Private</th></tr>
+            [+ FOREACH s = main.rperiod +][+ s = s.key +]
+            [+ periodid = s +]
+            [+ desc = main.rperiod.$s.description +]
+            [+ checked = main.rperiod.$s.checked +]
+            <tr>
+            <td><input type=checkbox name="checkbox_period_[+ periodid +]" value="[+ periodid +]" [+ checked +] ></td>
+            <td><a href=AdminPeriod.pl?periodid=[+ periodid +]>[+ desc +]</td>
+            <td><input  style="width: 50px" type=text name=public_price_[+ periodid +] value="[+ main.rperiod.$s.public_price +]"></td>
+            <td><input  style="width: 50px" type=text name=private_price_[+ periodid +] value="[+ main.rperiod.$s.private_price +]"></td>
+            </tr>
+            [+ END +]
+        </table>
+            <center><font class=blockme><a href=AdminPeriod.pl?action=new>Создать период</a>... </font></center>
+        </td>
+
+        </tr>
+        </table>
+
+        [+ END +]
+
+            <p align=center><input name=changetarifid value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+                    <center>Сохранить изменения</center>
+        </form>
+
+        [+ END +]
+
+
+        [+ IF not main.action or main.action == 'showall' +]
+    [+ FOREACH ss = main.rtarif +][+ t = ss.key +]
+    [+ END +]
+
+    <table class=wrapper>
+    <tr>
+
+    <th>ID</th>
+    <th>Название тарифа</th>
+
+    <th>Сервер</th>
+    <th>MOD</th>
+    <th>FTP</th>
+    <th>Обновлено</th>
+    <th colspan=2>Свойства</th>
+    [+ FOREACH ss = main.rtarif +][+ t = ss.key +]
+        [+ tarifid = main.rtarif.$t.0 +]
+        [+ description = main.rtarif.$t.1 +]
+        [+ ctime = main.rtarif.$t.2 +]
+        [+ mtime = main.rtarif.$t.3 +]
+        [+ FTP_enabled = main.rtarif.$t.4 +]
+        [+ MOD_enabled = main.rtarif.$t.5 +]
+        [+ game = main.rtarif.$t.6 +]
+
+        [+ IF FTP_enabled +]
+        [+ FTP_action = 'disable' +]
+        [+ FTP_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ FTP_action = 'enable' +]
+        [+ FTP_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+        [+ IF MOD_enabled +]
+        [+ MOD_action = 'disable' +]
+        [+ MOD_pic = '/img/i-agree.gif' +]
+        [+ ELSE +]
+        [+ MOD_action = 'enable' +]
+        [+ MOD_pic = '/img/i-stop.gif' +]
+        [+ END +]
+
+    </tr>
+        <form action=[+ main.program +] name="ftarifid" method=POST>
+        <input type="hidden" name=tarifid value=[+ tarifid +]>
+        <tr>
+        <td><a href=[+ main.program +]?tarifid=[+ tarifid +]&show=saveform>[+ tarifid +]</a></td>
+        <td>[+ description +]</td>
+        <td>[+ game +]</td>
+
+        <td align=center><a href=[+ main.program +]?tarifid=[+ tarifid +]&MOD=[+ MOD_action +]><img src=[+ MOD_pic +]></a></td>
+        <td align=center><a href=[+ main.program +]?tarifid=[+ tarifid +]&FTP=[+ FTP_action +]><img src=[+ FTP_pic +]></a></td>
+        <td>[+ mtime +]</td>
+
+            <td>
+            <select name=action-[+ tarifid +] id=action STYLE="width: 120px">
+            <option value=empty >----------------</option>
+            <option value=details>Редактировать</option>
+            <option value=newtarif>Добавить тариф</option>
+            <option value=deltarif>Удалить тариф</option>
+            </option>
+            </td>
+        <td align=center>
+        &nbsp;&nbsp;<input name=submitaction-[+ tarifid +] value='Go' style="background-color:transparent;border:0px;" type=image border=0 src=/img/bullet9.gif>
+        &nbsp;<input name=deltarif-[+ tarifid +] value=deltarif style="background-color:transparent;border:0px;" type=image border=0 src=/img/i-delete.gif>
+        &nbsp;<a href=[+ main.program +]?tarifid=[+ tarifid +]&show=saveform><img style='border:0px' border=0 src=/img/admin/i-baks.gif></a>
+        </td>
+
+        </form>
+        </tr>
+    [+ END +]
+
+    </TABLE>
+    <br>
+        <a href=[+ main.program +]?action=newtarif><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+    [+ END +]
+
+

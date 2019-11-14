@@ -1,0 +1,72 @@
+
+/* Collapses lists
+=================================================*/
+        DL.collapses{
+                margin:0;
+                padding:0;
+                }
+                DL.collapses DT{
+                        margin:0;
+
+                        }
+        .collapse{
+                }
+                .collapse.showed{
+                        display:block
+                        }
+        DL.payment{
+                border-bottom:1px solid #ececec;
+                }
+                DL.payment DT{
+                        clear:both;
+                        display:block;
+                        margin:0 0 10px 0;
+                        padding-top:10px;
+                        padding-bottom:5px;
+                        border-top:1px solid #ececec;
+                        }
+                DIV.serviceblocks2 dl.payment H4{
+
+                        }
+                span.collapse-link{
+
+                        }
+                        span.collapse-link.active{
+                                border-bottom:1px dashed #DB0029;
+                                cursor:pointer
+                                }
+        .side-pic{
+                float:right;
+                margin-top:0;
+                margin-bottom:10px;
+                margin-left:20px;
+                }
+                .payment .side-pic{
+                        width:135px;
+                        text-align:left;
+                        }
+                .payment A.more{
+                        display:block;
+                        width:135px;
+                        margin-top:10px;
+                        padding:2px 10px 4px 10px;
+                        background:url('/img/payment/payment_bg.gif') no-repeat left top;
+                        text-align:left;
+                        font-size:8px;
+                        font-weight:bold;
+                        color:#db0029;
+                        }
+
+        .collapse-all{
+                clear:both;
+                padding-top:3px;
+                padding-bottom:3px;
+                font-size:8px;
+                font-weight:bold;
+                text-align:right;
+                }
+                .collapse-all A{
+                        border-bottom:1px dashed #000;
+                        text-decoration:none;
+
+                        }

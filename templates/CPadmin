@@ -1,0 +1,153 @@
+﻿     <div class="popup" id="mess"></div>
+        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <table>
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+    <select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+    [+ FOREACH s = main.srvs +][+ s = s.key +]
+        [+ val = main.srvs.$s.0 +]
+        [+ name = main.srvs.$s.1 +]
+        [+ IF val == main.srvid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+        [+ END +]
+    </select>
+    &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+    <hr>
+    Тип доступа
+    <br/>
+    <select name=rid id=rid STYLE="width: 200px"  onchange="hideconfig()">
+    [+ FOREACH s = main.rid +][+ s = s.key +]
+        [+ val = main.rid.$s.0 +]
+        [+ name = main.rid.$s.1 +]
+        [+ IF val == main.form.rid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+    <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+    [+ END +]
+    </select>
+    <input type="submit" name="newadmin" value="Выбрать">
+    </form><br>
+    </td>
+    </tr>
+    </table>
+    <br/>
+
+    [+ main.errline +]
+
+    [+ IF main.getform.action == 'edit'
+    or main.getform.action == 'delete'
+    or main.action == 'new'
+    +]
+    <br/>
+    <table><tr><td>
+
+    <form action="[+ main.program +]" name=[+ main.f.name +] method=post>
+     <table class=wrapper>
+     <tr><th>[+ main.form.rid +]</th>
+     <th>Пароль</th>
+     <th>Флаги доступа</th></tr>
+
+     <tr class=wrapper>
+     <td width=150>
+     [+ IF main.f.adminname_flag == 'hidden' +]
+     [+ main.f.adminname +] <input type=hidden name=adminname value="[+ main.f.adminname +]">
+     [+ END +]
+     [+ IF main.f.adminname_flag == 'text' +]
+
+     [+ mesg = [ ] +]
+     [+ mesg.push('<b>Внимание</b>,') +]
+     [+ mesg.push('при добавлении админа по IP-адресу или SteamID пароль не требуется!!<br>') +]
+     [+ mesg.push('Адрес должен быть статическим!!') +]
+     [+ mesg = mesg.join("")  +]
+
+     <input type=text name=adminname value="[+ main.f.adminname +]"
+        onmouseover="tooltip(this,'[+ mesg +]')"
+        onmouseout="hide_info(this)">
+     [+ END +]
+     </td>
+     <td width=150>
+
+     [+ IF main.f.passline_flag == 'hidden' +]
+        <input type=hidden name=adminpasswd value="[+ main.f.passline +]">
+    [+ END +]
+     [+ IF main.f.passline_flag == 'text' +]
+      <input type=text name=adminpasswd value="[+ main.f.passline +]">
+     [+ END +]
+     </td>
+     <td>
+     [+ mesg = [ ] +]
+     [+ mesg.push('a - Флаг иммунитета. Человека нельзя кикнуть/забанить/сделать slay/slap и т.п.<br>') +]
+     [+ mesg.push('b - Флаг, разрешающий подключения на резервные слоты.<br>') +]
+     [+ mesg.push('c - Флаг доступа к команде amx_kick.<br>') +]
+     [+ mesg.push('d - Флаг доступа к командам amx_ban amx_unban.<br>') +]
+     [+ mesg.push('e - Флаг доступа к командам amx_slap amx_slay.<br>') +]
+     [+ mesg.push('f - Флаг доступа к команде amx_map.<br>') +]
+     [+ mesg.push('g - Флаг доступа для изменения cvar настроек через amx_cvar.<br>') +]
+     [+ mesg.push('h - Флаг доступа к amx_cfg.<br>') +]
+     [+ mesg.push('i - Флаг доступа к amx_chat и другим чат командам.<br>') +]
+     [+ mesg = mesg.join("")  +]
+
+     <input type=text name=adminflags value="[+ main.f.adminflags +]"
+        onmouseover="tooltip(this,'[+ mesg +]')"
+        onmouseout="hide_info(this)">
+     </td>
+     </tr></table>
+     </td>
+     <td>
+     <input type=submit name="[+ main.f.submitname +]" value="[+ main.f.submitval +]"
+     onmouseover="tooltip(this,'Внимание! Изменения на сервере вступают в силу после смены карты или рестарта')"
+     onmouseout="hide_info(this)"
+     >
+     <input type=hidden name=[+ rid +] value=[+ main.form.rid +]>
+     <input type=hidden name=defaultadminflags value="abcdefghijklmnoprstu">
+     </form>
+
+     </td></tr>
+     </TABLE>
+    [+ END +]
+    <br>
+     <table class=wrapper>
+     <tr>
+     <th>Ник/IP/SteamID</th>
+     <th>Пароль</th>
+     <th>Флаги доступа</th>
+     <th>Активен</th>
+     <th>Действие</th>
+     </tr>
+
+    [+ FOREACH s = main.ra +][+ s = s.key +]
+    [+ adminname = main.ra.$s.adminname +]
+    [+ rid = main.ra.$s.rid +]
+    [+ pass = main.ra.$s.pass +]
+    [+ flags = main.ra.$s.flags +]
+    [+ action = main.ra.$s.action +]
+    [+ IF action == 'disable' +]
+    [+ pic = '/img/i-agree.gif' +]
+    [+ ELSE +]
+    [+ pic = '/img/i-stop.gif' +]
+    [+ END +]
+
+    <tr class=wrapper>
+        <td>[+ adminname +]</td>
+        <td>[+ pass +]</td>
+        <td>[+ flags +]</td>
+        <td align=center><a href=[+ main.program +]?sid=[+ main.srvid +]&rid=[+ rid +]&adminname=[+ adminname +]&action=[+ action +]><img src=[+ pic +]></a>
+        </td>
+        <td align=center>
+        <a href=[+ main.program +]?sid=[+ main.srvid +]&rid=[+ rid +]&adminname=[+ adminname +]&action=edit>
+        <img src=/img/i-edit.gif></a>&nbsp;&nbsp;&nbsp;<a href=[+ main.program +]?sid=[+ main.srvid +]&rid=[+ rid +]&adminname=[+ adminname +]&action=delete>
+        <img src=/img/i-delete.gif></a>
+        </td>
+    </tr>
+     [+ END +]
+     </table>
+
+
+

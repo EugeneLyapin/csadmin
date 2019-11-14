@@ -1,0 +1,139 @@
+﻿        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <table>
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+<select name=sid id=sid STYLE="width: 180px"  onchange="hideconfig()">
+[+ FOREACH s = main.srvs +][+ s = s.key +]
+[+ val = main.srvs.$s.0 +]
+[+ name = main.srvs.$s.1 +]
+[+ IF val == main.sid +]
+[+ sflag = 'selected' +]
+[+ ELSE +]
+[+ sflag = '' +]
+[+ END +]
+<option value=[+ val +] [+ sflag +]>[+ name +]</option>
+[+ END +]
+</select>
+   &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+
+    <table width=300>
+
+    <tr><td>
+    <fieldset><table><tr><td>
+    Статус сервера: [+ main.ftpaction.status +] &nbsp;&nbsp;
+    <a href=[+ main.program +]?sid=[+ main.sid +]&action=[+ main.ftpaction.name +]><img alt=[+ main.ftpaction.altname +] src=/img/[+ main.ftpaction.statuspic +]></a><br>
+    FTP Статус: [+ main.ftpaction.ftpstatus +] &nbsp;&nbsp;
+    <a href=[+ main.program +]?sid=[+ main.sid +]&action=[+ main.ftpaction.ftpname +]><img alt=[+ main.ftpaction.ftpaltname +] src=/img/[+ main.ftpaction.ftpstatuspic +]></a><br>
+    </td></tr></table></fieldset>
+    </td></tr>
+    </table>
+    <table width=400><tr><td>
+
+    <fieldset><table><tr><td>
+    Login: <b>[+ main.ftp.login +]</b><br>
+    Изменить пароль
+    &nbsp;&nbsp;<input name=changeftppass value=changeftppass style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+
+    [+ IF main.changeftppass +]
+    <br>
+    <table><tr>
+    <td>
+    Введите пароль:
+    </td>
+    <td>
+    <input type=password name=ftppass1 value=''>
+    </td>
+    </tr>
+    <tr><td>
+    Еще разок:
+    </td>
+    <td>
+    <input type=password name=ftppass2 value=''>
+    <input type=submit value="Изменить" name=changepass>
+    </td>
+    </tr></table>
+    <br/>
+    [+ END +]
+
+    </form>
+
+    </td>
+    </tr>
+    </table>
+    </fieldset>
+    </td></tr></table>
+
+
+
+    [+ main.errline +]
+   <fieldset>
+   <table><tr><td>
+    <legend>Список файлов</legend>
+    <table width=500>
+       <tr>
+
+        <td>drwxr-xr-x</td>
+        <td>1</td>
+        <td>--</td>
+        <td>--</td>
+        <td>0</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td><a href=[+ main.program +]?sid=[+ main.sid +]&action=cd&file=[+ main.ftp.curpath +]/..>..</a></td>
+        </tr>
+
+        [+ FOREACH m = main.f +][+ m = m.key +]
+
+    <tr>
+    <td>[+ main.f.$m.p1 +]</td>
+    <td>[+ main.f.$m.p2 +]</td>
+    <td>[+ main.f.$m.p3 +]</td>
+    <td>[+ main.f.$m.p4 +]</td>
+    <td>[+ main.f.$m.p5 +]</td>
+    <td>[+ main.f.$m.p6 +]</td>
+    <td>[+ main.f.$m.p7 +]</td>
+    <td>[+ main.f.$m.p8 +]</td>
+    <td><a href=[+ main.program +]?sid=[+ main.sid +]&action=[+ main.f.$m.delaction +]&dfile=[+ main.f.$m.file +]&file=[+ main.ftp.curpath +]><img src=/img/i-delete.gif></a></td>
+    <td><a href=[+ main.program +]?sid=[+ main.sid +]&action=[+ main.f.$m.action +]&file=[+ main.f.$m.file +]>[+ main.f.$m.p9 +]</a></a></td>
+    </tr>
+
+    [+ END +]
+
+    </table>
+    </td></tr>
+    </table>
+    </fieldset>
+
+    <br>
+    <form action=[+ main.program +] method=post enctype="multipart/form-data" name=ftpuploader>
+    Загрузить файл:<br>
+    <input type="file" name="datafile">
+    <input type="submit" name=uploadfile value="Отправить">
+    <input type="hidden" name="file" value="[+ main.file +]">
+    <input type="hidden" name="sid" value="[+ main.sid +]">
+    </form>
+
+    <br>
+
+    <form action=[+ main.program +] name=ftpmkdirform method=post>
+    <div class="popup" id="mess"></div>
+    <input type=text name=newdir
+    onchange="this.value=this.value.replace(/([^0-9a-zA-z_\-\.])/g,'');"
+    onkeyup="var n=this.value.replace(/([^0-9A-z_\-\.])/g,'');
+    if(n!=this.value) this.value=n;"
+    onmousedown="this.value=this.value.replace(/([^0-9a-zA-z_\-\.])/g,'');"
+    onmouseover="tooltip(this,'Длина каталога не более 50 символов')" onmouseout="hide_info(this)" value=''>
+    <input type=hidden name=curdir value="[+ main.file +]">
+    <input type=hidden name=file value="[+ main.file +]">
+    <input type=hidden name=action value="mkdir">
+    <input type=hidden name=sid value="[+ main.sid +]">
+    <input type=submit value="Создать каталог" name=ftpmkdir>
+
+    </form><hr>
+    Возможности этого FTP-клиента ограничены. Для дополнительных функций рекомендуется пользоваться стандартными FTP-клиентами.
+    <br>
+
+

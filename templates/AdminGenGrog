@@ -1,0 +1,205 @@
+﻿<br>
+    [+ main.errline +]
+[+ IF main.form.raction == 'show'
+    or main.form.raction == 'new'
+    or main.form.raction == 'newprop'
+    or main.form.raction == 'editprop'
+    or main.form.raction == 'deleteprop'
+    or main.form.raction == 'saveprop'
+    or main.form.grogform
+    +]
+    <div class="popup" id="mess"></div>
+    <form action=[+ main.program +] method="POST">
+        <input type=hidden name=grogform value=1>
+        <input type=hidden name=debug value=[+ main.global.debug +]>
+    <br>
+    [+ IF main.form.raction != 'new' +]
+        <table width=450>
+        <tr><td>
+        <fieldset><legend>Выбрать класс</legend>
+        <table><tr><td>Имя &nbsp;
+
+        <select name=oid id=oid STYLE="width: 200px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.moid +][+ s = s.key +]
+            [+ val = main.moid.$s.0 +]
+            [+ name = main.moid.$s.1 +]
+            [+ IF val == main.form.oid +]
+            [+ sflag = 'selected' +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+
+        </select>
+        </td>
+
+        [+ IF main.groginfo.enabled +]
+        [+ enabled_pic = 'i-agree.gif' +]
+        [+ enabled_action = 'disable' +]
+        [+ ELSE +]
+        [+ enabled_pic = 'i-stop.gif' +]
+        [+ enabled_action = 'enable' +]
+        [+ END +]
+
+                <td valign=center><input name=show value='show' style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+            [+ IF main.groginfo.locked == 0 +]
+                <td valign=center><input name=delete value='delete' style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+            [+ END +]
+                <td valign=center><input name=new value='new' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+            [+ IF main.groginfo.locked == 0 +]
+                <td valign=center><input name=change value='change' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=[+ enabled_action +] value='[+ enabled_action +]' style='border:0px' type=image border=0 src=/img/[+ enabled_pic +]></td>
+            [+ END +]
+            [+ IF main.groginfo.locked == 1 +]
+                <td valign=center><input name=unlock value='unlock' style='border:0px' type=image border=0 src=/img/admin/lock-unlock.png ></td>
+            [+ END +]
+            [+ IF main.groginfo.locked == 0 +]
+                <td valign=center><input name=lock value='lock' style='border:0px' type=image border=0 src=/img/admin/lock.png ></td>
+            [+ END +]
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+                </tr></table>
+                </fieldset>
+                </td></tr>
+            </table>
+    [+ END +]
+
+    [+ IF main.form.raction == 'new' +]
+        <table>
+        <tr>
+                <td valign=center><input name=new value='new' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                <td valign=center><input name=change value='change' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+        </tr>
+        </table>
+        <input type=hidden name=firstcreated value=1>
+    [+ END +]
+
+
+                <table width="100">
+                <tr><td><fieldset>
+                <legend>Класс (ObjectClass):</legend>
+            <table valign="top">
+            <tbody><tr><td>Имя:</td><td width="100"><input style="width: 100px;"
+            name="name"
+                        onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); chlogin(); checkdblogin()"
+                        onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+                        onmouseover="tooltip(this,'Имена объектов и свойств пишутся латинскими буквами')"
+                        onmouseout="hide_info(this)"
+            value="[+ main.groginfo.name +]" type="text"></td></tr>
+                        <tr><td>Описание:</td><td width="100"><input name="description" style="width: 100px;" value="[+ main.groginfo.description +]" type="text"></td></tr>
+            </table>
+            </fieldset>
+            </td></tr>
+            </table>
+
+    <table width="100">
+    <tr><td><fieldset>
+    <legend>Свойство (attr):</legend>
+        <table class=wrapper width=400>
+        <tr>
+        <th width=100>Имя</th>
+        <th width=100>Описание</th>
+        <th width=20>Действие</th>
+        </tr>
+
+    [+ FOREACH h = main.groginfo.outhash +][+ h = h.key +]
+    [+ pname = main.groginfo.outhash.$h.pname +]
+    [+ pdescription = main.groginfo.outhash.$h.description +]
+    <tr>
+    <td>[+ pname +]</td>
+    <td>[+ pdescription +]</td>
+    <td align=center>
+        [+ IF main.groginfo.locked == 0 +]
+            <a href=[+ main.program +]?oid=[+ main.form.oid +]&pname=[+ pname +]&grogform=1&action=deleteprop>
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            </a>
+            [+ ELSE +]
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            [+ END +]
+    </td>
+    </tr>
+    [+ END +]
+    [+ IF main.form.raction == 'newprop'
+        or main.form.raction == 'new'
+        or main.groginfo.nohash
+     +]
+
+        <tr>
+        <td><input name=newpname value=''
+            onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); chlogin(); checkdblogin()"
+            onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+            if(n!=this.value) this.value=n;"
+            onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+            onmouseover="tooltip(this,'Имена объектов и свойств пишутся латинскими буквами')"
+            onmouseout="hide_info(this)"
+        type=text></td>
+        <td><input name=newpdescription value='' type=text></td>
+        <td align=center>
+    <input name="saveprop" value=saveckey style="background-color:transparent;border:0px;" type=image border=0 src=/img/admin/bullet_disk.png>
+        </td>
+        </tr>
+        [+ END +]
+        </table>
+    [+ IF main.form.raction != 'newprop'
+        and main.form.raction != 'new'
+        and main.groginfo.locked ==0
+        and main.groginfo.nohash == 0  +]
+    <style type="text/css">
+    .blocked A {
+        text-decoration: none;
+        }
+    .blocked A:hover {
+        color: red;
+    }
+    .blockme A {
+        text-decoration: none;
+    }
+    .blockme A:hover {
+        color: green;
+    }
+    </style>
+    <center>
+    <!--
+    <a href=[+ main.program +]?oid=[+ main.form.oid +]&action=newprop><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+        -->
+        <br><font class=blockme><a href=[+ main.program +]?oid=[+ main.form.oid +]&action=newprop>Создать свойство</a>... </font>
+        </center>
+        [+ END +]
+
+        [+ IF main.global.debug == '3' +]
+
+        </fieldset>
+    </td></tr>
+    </table>
+    <table width="300">
+    <tr><td><fieldset>
+    <pre>
+    [+ main.groginfo.dump_hash +]
+    </pre>
+        </fieldset>
+
+    [+ END +]
+
+    </td></tr>
+    </table>
+
+
+
+
+            [+ IF main.groginfo.locked == 0 or main.form.raction == 'new' +]
+
+                <p align=center><input name=save value='Save' style="background-color: transparent; border: 0px;color:transparent;"
+                type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+        [+ END +]
+
+            </form>
+
+</center>
+[+ END +]

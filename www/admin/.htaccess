@@ -1,0 +1,8 @@
+Options -Indexes
+DirectoryIndex AdminGenPage.pl
+AddDefaultCharset UTF-8
+Options +FollowSymLinks
+RewriteEngine On
+<Files *.txt>
+    ForceType text/plain
+</Files>

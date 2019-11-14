@@ -1,0 +1,224 @@
+/* @@@@@@@ Wrappers for top menu of magazin, registration, clients */
+
+#g-wrapper{
+	min-width:868px;
+	width:80%;
+	margin:0 auto;
+	}
+#ie-min-width{
+	width:868px;
+	height:1px;
+	margin-bottom:-1px;
+}
+.maintable{
+	width:100%;
+	}
+
+#g-m-logo{
+	float:left;
+	width:25%;
+	padding-top:26px;
+	text-align:center;
+	
+	}
+#g-header{
+	width:100%;
+	margin-bottom:12px;
+}
+#g-main-nav{
+	margin-bottom:12px;
+}
+#g-header-nav{
+	overflow:hidden;
+	}
+#g-header-nav-b{
+	padding:0;
+	margin:12px 0 0;
+	list-style:none;
+	overflow:hidden;
+}
+	#g-header-nav-b .header-nav-b-part{
+		float:left;
+		width:33.3%;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+	#g-header-nav-b .header-nav-b-part-c{
+		margin-right:12px;
+		
+	}
+/* @@@@ Wrapper for search */
+
+#g-search{
+	float:right;
+	width:20%;
+	}
+	#g-search #searchblock {
+		padding:5px 7px;
+		border-radius:5px;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+	}
+	#g-search{	padding-top: 9px;padding-left: 5px;	font-size:11px;font-weight:bold;}
+		#g-search,
+		#g-search A{text-decoration:none;color: #ccc;}
+		#g-search A:HOVER{color: #fff;}
+		#g-search .block-cont{padding: 5px 9px;}
+		#g-search .block-cont INPUT{vertical-align:middle;	}
+		#g-search TABLE TD{padding:0;	vertical-align: middle;}
+			 #g-search TABLE TD.searchblock{padding-right:7px;	width:90%;	}
+			#g-search TABLE TD.searchblock INPUT{	margin:0;	padding:0;	width:100%;	}
+			#g-search .accent{	color:#ccc;}
+		#g-search DIV.links{width:18em;	height:1.1em;}
+		#g-search UL.links{	list-style:none;margin:0;padding:0;	height:100%;}
+			#g-search UL.links LI{	
+				display:inline;	
+				padding:2px 1em 2px 13px;
+				background:url('/img/bullet91.gif') no-repeat 3px 4px;}
+		#g-search #searchblock input{
+		        background:transparent;
+		        border: 1px solid #000;
+		        font-family: Arial;
+		        font-weight: normal;
+		        font-size: 11px;
+		        color: #000;
+		}
+
+
+
+/* @@@@@@@@ ! wrapper for page */
+
+#g-page{
+	overflow:hidden;
+	zoom:1;
+	margin-bottom:12px;
+	}
+	#g-leftsidebar{
+		float:left;
+		width:195px;
+		margin-right:12px;
+		font-size:11px;
+		padding:0;
+		}
+		#g-leftsidebar .somestuff-spacer{
+			display:none;
+		}
+		#g-leftsidebar .somestuff{
+			border:1px solid #C8C8C8;
+			margin-bottom:12px;
+			-moz-border-radius:0 0 6px 6px;
+			-webkit-border-radius:0 0 6px 6px;
+			border-radius:0 0 6px 6px;
+			}
+			#g-leftbonus .somestuff{
+				
+				-moz-border-radius:6px;
+				-webkit-border-radius:6px;
+				border-radius:6px;
+				}
+				#g-leftbonus .somestuff:hover{
+					border-color:#999;
+				}
+				
+	
+	#g-page-material{
+				    
+		overflow:hidden;
+		zoom:1;
+		}
+		
+		
+	/* ==== */
+/* @@@@@@@@@  left menu */	
+	#g-leftsidebar H3{
+		display:block;
+		margin:0;
+		padding:6px 0 6px 8px;
+		font-size:11px;
+		font-weight:bold;
+		}
+		
+		
+	#g-leftsidebar #leftmenu{
+		padding:0;
+		background-color:#ccc;
+		font-size:11px;
+		font-weight:normal;
+		}
+	#g-leftsidebar #leftmenu H3{
+		background-color:#313131;
+		color:#fff;
+		}
+		#g-leftsidebar #leftmenu H3 A{
+			text-decoration:none;
+			color:#fff;
+			}
+
+/* @@@@@ somestuff links */
+	#g-leftsidebar .somestuff-content A{
+		text-decoration:none;
+		color:#ccc;
+		}
+	#g-leftsidebar .somestuff-content A:HOVER{
+		color:#fff;
+		}
+	#g-leftsidebar .somestuff-content A.accent2{
+		color:#ccc;
+		text-decoration:none;
+		}
+	#g-leftsidebar .somestuff-content A.accent2:HOVER{
+		color:#fff;
+		text-decoration:underline;
+		}
+	#g-leftsidebar .somestuff-content A H4{
+		color:#fff;
+		}
+	
+
+/* @@@@@@@@ LeftBonus blocks
+=================================================*/
+
+#g-leftsidebar .link-box{
+	padding:8px 2px 11px 12px;
+	}
+
+	#g-leftsidebar .link-box A{
+		display:block;
+		padding-top:4px;
+		}
+
+	#g-leftsidebar .link-box .icon{
+		display:block;
+		padding:0px;
+		border-left:6px solid #000;
+		float:right;
+		background:#000;
+		}
+
+		#g-leftsidebar .link-box .icon IMG{
+			margin-top:-6px;
+			}
+
+		#g-leftsidebar .link-box H4{
+			margin:0;
+			padding:0;
+			border:0 none;
+			font-size:11px;
+			color:#ccc;
+			}
+
+			#g-leftsidebar .link-box H4 A,
+			#g-leftsidebar .link-box H4 A:hover{
+				padding:0;
+				color:#fff;
+				}
+
+				#g-leftsidebar .link-box H4 STRONG{
+					display:block;
+					padding-bottom:5px;
+					border-bottom:2px solid #515151;
+					}
+
+
+
+

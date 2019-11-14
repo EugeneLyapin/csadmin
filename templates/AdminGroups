@@ -1,0 +1,156 @@
+﻿<br>
+[+ debug = 0 +]
+    [+ main.errline +]
+[+ IF main.form.raction == 'show'
+    or main.form.raction == 'new'
+    or main.form.gidform
+    +]
+    <div class="popup" id="mess"></div>
+    <form action=[+ main.program +] method="POST">
+        <input type=hidden name=gidform value=1>
+    <br>
+    [+ IF main.form.raction != 'new' +]
+        <table width=450>
+        <tr><td>
+        <fieldset><legend>Выбрать роль</legend>
+        <table><tr><td>Имя &nbsp;
+
+        <select name=gid id=gid STYLE="width: 200px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.mgid +][+ s = s.key +]
+            [+ val = main.mgid.$s.gid +]
+            [+ name = main.mgid.$s.gname +]
+            [+ IF val == main.form.gid +]
+            [+ sflag = 'selected' +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+        </select>
+        </td>
+
+                [+ IF main.gidinfo.enabled +]
+                [+ enabled_pic = 'i-agree.gif' +]
+                [+ enabled_action = 'disable' +]
+                [+ ELSE +]
+                [+ enabled_pic = 'i-stop.gif' +]
+                [+ enabled_action = 'enable' +]
+                [+ END +]
+                <td valign=center><input name=show value='show' style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+            [+ IF main.gidinfo.locked == 0 +]
+                <td valign=center><input name=delete value='delete' style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+            [+ END +]
+                <td valign=center><input name=new value='new' style='border:0px' type=image border=0 src=/img/admin/users--plus.png></td>
+            [+ IF main.gidinfo.locked == 0 +]
+                <td valign=center><input name=change value='change' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=[+ enabled_action +] value='[+ enabled_action +]' style='border:0px' type=image border=0 src=/img/[+ enabled_pic +]></td>
+            [+ END +]
+            [+ IF main.gidinfo.locked == 1 +]
+                <td valign=center><input name=unlock value='unlock' style='border:0px' type=image border=0 src=/img/admin/lock-unlock.png ></td>
+            [+ END +]
+            [+ IF main.gidinfo.locked == 0 +]
+                <td valign=center><input name=lock value='lock' style='border:0px' type=image border=0 src=/img/admin/lock.png ></td>
+            [+ END +]
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/users.png></td>
+                </tr></table>
+                </fieldset>
+                </td></tr>
+            </table>
+    [+ END +]
+
+    [+ IF main.form.raction == 'new' +]
+        <table>
+        <tr>
+                <td valign=center><input name=new value='new' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                <td valign=center><input name=change value='change' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+        </tr>
+        </table>
+        <input type=hidden name=firstcreated value=1>
+    [+ END +]
+
+
+                <table width="400">
+                <tr><td><fieldset>
+                <legend>Роль ( group ):</legend>
+            <table valign="top">
+            <tbody><tr><td>Имя:</td><td width="300"><input style="width: 100px;"
+            name="name"
+                        onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); chlogin(); checkdblogin()"
+                        onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+                        onmouseover="tooltip(this,'Имена ролей пишутся латинскими буквами')"
+                        onmouseout="hide_info(this)"
+            value="[+ main.gidinfo.name +]" type="text"></td></tr>
+                        <tr><td>Описание:</td><td width="300">
+<[+ main.textarea +] name=description rows=4 cols=12 style='width:300px'>[+ main.gidinfo.description +]</[+ main.textarea +]>
+            </td></tr>
+                        <tr><td>Вес:</td><td width="100">
+                        <input type=text value="[+ main.gidinfo.weight +]" name=weight style='width:50px'>
+            </td></tr>
+
+
+            </table>
+            </fieldset>
+            </td></tr>
+            </table>
+    [+ IF main.form.raction != 'new' +]
+    <table width="80%">
+    <tr><td align=justify><fieldset>
+    <legend>Свойства ( ACL ):</legend>
+    [+ FOREACH h = main.groginfo +][+ h = h.key +]
+    [+ FOREACH p = main.groginfo.$h.rhash +][+ p = p.key +]
+    [+ pdescription = main.groginfo.$h.rhash.$p.description +]
+    [+ pname = main.groginfo.$h.rhash.$p.pname +]
+    [+ pvalue = main.aclh.$h.$pname +]
+            [+ IF pvalue +]
+            [+ acl_action = 'acl_disable' +]
+            [+ acl_pic = 'i-agree.gif' +]
+            [+ ELSE +]
+            [+ acl_action = 'acl_enable' +]
+            [+ acl_pic = 'i-stop.gif' +]
+        [+ END +]
+        [+ h +]::[+ pdescription +]
+        [+ IF main.gidinfo.locked == 0 and main.gidinfo.enabled == 1 +]
+            <a href=[+ main.program +]?gid=[+ main.form.gid +]&oname=[+ h +]&pname=[+ pname +]&gidform=1&action=[+ acl_action +]>
+            <img style="background-color:transparent;border:0px;" src=/img/[+ acl_pic +]>
+            </a>
+            [+ ELSE +]
+            <img style="background-color:transparent;border:0px;" src=/img/[+ acl_pic +]>
+            [+ END +]
+    [+ END +]
+    [+ END +]
+        </fieldset>
+    </td></tr>
+    </table>
+    [+ END +]
+
+    [+ IF debug +]
+    <table width="300">
+    <tr><td><fieldset>
+    <pre>
+    [+ main.dump_hash +]
+    </pre>
+        </fieldset>
+    </td></tr>
+    </table>
+    [+ END +]
+
+
+            [+ IF main.gidinfo.locked == 0 or main.form.raction == 'new' +]
+
+                <p align=center><input name=save value='save' style="background-color: transparent; border: 0px;color:transparent;"
+                type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+        [+ END +]
+
+            </form>
+
+</center>
+[+ END +]
+
+

@@ -1,0 +1,111 @@
+﻿        <style type="text/css">
+        .blocked A {
+            text-decoration: none;
+            }
+        .blocked A:hover {
+            color: red;
+        }
+        .blockme A {
+            text-decoration: none;
+        }
+        .blockme A:hover {
+            color: green;
+        }
+        </style>
+
+
+        <br>
+        [+ main.errline +]
+    <form action=[+ main.program +] method="POST">
+        <br>
+        [+ IF main.p.raction != 'new' +]
+                <table width=300>
+                <tr><td>
+                <fieldset><legend>Выбрать период</legend>
+                <table><tr><td>Имя &nbsp;
+
+                <select name=periodid id=periodid STYLE="width: 100px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.mpd +][+ s = s.key +]
+            [+ val = main.mpd.$s.0 +]
+            [+ name = main.mpd.$s.2 +]
+            [+ IF val == main.p.periodid +]
+            [+ sflag = 'selected' +]
+            [+ main.p.name = name +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+                <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+                [+ IF main.pinfo.enabled +]
+                [+ enabled_pic = 'i-agree.gif' +]
+                [+ enabled_action = 'disable' +]
+                [+ ELSE +]
+                [+ enabled_pic = 'i-stop.gif' +]
+                [+ enabled_action = 'enable' +]
+                [+ END +]
+                </select>
+                </td>
+
+                        <td valign=center><input name=show value=show style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+                        <td valign=center><input name=delete value=delete style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+                        <td valign=center><input name=new value=new style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                        <td valign=center><input name=change value=change style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                        <td valign=center><input name=[+ enabled_action +] value='[+ enabled_action +]' style='border:0px' type=image border=0 src=/img/[+ enabled_pic +]></td>
+                        <td valign=center><a href=AdminTariff.pl><img style='border:0px' border=0 src=/img/admin/i-baks.gif></a></td>
+                        </tr></table>
+                        </fieldset>
+                        </td></tr>
+                        </table>
+                [+ END +]
+
+        [+ IF main.p.raction == 'new' +]
+                <table>
+                <tr>
+                        <td valign=center><input name=new value=new style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                        <td valign=center><input name=change value=change style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                        <td valign=center><a href=AdminTariff.pl><img style='border:0px' border=0 src=/img/admin/i-baks.gif></a></td>
+                    <input type=hidden name=newperiod value=1>
+                </tr>
+                </table>
+        [+ END +]
+            </form>
+
+
+            <form action=[+ main.program +] method="POST">
+                <table width="200">
+                <tr><td><fieldset>
+                <legend>Параметры:</legend>
+            <table valign="top">
+
+            <tbody><tr><td>Название:</td><td width="50"><input style="width: 50px;" name="name"
+                        onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+            value="[+ main.pinfo.name +]" type="text"></td></tr>
+
+                        <tr><td>Описание:</td><td width="200"><input name="description" style="width: 200px;" value="[+ main.pinfo.description +]" type="text"></td></tr>
+
+                        <tr><td>Период, час:</td><td width="50"><input name="hours"
+                        onchange="this.value=this.value.replace(/([^0-9])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9])/g,'');"
+                        style="width: 50px;" value="[+ main.pinfo.hours +]" type="text"></td></tr>
+
+            </tbody></table>
+            </fieldset>
+            </td></tr>
+            </table>
+                <br>
+                <p align=center><input name=save value='save' style="background-color: transparent; border: 0px;color:transparent;"
+                type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+                <input type=hidden name=periodid value=[+ main.pinfo.periodid +]>
+            </form>
+
+</center>
+

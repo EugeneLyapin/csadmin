@@ -1,0 +1,397 @@
+﻿        <br>
+
+        <table><tr><td>
+        [+ IF main.errline +]
+        <font size=3 color=[+ main.linecolor +]>[+ main.errline +]</font><br>
+        [+ END +]
+<!--
+        [+ IF main.res.login == 'admin' and main.res.SignatureValue +]
+        [+ FOREACH s IN main.res +]
+        [+ IF s.key != 'MrchPass1' and s.key != 'MrchPass2' and s.key != 'result' +]
+        <br>[+ s.key +] = [+ s.value +]
+        [+ END +]
+        [+ END +]
+        [+ main.res.URL +]?MrchLogin=[+ main.res.MrchLogin +]&Desc=[+ main.res.Desc +]&Culture=[+ main.res.Culture +]&IncCurrLabel=[+ main.res.IncCurrLabel +]&InvId=[+ main.res.InvId +]&OutSum=[+ main.res.OutSum +]&SignatureValue=[+ main.res.SignatureValue +]
+        [+ END +]
+-->
+        </td></tr></table>
+        <!-- [+ main.pay.action +] -->
+
+        [+ IF main.pay.action == 'dopayment' +]
+        [+ END +]
+
+        [+ IF main.pay.action == 'details' +]
+        <form action=[+ main.id +].pl name="fInvId" method=POST>
+        <table>
+
+        [+ FOREACH ss = main.rpay +][+ t = ss.key +]
+            [+ InvId = main.rpay.$t.0 +]
+
+            [+ stype_description = main.rpay.$t.1 +]
+            [+ ostype_description = main.rpay.$t.2 +]
+            [+ login = main.rpay.$t.3 +]
+            [+ tariff = main.rpay.$t.4 +]
+            [+ game = main.rpay.$t.5 +]
+            [+ period = main.rpay.$t.6 +]
+            [+ location = main.rpay.$t.7 +]
+            [+ payment_description = main.rpay.$t.8 +]
+            [+ numslots = main.rpay.$t.9 +]
+            [+ summ = main.rpay.$t.10 +]
+            [+ ctime = main.rpay.$t.11 +]
+            [+ ptime = main.rpay.$t.12 +]
+            [+ pflag = main.rpay.$t.13 +]
+            [+ sid = main.rpay.$t.14 +]
+            [+ currency = main.rpay.$t.15 +]
+
+            [+ IF pflag +]
+                [+ pflag_pic = '/img/i-stop.gif' +]
+            [+ ELSE +]
+                [+ pflag_pic = '/img/i-agree.gif' +]
+            [+ END +]
+        <input type="hidden" name=InvId value=[+ InvId +]>
+        <tr><td align=right> <b>ID:</b></td> <td>[+ main.pay.InvId +]</td></tr>
+        <tr><td align=right> <b>Описание заказа:</b></td> <td> [+ payment_description +]</td></tr>
+        <tr><td align=right> <b>Оплачен:</b></td> <td><img src=[+ pflag_pic +]> [+ ptime +]</td></tr>
+        <tr><td align=right> <b>Сумма к оплате:</b></td> <td>[+ summ +]</td></tr>
+        <tr><td align=right> <b>Время создания заказа:</b></td> <td> [+ ctime +]</td></tr>
+        <tr><td align=right> <b>ID сервера:</b></td> <td> [+ sid +]</td></tr>
+        <tr><td align=right> <b>Пользователь:</b></td> <td> [+ login +]</td></tr>
+        <tr><td align=right> <b>Игровой сервер:</b></td> <td> [+ game +]</td></tr>
+        <tr><td align=right> <b>Локация:</b></td> <td> [+ location +]</td></tr>
+        <tr><td align=right> <b>Тип сервера:</b></td> <td> [+ stype_description +]</td></tr>
+        <tr><td align=right> <b>Операционная система:</b></td> <td> [+ ostype_description +]</td></tr>
+        <tr><td align=right> <b>Тарифный план:</b></td> <td> [+ tariff +]</td></tr>
+        <tr><td align=right> <b>Период:</b></td> <td> [+ period +]</td></tr>
+        <tr><td align=right> <b>Количество слотов:</b></td> <td> [+ numslots +]</td></tr>
+        <tr><td align=right> <b>Валюта:</b>
+
+        [+ IF pflag +]
+        </td> <td>
+            <select name=currency id=currency STYLE="width: 120px">
+        [+ FOREACH ss = main.rcurr +][+ t = ss.key +]
+            [+ selected = '' +]
+            [+ currid = main.rcurr.$t.0 +]
+            [+ name = main.rcurr.$t.1 +]
+            [+ fullname = main.rcurr.$t.2 +]
+                [+ IF name == currency +]
+                [+ selected = 'selected' +]
+                [+ END +]
+                [+ IF currency == 'empty' and name == 'WME' +]
+                [+ selected = 'selected' +]
+                [+ END +]
+            [+ IF name != 'empty' +]
+            <option value=[+ name +] [+ selected +] >[+ fullname +]</option>
+            [+ END +]
+        [+ END +]
+            </select>
+        </td></tr>
+        [+ ELSE +]
+        </td> <td> [+ currency +]</td></tr>
+        [+ END +]
+
+        [+ END +]
+        </table>
+        [+ IF pflag +]
+        <input type="submit" name=dopayment value ='Оплатить'>
+        [+ END +]
+        </form>
+        [+ END +]
+
+
+        [+ IF main.pay.action == 'paccdetails' +]
+
+        <form action=[+ main.program +] name="fInvId" method=POST>
+        <table>
+
+        [+ FOREACH ss = main.rpaccpay +][+ t = ss.key +]
+            [+ InvId = main.rpaccpay.$t.0 +]
+            [+ login = main.rpaccpay.$t.3 +]
+            [+ payment_description = main.rpaccpay.$t.8 +]
+            [+ summ = main.rpaccpay.$t.10 +]
+            [+ ctime = main.rpaccpay.$t.11 +]
+            [+ ptime = main.rpaccpay.$t.12 +]
+            [+ pflag = main.rpaccpay.$t.13 +]
+            [+ currency = main.rpaccpay.$t.15 +]
+
+            [+ IF pflag +]
+                [+ pflag_pic = '/img/i-stop.gif' +]
+            [+ ELSE +]
+                [+ pflag_pic = '/img/i-agree.gif' +]
+            [+ END +]
+        <input type="hidden" name=InvId value=[+ InvId +]>
+        <tr><td align=right> <b>ID:</b></td> <td>[+ main.pay.InvId +]</td></tr>
+        <tr><td align=right> <b>Описание заказа:</b></td> <td> [+ payment_description +]</td></tr>
+        <tr><td align=right> <b>Оплачен:</b></td> <td><img src=[+ pflag_pic +]> [+ ptime +]</td></tr>
+        <tr><td align=right> <b>Сумма к оплате:</b></td> <td>[+ summ +]</td></tr>
+        <tr><td align=right> <b>Время создания заказа:</b></td> <td> [+ ctime +]</td></tr>
+        <tr><td align=right> <b>Пользователь:</b></td> <td> [+ login +]</td></tr>
+        <tr><td align=right> <b>Валюта:</b>
+
+        [+ IF pflag +]
+        </td> <td>
+            <select name=currency id=currency STYLE="width: 120px">
+        [+ FOREACH ss = main.rcurr +][+ t = ss.key +]
+            [+ selected = '' +]
+            [+ currid = main.rcurr.$t.0 +]
+            [+ name = main.rcurr.$t.1 +]
+            [+ fullname = main.rcurr.$t.2 +]
+                [+ IF name == currency +]
+                [+ selected = 'selected' +]
+                [+ END +]
+                [+ IF currency == 'empty' and name == 'WME' +]
+                [+ selected = 'selected' +]
+                [+ END +]
+            [+ IF name != 'empty' +]
+            <option value=[+ name +] [+ selected +] >[+ fullname +]</option>
+            [+ END +]
+        [+ END +]
+            </select>
+        </td></tr>
+        [+ ELSE +]
+        </td> <td> [+ currency +]</td></tr>
+        [+ END +]
+
+        [+ END +]
+        </table>
+        [+ IF pflag +]
+        <input type="submit" name=dopaccpayment value ='Оплатить'>
+        [+ END +]
+        </form>
+        [+ END +]
+
+    [+ IF not main.pay.action or main.pay.action == 'empty' +]
+    [+ main.phistorymsg +]
+
+        <form action=[+ main.program +] name="searchpayments" method=POST>
+            <table>
+            </tr>
+                <td>Период: с </td>
+                [+ FOREACH s = [ 'year', 'month', 'day' ] +]
+                [+ val = main.pdates.f.$s.val +]
+                <td>
+            <input type=text name=f_[+ s +] value="[+ val +]"
+                        onchange="this.value=this.value.replace(/([^0-9])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9])/g,'');"
+                        style='width: [+ main.curdate.$s.w +]'>
+                </td>
+                [+ END +]
+                <td>по </td>
+                [+ FOREACH s = [ 'year', 'month', 'day' ] +]
+                [+ val = main.pdates.t.$s.val +]
+                <td>
+            <input type=text name=t_[+ s +] value="[+ val +]"
+                        onchange="this.value=this.value.replace(/([^0-9])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9])/g,'');"
+                        style='width: [+ main.curdate.$s.w +]'>
+                </td>
+                [+ END +]
+                <td><input name=search value='search' style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+            </tr>
+            </table>
+    </form>
+
+    [+ IF main.log_visible +]
+        <table class=wrapper>
+        <tr>
+
+        <th>+/-</th>
+        <th>Время создания</th>
+        <th>Описание</th>
+        <th>Сумма</th>
+        <th>Логин</th>
+        <th>Валюта</th>
+        </tr>
+        [+ FOREACH ss = main.rpaylog +][+ t = ss.key +]
+            [+ time = main.rpaylog.$t.0 +]
+            [+ event = main.rpaylog.$t.1 +]
+            [+ summ = main.rpaylog.$t.2 +]
+            [+ dkflag = main.rpaylog.$t.3 +]
+            [+ CurrId = main.rpaylog.$t.4 +]
+            [+ login = main.rpaylog.$t.5 +]
+            [+ IF dkflag +]
+                [+ dkflag_pic = '/img/i-agree.gif' +]
+            [+ ELSE +]
+                [+ dkflag_pic = '/img/i-stop.gif' +]
+            [+ END +]
+        <tr>
+        <td align=center><img src=[+ dkflag_pic +]></td>
+        <td>[+ time +]</td>
+        <td>[+ event +]</td>
+        <td align=center>[+ summ +]</td>
+        <td align=center>[+ CurrId +]</td>
+        <td align=center>[+ login +]</td>
+        </tr>
+    [+ END +]
+    </table>
+    [+ END +]
+
+    [+ IF main.paid +]
+    [+ main.paidmsg +]
+    [+ ELSE +]
+    <br>[+ main.paidmsg +]
+        <table class=wrapper>
+        <tr>
+
+        <th>ID</th>
+        <th>Логин</th>
+        <th>Тариф</th>
+        <th>Время создания</th>
+        <th>Платформа</th>
+        <th>Период</th>
+        <th>Кол-во слотов</th>
+        <th>Сумма, руб.</th>
+        <th>Оплачен</th>
+        <th colspan=2>Свойства</th>
+        </tr>
+
+
+        [+ FOREACH ss = main.rpay +][+ t = ss.key +]
+            [+ InvId = main.rpay.$t.0 +]
+
+            [+ stype_description = main.rpay.$t.1 +]
+            [+ ostype_description = main.rpay.$t.2 +]
+            [+ login = main.rpay.$t.3 +]
+            [+ tariff = main.rpay.$t.4 +]
+            [+ game = main.rpay.$t.5 +]
+            [+ period = main.rpay.$t.6 +]
+            [+ location = main.rpay.$t.7 +]
+            [+ payment_description = main.rpay.$t.8 +]
+            [+ numslots = main.rpay.$t.9 +]
+            [+ summ = main.rpay.$t.10 +]
+            [+ ctime = main.rpay.$t.11 +]
+            [+ ptime = main.rpay.$t.12 +]
+            [+ pflag = main.rpay.$t.13 +]
+            [+ sid = main.rpay.$t.14 +]
+            [+ currency = main.rpay.$t.15 +]
+
+            [+ IF pflag +]
+                [+ pflag_pic = '/img/i-stop.gif' +]
+            [+ ELSE +]
+                [+ pflag_pic = '/img/i-agree.gif' +]
+            [+ END +]
+
+            <form action=[+ main.id +].pl name="fInvId" method=POST>
+            <input type="hidden" name=InvId value=[+ InvId +]>
+            <tr>
+            <td><a href=[+ main.id +].pl?InvId=[+ InvId +]&action=details>[+ InvId +]</a></td>
+            <td>[+ login +]</td>
+            <td>[+ tariff +]</td>
+            <td>[+ ctime +]</td>
+            <td>[+ ostype_description +]</td>
+            <td align=center>[+ period +]</td>
+            <td align=center>[+ numslots +]</td>
+            <td align=center>[+ summ +]</td>
+            <td align=center><img src=[+ pflag_pic +]></td>
+
+            <td>
+            <select name=action-[+ InvId +] id=action STYLE="width: 120px">
+            <option value=empty >----------------</option>
+            <option value=details>Подробнее</option>
+            [+ IF pflag +]
+            [+ IF main.pay.adminpayment != 1 +]
+            <option value=dopayment>Оплатить заказ</option>
+            [+ END +]
+            <option value=delpayment>Удалить заказ</option>
+            [+ END +]
+            </option>
+            </td>
+
+            <td align=center>
+              <input name=submitaction-[+ InvId +] value='Go' style="background-color:transparent;border:0px;" type=image border=0 src=/img/bullet9.gif>
+              &nbsp;<a href=[+ main.program +]?InvId=[+ InvId +]&action=details><img src=/img/i-edit.gif></a>
+             <input name=delpayment-[+ InvId +] value=delpayment style="background-color:transparent;border:0px;" type=image border=0 src=/img/i-delete.gif>
+            </td>
+
+            </form>
+            </tr>
+        [+ END +]
+
+        [+ FOREACH ss = main.rpaccpay +][+ t = ss.key +]
+            [+ InvId = main.rpaccpay.$t.0 +]
+            [+ login = main.rpaccpay.$t.3 +]
+            [+ payment_description = main.rpaccpay.$t.8 +]
+            [+ summ = main.rpaccpay.$t.10 +]
+            [+ ctime = main.rpaccpay.$t.11 +]
+            [+ ptime = main.rpaccpay.$t.12 +]
+            [+ pflag = main.rpaccpay.$t.13 +]
+            [+ currency = main.rpaccpay.$t.15 +]
+
+            [+ IF pflag +]
+                [+ pflag_pic = '/img/i-stop.gif' +]
+            [+ ELSE +]
+                [+ pflag_pic = '/img/i-agree.gif' +]
+            [+ END +]
+
+            <form action=[+ main.id +].pl name="fInvId" method=POST>
+            <input type="hidden" name=InvId value=[+ InvId +]>
+            <tr>
+            <td><a href=[+ main.id +].pl?InvId=[+ InvId +]&action=paccdetails>[+ InvId +]</a></td>
+            <td>[+ login +]</td>
+            <td align=center>--</td>
+            <td>[+ ctime +]</td>
+            <td align=center>--</td>
+            <td align=center>--</td>
+            <td align=center>--</td>
+            <td align=center>[+ summ +]</td>
+            <td align=center><img src=[+ pflag_pic +]></td>
+
+            <td>
+            <select name=action-[+ InvId +] id=action STYLE="width: 120px">
+            <option value=empty >----------------</option>
+            <option value=paccdetails>Подробнее</option>
+            [+ IF pflag +]
+       [+ IF main.pay.adminpayment != 1 +]
+            <option value=dopaccpayment>Оплатить заказ</option>
+       [+ END +]
+            <option value=delpayment>Удалить заказ</option>
+            [+ END +]
+            </option>
+            </td>
+
+            <td align=center>
+              <input name=submitaction-[+ InvId +] value='Go' style="background-color:transparent;border:0px;" type=image border=0 src=/img/bullet9.gif>
+              &nbsp;<a href=[+ main.program +]?InvId=[+ InvId +]&action=paccdetails><img src=/img/i-edit.gif></a>
+             <input name=delpayment-[+ InvId +] value=delpayment style="background-color:transparent;border:0px;" type=image border=0 src=/img/i-delete.gif>
+            </td>
+
+            </form>
+            </tr>
+        [+ END +]
+        </table>
+        [+ END +]
+
+       [+ IF main.pay.userpayment +]
+
+        <table>
+
+            <tr>
+            <td valign=left>
+      <div style="padding:2px;font-weight:bold;
+           font-size:10px;text-align:right;
+           color:#939494;margin-bottom:10px"
+           id="summ">
+           Итого доступных средств на счете: [+ main.pacc.summ +]
+           [+ main.pacc.currname +]
+     </div>
+            </td>
+            </tr>
+            <tr>
+            <td align=center width=300>
+        <form action=[+ main.id +].pl name="addmoneytopacc" method=POST>
+            <input type=text name=paccsumm value="0.00"
+                        onchange="this.value=this.value.replace(/([^0-9\.])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9\.])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9\.])/g,'');">
+<br><input name=addmoneytopacc value=addmoneytopacc style="background-color:transparent;border:0px;" type=image border=0 src=/img/money.png>
+<br>Пополнить счет
+</form>
+            </td>
+            </tr>
+        </TABLE>
+        [+ END +]
+        [+ END +]

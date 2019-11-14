@@ -1,0 +1,100 @@
+﻿
+        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <table>
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+<select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+[+ FOREACH s = main.srvs +][+ s = s.key +]
+[+ val = main.srvs.$s.0 +]
+[+ name = main.srvs.$s.1 +]
+[+ IF val == main.srvid +]
+[+ sflag = 'selected' +]
+[+ ELSE +]
+[+ sflag = '' +]
+[+ END +]
+<option value=[+ val +] [+ sflag +]>[+ name +]</option>
+[+ END +]
+</select>
+   &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+    <hr>
+[+ main.errline +]
+
+[+ FOREACH s = main.rcat +][+ s = s.key +]
+[+ catname = main.rcat.$s.1 +]
+[+ catval = main.rcat.$s.0 +]
+<br><br>
+<font size=3 color=#d19427>Выберите [+ catname +] для редактирования<br></font><br/>Конфиг:
+<select name=config[+ catval +] id=config[+ catval +] STYLE="width: 200px"  onchange="hideconfig()">
+[+ FOREACH c = main.cat.$catval.srvconfigs +][+ c = c.key +]
+[+ configfilename = main.cat.$catval.srvconfigs.$c.1 +]
+[+ configtablename = main.cat.$catval.srvconfigs.$c.0 +]
+[+ configval = main.cat.$catval.srvconfigs.$c.2 +]
+
+[+ IF configfilename == main.configname +]
+[+ sflag = 'selected' +]
+[+ ELSE +]
+[+ sflag = '' +]
+[+ END +]
+
+<option value=[+ configtablename +] [+ sflag +]>[+ configfilename +]</option>
+[+ END +]
+</select>
+&nbsp;<input type="submit" name="editcfg[+ catval +]" value="Выбрать">
+<input type="submit" name="newcfg[+ catval +]" value="New">
+[+ END +]
+</form>
+
+<br><br>Конфиг: [+ main.configname +]
+[+ IF main.configname == 'server.cfg' +]
+
+<form action=[+ main.program +] name=cfg method=post><br>
+    <table border=0>
+
+[+ FOREACH scfg = main.servercfg +][+ scfg = scfg.key +]
+[+ sval = main.servercfg.$scfg.val +]
+[+ scount = main.servercfg.$scfg.count +]
+[+ sstrlen = main.servercfg.$scfg.strlen +]
+[+ selement = main.servercfg.$scfg.element +]
+
+    <tr>
+        <td align=right>[+ scfg +]</td>
+        [+ IF selement == 'text' +]
+        <td><input type=[+ selement +] style='background-color:transparent;border:1px solid #ccc; color:#ccc;width:[+ sstrlen +]px' name=[+ scfg +] value="[+ sval +]"><br/></td>
+        [+ ELSIF selement == 'textarea' +]
+        <td><[+ selement +] name=[+ scfg +] rows=[+ scount +] cols=12 style='border:2px solid #ccc; width:200px'>[+ sval +]</[+ selement +]></td>
+        [+ END +]
+    </tr>
+[+ END +]
+    </table>
+<br><input type="submit" name="savecfg" value="Сохранить">
+<input type=hidden name=savedconfigtable value=[+ main.ctable +]>
+<input type=hidden name=savedconfigname value=[+ main.configname +]>
+<input type=hidden name=srvid value=[+ main.srvid +]>
+</form>
+[+ ELSE +]
+<form action=[+ main.program +] name=cfg method=post><br>
+[+ IF main.configname +]
+    [+ FOREACH cv = main.srv +][+ cv = cv.key +]
+    [+ configeditval = main.srv.$cv.2 +]
+    [+ END +]
+[+ END +]
+[+ selement = 'textarea' +]
+<[+ selement +] name=configvalue rows=20 cols=12 style='border:2px solid #ccc; width:700px'>[+ configeditval +]</[+ selement +]>
+<br><input type="submit" name="savecfg" value="Сохранить">
+<input type=hidden name=savedconfigtable value=[+ main.ctable +]>
+<input type=hidden name=savedconfigname value=[+ main.configname +]>
+<input type=hidden name=srvid value=[+ main.srvid +]>
+</form>
+[+ END +]
+
+
+
+
+    <table><tr valign=center>
+    <td><font size=3 color=orange>Залить конфиги по умолчанию ... </font>
+    </td><td>
+    <a href=[+ main.program +]?sid=[+ main.srvid +]&action=adddefaultconfigs>
+    <img valign=center src=/img/admin/control_play_blue.png></a></td></tr></table></fieldset>
+    </td></tr>
+    </table>

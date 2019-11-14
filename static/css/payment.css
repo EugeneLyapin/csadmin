@@ -1,0 +1,202 @@
+/* Payment
+=================================================*/
+
+/* BODY .cbox UL.payment{
+        border-bottom:1px solid #ECECEC;
+        }
+
+        BODY .cbox UL.payment{
+                display:block;
+                margin:1.25em 0 0 0;
+                padding:0;
+                border-bottom:1px solid #fff;
+                clear:both;
+                }
+
+                BODY .cbox UL.payment LI{
+                        display:block;
+                        margin:0;
+                        padding:0 0 5px 0;
+                        border-top:1px solid #fff;
+                        clear:both;
+                        background:transparent;
+                        }
+
+                        BODY .cbox UL.payment UL{
+                                margin:1em 0 1em 7px;
+                                padding:0;
+                                }
+
+                                BODY .cbox UL.payment UL LI{
+                                        margin:0 0 0.5em;
+                                        padding:0 0 0 1em;
+                                        border:0 none;
+                                        clear:none;
+                                        background:url("/img/bullet6.gif") no-repeat left 0.5em;
+                                        }
+
+                BODY .cbox UL.payment H4{
+                        margin:0.85em 0 1.7em 0;
+                        padding:0;
+                        font-size:8px;
+                        font-weight:bold;
+                        }
+
+                        BODY .cbox H4 SPAN.collapse-link.active{
+                                border-bottom:1px dashed #DB0029;
+                                cursor:pointer;
+                                }
+
+                BODY .cbox .collapse{
+                        margin-top:-1.35em;
+                        overflow:hidden;
+                        }
+
+                BODY .cbox .collapse-all{
+                        clear:both;
+                        padding-bottom:3px;
+                        padding-top:3px;
+                        font-size:8px;
+                        font-weight:bold;
+                        text-align:right;
+                        }
+
+                        BODY .cbox .collapse-all A{
+                                border-bottom:1px dashed #ccc;
+                                text-decoration:none;
+                                }
+
+                        BODY .cbox .collapse-all A:hover{
+                                color:#fff;
+                                }
+
+                BODY .cbox .side-pic{
+                        float:right;
+                        margin:0.5em 0 10px 20px;
+                        }
+
+                BODY .cbox .payment .side-pic{
+                        width:135px;
+                        text-align:left;
+                        } */
+
+        #payment{
+
+                }
+        #payment-list{
+                margin:0;
+                list-style:none;
+                }
+                #payment-list LI{
+                        position:relative;
+                        margin:0 0 9px;
+                        padding:10px 15px 11px;
+                        border:1px solid #ccc;
+                        -moz-border-radius:12px;
+                        -webkit-border-radius:12px;
+                        border-radius:12px;
+                        min-width:490px;
+                        background:none;
+                        }
+                        #payment-list LI H3{
+                                margin:0;
+                                font-size:8px;
+                                color:#ccc;
+                                }
+                .payment-item-closed{
+                        cursor:pointer;
+                        }
+        .payment-item-bullet,
+        BODY .cbox .payment-item-bullet{
+                display:none;
+                position:absolute;
+                top:0.8em;
+                right:12px;
+                width:20px;
+                height:20px;
+                border:1px solid #C3C3C3;
+                text-align:center;
+                line-height:1.7em;
+                font-size:8px;
+                color:#C3C3C3;
+                }
+
+                #payment-list LI.payment-item-closed H3 SPAN.payment-item-header-link{
+                        border-bottom:1px dashed #DD1137;
+                        }
+        .payment-cols,
+        BODY .cbox .payment-cols{
+                margin:12px 0 10px;
+                }
+        .payment-col,
+        BODY .cbox A.payment-col{
+                float:left;
+                width:50%;
+                padding:0 0 10px;
+                position:relative;
+                text-decoration:none;
+                text-align:center;
+                }
+                .payment-col-brd{
+                        display:block;
+                        position:absolute;
+                        top:13px;
+                        right:0;
+                        bottom:13px;
+                        width:1px;
+                        background:#E3E3E3;
+                        }
+                .payment-col IMG{
+                        display:block;
+                        margin:0 auto 7px;
+                        }
+                .payment-col-caption,
+                BODY .cbox A.payment-col-caption{
+                        text-decoration:underline;
+                        font-size:8px;
+                        color:#ccc;
+                        }
+                        .payment-col:hover .payment-col-caption,
+                        BODY .cbox A.payment-col-caption:hover{
+                                color:#fff;
+                                }
+                        BODY .cbox .payment-cols .payment-col-caption{
+                                }
+                .payment-full,
+                BODY .cbox .payment-full{
+                        margin:0 0 10px;
+                        text-align:center;
+                        }
+                .payment-full-core{
+                        text-align:left;
+                        margin:0 auto;
+                        width:507px;
+                        }
+                .payment-full-text,
+                BODY .cbox .payment-full-text{
+                        padding:0 20px 0 33px;
+                        }
+
+        #payment-map{
+
+                }
+                #payment-map EM{
+                        font-size:8px;
+                        font-style:italic;
+                        color:#4E4E4E;
+                        }
+        #payment-control{
+                float:right;
+                font-size:8px;
+                }
+                #payment-control SPAN{
+                        color:#000;
+                        border-bottom:1px dashed #ccc;
+                        line-height:150%;
+                        cursor:pointer;
+                        }
+                        #payment-control SPAN:hover{
+                                color:#fff;
+                                }
+                #payment-control-hide{
+                        }

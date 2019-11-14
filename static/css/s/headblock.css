@@ -1,0 +1,233 @@
+
+/*@@@@@@ HEADBLOCK magazin, registration, clients */
+
+				TABLE.headblock TD{
+					width:33%;
+					padding:6px 5px 0 0;
+					vertical-align:top;
+					}
+
+
+				.headblock A,
+				.headblock A:HOVER{
+					text-decoration:none;
+					color: #fff;
+					}
+				.headblock .accent,
+				.headblock .accent A,
+				.headblock .accent A:HOVER{
+					color:#fff;
+					}
+
+
+					.headblock .h3 A,
+					.headblock .h3 A:HOVER{
+						color: #000;
+						}
+
+
+					.on h3 A,
+					.on h3 A:HOVER,
+					.on h3 A .m-shop{
+						color:#fff;
+						}
+
+				.headblock.off .h3{
+					background-image:url('/img/hblock_off_bg.gif');
+					/* background-color:#eaeaea; */
+					}
+				.headblock.on .h3{
+					background-image:url('/img/hblock_on_bg.gif');
+					/* background-color:#eaeaea; */
+					}
+
+				.headblock.off .h3{
+					background-image:url('/img/hblock_off_bg.gif');
+					/* background-color:#eaeaea; */
+					}
+
+				.headblock .hblock-tl,
+				.headblock .hblock-tr{
+					display:block;
+					position:relative;
+					background-repeat:no-repeat;
+					}
+				.headblock .hblock-tl{
+					left:-1px;
+					background-position:0 0;
+					}
+				.headblock .hblock-tr{
+					right:-2px;
+					background-position:right 0;
+					}
+				.headblock .h3 .hblock-cnt{
+					display:block;
+					padding:6px 10px 0 33px;
+					width:8em;
+					background-repeat:no-repeat;
+					background-position:8px 3px;
+					}
+
+
+						
+
+			.headblock .hblock-tl{
+				}
+			.headblock .hblock-tr{
+				}
+
+			.headblock  .hblock-note{
+				margin:6px 0 0 0;
+				padding:0 6px 0 10px;
+				}
+			.headblock  TABLE.hblock-note{
+				padding-right:0;
+				}
+
+			.headblock ul{
+				list-style:none;
+				}
+				.headblock li{
+					margin:0;
+					padding:0 0 0 8px;
+					white-space: normal;
+					position:relative
+					}
+			.headblock .shop-order li{
+				padding-left:0;
+				background:none;
+				}
+				.headblock .shop-order strong{
+					color:#000;
+					}
+
+DIV.headblock{
+	position:relative;
+	height:6.4em;
+	min-height:52px;
+	margin-top:0.8em;
+	border:1px solid #C8C8C8;
+	font-size:0.75em;
+	font-weight:bold;
+	background:#FFF;
+	color:#747474;
+	-webkit-border-radius:0 0 8px 8px;
+	-moz-border-radius:0 0 8px 8px;
+	border-radius:0 0 8px 8px;
+	}
+
+	.headblock .h3{
+		position:relative;
+		display:block;
+		top:-1px;
+		height:2.4em;
+		min-height:20px;
+		margin:-.65em 7px 0 7px;
+		padding:0;
+		background-position:0 0;
+		background-repeat:repeat-x;
+		font-size:1.2em;
+		white-space:nowrap;
+		color:#000000;
+		}
+	.headblock A.hblock-anchor{
+		display:block;
+		position:absolute;
+		z-index:100;
+		top:-0.9em;
+		height:7.3em;
+		height:100%;
+		width:100%;
+		background:url('/img/0.gif');
+		}
+
+
+		.headblock.off .h3 .hblock-tl{
+			left:0;
+			height:2.4em;
+			margin-left:-8px;
+			background:url(/img/hblock_off_tl.gif) no-repeat 0 0;
+			}
+
+		.headblock.off .h3 .hblock-tr{
+			right:0;
+			height:2.4em;
+			margin-right:-8px;
+			* right:-8px;
+			background:url(/img/hblock_off_tr.gif) no-repeat 100% 0;
+			}
+		.headblock.on .h3 .hblock-tl{
+			left:0;
+			height:2.4em;
+			margin-left:-8px;
+			background:url(/img/hblock_on_tl.gif) no-repeat 0 0;
+			}
+
+		.headblock.on .h3 .hblock-tr{
+			right:0;
+			height:2.4em;
+			margin-right:-8px;
+			* right:-8px;
+			background:url(/img/hblock_on_tr.gif) no-repeat 100% 0;
+			}
+
+		.headblock .h3 .hblock-cnt {
+			* background-position:0 3px;
+			* padding:6px 10px 0 25px;
+			}
+
+
+
+
+
+
+/* @@@@@@@ Wrappers for top menu of magazin, registration, clients */
+
+#g-wrapper{
+        min-width:868px;
+        width:80%;
+        margin:0 auto;
+        }
+#ie-min-width{
+        width:868px;
+        height:1px;
+        margin-bottom:-1px;
+}
+.maintable{
+        width:100%;
+        }
+
+#g-m-logo{
+        float:left;
+        width:25%;
+        padding-top:26px;
+        text-align:center;
+
+        }
+#g-header{
+        width:100%;
+        margin-bottom:12px;
+}
+#g-main-nav{
+        margin-bottom:12px;
+}
+#g-header-nav{
+        overflow:hidden;
+        }
+#g-header-nav-b{
+        padding:0;
+        margin:12px 0 0;
+        list-style:none;
+        overflow:hidden;
+}
+        #g-header-nav-b .header-nav-b-part{
+                float:left;
+                width:33.3%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+        }
+        #g-header-nav-b .header-nav-b-part-c{
+                margin-right:12px;
+
+        }
+

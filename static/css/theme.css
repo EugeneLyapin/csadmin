@@ -1,0 +1,87 @@
+@import url("reset.css");
+body {
+	background-image: url(../img/theme/body-bg.pn);
+	background-repeat: repeat-x,y ;
+	background-position: center top;
+	background-color: #222222;
+	margin: 0 auto;
+	padding: 0;
+	width: 100%;	
+}
+#head-logo {
+	background-image: url(../img/theme/head-logo.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	width: 100%;
+	height: 400px;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+}
+
+#login {
+	position:relative;
+	display:block;
+	background-image: url(../img/theme/login.png);
+	background-repeat: no-repeat;
+	border: 0px solid #009933;
+	top: 150px;
+	left: -320px;
+	width: 225px;
+	height: 225px;
+	margin: 0 auto;
+	padding: 0;
+	z-index: 2;
+}
+
+#top-menu {
+	background-image:url(../img/theme/menu-top.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 100%;
+	height: 70px;
+	margin: auto;
+	padding: 0;
+
+}
+
+#text-menu {
+	width: 1000px;
+	height: 30px;
+	border: 0px solid #009933;
+	margin: auto;
+	padding: 15px 0 0 10px;
+}
+
+#content {
+	background-image: url(../img/theme/wraper-bg.png);
+	background-repeat: repeat-x,y ;
+	border: 1px solid #353535;
+	width: 1000px;
+	height: 550px;
+	margin: auto;
+	padding: 10px 10px 10px 10px;
+}
+
+
+#r-block {
+	background-image:url(../img/theme/r-block.png);
+	background-repeat: no-repeat;
+	float:right;
+	width: 270px;
+	height: 500px;
+	border: 0px solid #009933;
+	margin: 0 auto;
+	padding: 0px 0 0 10px;
+}
+
+#footer {
+	background-image:url(../img/theme/footer-bg.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	width: 100%;
+	height: 469px;
+	border: 0px solid #009933;
+	margin: 0 auto;
+	padding: 0;
+}

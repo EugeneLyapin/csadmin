@@ -1,0 +1,59 @@
+﻿        [+ main.errline +]
+    <br>
+    [+ IF main.srv.action == 'showall' +]
+    <table class=wrapper>
+    <tr>
+    <th>ID</th>
+    <th>Имя</th>
+    <th>IP-адрес</th>
+    <th>Статус</th>
+    <th>Активен</th>
+    <th>Слоты</th>
+    <th>Игроки</th>
+    <th colspan=3>Контроль</th>
+    </tr>
+
+        [+ FOREACH s = main.msid +][+ s = s.key +]
+        <form action=[+ main.program +] name="srvinfo" method=POST>
+        [+ sid = main.msid.$s.sid +]
+        [+ name = main.msid.$s.name +]
+        [+ ipaddr = main.msid.$s.ipaddr +]
+        [+ status = main.msid.$s.status +]
+        [+ action_status = main.msid.$s.action_status +]
+        [+ pic_status = main.msid.$s.pic_status +]
+        [+ enabled = main.msid.$s.enabled +]
+        [+ action_enabled = main.msid.$s.action_enabled +]
+        [+ pic_enabled = main.msid.$s.pic_enabled +]
+        [+ numslots = main.msid.$s.numslots +]
+        [+ numgamers = main.msid.$s.numgamers +]
+        [+ login = main.msid.$s.login +]
+        <input type=hidden name=sid value=[+ sid +]>
+        <tr>
+        <td align=left><a href=AdminSrvStatus.pl?sid=[+ sid +] >[+ sid +]</a></td>
+        <td align=left>[+ name +]</td>
+        <td align=center>[+ ipaddr +]</td>
+        <td align=center><a href=[+ main.program +]?sid=[+ sid +]&action=[+ action_status +]><img src=/img/[+ pic_status +]></a></td>
+        <td align=center><a href=[+ main.program +]?sid=[+ sid +]&action=[+ action_enabled +]><img src=/img/[+ pic_enabled +]></a></td>
+        <td align=center>[+ numslots +]</td>
+        <td align=center>[+ numgamers +]</td>
+        <td align=center>[+ login +]</td>
+            <td>
+            <select name=action-[+ sid +] id=action STYLE="width: 120px">
+            <option value=empty >----------------</option>
+            <option value=startsrv >Вкл</option>
+            <option value=stopsrv>Выкл</option>
+            <option value=delsrv>Удалить сервер</option>
+            <option value=restartsrv>Рестарт</option>
+            <option value=getdefaultconfigs>Залить конфиги</option>
+            <option value=details>Подробнее</option>
+            </option>
+            </td>
+        <td align=center>
+        &nbsp;&nbsp;<input name=submitaction-[+ sid +] value=submitaction style="background-color:transparent;border:0px;" type=image border=0 src=/img/bullet9.gif> &nbsp;&nbsp;
+        </td>
+        </form>
+        </tr>
+        [+ END +]
+        </table>
+
+    [+ END +]

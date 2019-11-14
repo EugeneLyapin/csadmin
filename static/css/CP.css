@@ -1,0 +1,76 @@
+table.wrapper { 
+    background-color:  #ccc 
+    } 
+tr.wrapper { 
+    background-color:  #404040 
+    } 
+table { 
+    border-collapse: separate 
+    } 
+th { 
+    font-weight: bold; background-color:  #000 
+    } 
+th,td { 
+    padding: 2px 
+    } 
+caption,th,td { 
+    font-weight: normal 
+    } 
+table,td,th { 
+    vertical-align: middle 
+    } 
+/* remove margin after closing "form" tag in MSIE */
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+input{
+	background:transparent;
+	border: 1px solid #ccc;
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #ccc;
+}
+select
+{
+	background:transparent;
+	border: 1px solid #ccc;
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 12px;
+	color: #ccc;
+	vertical-align: middle;
+}
+textarea{
+	background:transparent;
+/*	background-color: #404040; */
+	border: 5px solid #ccc; 
+	margin: 2px;
+	padding: 2px;
+	font-family: Courier New;
+	font-weight: normal;
+	font-size: 11px;
+	color: #cccccc;
+	vertical-align: middle;
+}
+
+
+
+fieldset {
+  border: 1px solid green;
+  font-family: Tahoma, Arial;
+  font-size: 11px
+  }
+label {
+  float:left;
+  width:25%;
+  margin-right:0.5em;
+  padding-top:0.2em;
+  text-align:right;
+  font-weight:bold;
+  }
+

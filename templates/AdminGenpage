@@ -1,0 +1,212 @@
+﻿[+ main.errline +]
+[+ IF main.p.raction == 'showpage'
+    or main.p.raction == 'newpage'
+    or main.p.raction == 'savepage'
+    or main.p.raction == 'changepage'
+    or main.p.pageform
+    +]
+
+    <form action=[+ main.program +] method="POST">
+    <br>
+    [+ IF main.p.raction != 'newpage' +]
+        <table width=500>
+        <tr><td>
+        <fieldset><legend>Выбрать страницу</legend>
+        <table><tr><td>Имя &nbsp;
+
+        <select name=pageid id=pageid STYLE="width: 200px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.mpageid +][+ s = s.key +]
+            [+ val = main.mpageid.$s.0 +]
+            [+ name = main.mpageid.$s.1 +]
+            [+ IF val == main.p.pageid +]
+            [+ sflag = 'selected' +]
+            [+ main.p.name = name +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+        </select>
+        <input type=hidden name=pageform value=1>
+        </td>
+
+                <td valign=center><input name=showpage value='showpage' style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+            [+ IF main.pinfo.locked == 0 +]
+                <td valign=center><input name=deletepage value='deletepage' style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+            [+ END +]
+                <td valign=center><input name=newpage value='newpage' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+            [+ IF main.pinfo.locked == 0 +]
+                <td valign=center><input name=changepage value='changepage' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+            [+ END +]
+            [+ IF main.pinfo.locked == 1 +]
+                <td valign=center><input name=unlockpage value='unlockpage' style='border:0px' type=image border=0 src=/img/admin/lock-unlock.png ></td>
+            [+ END +]
+            [+ IF main.pinfo.locked == 0 +]
+                <td valign=center><input name=lockpage value='lockpage' style='border:0px' type=image border=0 src=/img/admin/lock.png ></td>
+            [+ END +]
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+                <td valign=center><a href=AdminSetObjectClass.pl?table=page&field=name&object=[+ main.p.name +]&action=showobject>
+                <img border=0 src=/img/admin/users.png></a></td>
+                </tr></table>
+                </fieldset>
+                </td></tr>
+            </table>
+        [+ END +]
+
+    [+ IF main.p.raction == 'newpage' +]
+        <table>
+        <tr>
+                <td valign=center><input name=newpage value='newpage' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                <td valign=center><input name=changepage value='changepage' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+        </tr>
+        </table>
+    [+ END +]
+
+
+
+                <table width="400">
+                <tr><td><fieldset>
+                <legend>Параметры страницы:</legend>
+            <table valign="top">
+            <tbody><tr><td>Название:</td><td width="200"><input style="width: 200px;" name="name" value="[+ main.pinfo.name +]" type="text"></td></tr>
+                        <tr><td>Описание:</td><td width="200"><input name="description" style="width: 200px;" value="[+ main.pinfo.description +]" type="text"></td></tr>
+                        <tr><td>Header:</td><td widht="200"><input name="cheader" style="width: 200px;" value="[+ main.pinfo.cheader +]" type="text"></td></tr>
+                        <tr><td>Владелец:</td><td widht="200">
+                <select name=owner id=owner STYLE="width: 100px"  onchange="hideconfig()">
+                        [+ FOREACH s = main.muid +][+ s = s.key +]
+                        [+ userid = main.muid.$s.userid +]
+                        [+ login = main.muid.$s.login +]
+                        [+ selected = main.muid.$s.selected +]
+                    <option value=[+ userid +] [+ selected +]>[+ login +]</option>
+                        [+ END +]
+                </select>
+                <input name=oldowner value='[+ main.pinfo.owner +]' type=hidden>
+                        </td></tr>
+            </tbody></table>
+
+            </fieldset>
+            </td></tr>
+            </table>
+                <br>
+
+        <table width=99%>
+        <tr><td>Значение:</td></tr>
+        <tr><td>
+<[+ main.textarea +] name=value rows=35 cols=12 style='width:99%'>[+ main.pinfo.value +]</[+ main.textarea +]>
+        </td></tr>
+        </table>
+        </fieldset>
+            [+ IF main.pinfo.locked == 0 or main.p.raction == 'newpage' +]
+                <p align=center><input name=savepage value='Save' style="background-color: transparent; border: 0px;color:transparent;"
+                type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+        [+ END +]
+
+            </form>
+
+</center>
+[+ END +]
+
+[+ IF ( main.p.raction == 'showall'
+    or main.p.raction == 'deletepage'
+    or main.p.raction == 'disable'
+    or main.p.raction == 'enable'
+    or main.p.raction == 'lockpage'
+    or main.p.raction == 'unlockpage' )
+    and main.p.pageform == 0
++]
+   <center>
+    <br>
+  <style type="text/css">
+   .locked A {
+    text-decoration: none;
+   }
+   .locked A:hover {
+    color: red;
+   }
+   .lockme A {
+    text-decoration: none;
+   }
+   .lockme A:hover {
+    color: green;
+   }
+  </style>
+
+
+        <table class=wrapper>
+        <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Описание</th>
+        <th>Заголовок</th>
+        <th>Статус</th>
+
+        <th>Действие</th>
+        </tr>
+
+    [+ FOREACH s = main.pgid +][+ s = s.key +]
+    [+ pageid  = main.pgid.$s.pageid +]
+    [+ name  = main.pgid.$s.name +]
+    [+ description  = main.pgid.$s.description +]
+    [+ cheader  = main.pgid.$s.cheader +]
+    [+ enabled  = main.pgid.$s.enabled +]
+    [+ action_enable  = main.pgid.$s.action_enabled +]
+    [+ locked  = main.pgid.$s.locked +]
+    [+ gids  = main.pgid.$s.gids +]
+    [+ IF enabled +]
+    [+ pic = 'i-agree.gif' +]
+    [+ ELSE +]
+    [+ pic = 'i-stop.gif' +]
+    [+ END +]
+
+
+
+            <tr>
+            <td>[+ pageid +]</a></td>
+            <td><a href=[+ main.program +]?pageid=[+ pageid +]&action=showpage>[+ name +]</a></td>
+            <td>[+ description +]</td>
+            <td>[+ cheader +]</td>
+            <td align=center>
+            [+ IF locked +]
+            <img src=/img/[+ pic +]>
+            [+ ELSE +]
+            <a href=[+ main.program +]?pageid=[+ pageid +]&action=[+ action_enable +]>
+            <img src=/img/[+ pic +]>
+            </a>
+            [+ END +]
+            </td>
+            <td align=center>
+            [+ IF locked +]
+            [+ bflag = 'u' +]
+            [+ baction = 'unlockpage' +]
+            [+ bclass = 'locked' +]
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            [+ ELSE +]
+            [+ bflag = 'b' +]
+            [+ baction = 'lockpage' +]
+            [+ bclass = 'lockme' +]
+            <a href=[+ main.program +]?pageid=[+ pageid +]&action=deletepage>
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            </a>
+            [+ END +]
+            <a href=[+ main.program +]?pageid=[+ pageid +]&action=showpage><img src=/img/i-edit.gif></a>
+            <font class=[+ bclass +]><a href=[+ main.program +]?pageid=[+ pageid +]&action=[+ baction +]>[[+ bflag +]]</a></font>
+            </td>
+
+            </tr>
+    [+ END +]
+
+        </TABLE>
+       <br>
+        <a href=[+ main.program +]?action=newpage><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+    </center>
+[+ END +]
+
+
+
+
+

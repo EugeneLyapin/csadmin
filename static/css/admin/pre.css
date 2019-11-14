@@ -1,0 +1,162 @@
+pre.wiki, pre.literal-block {
+ font-size: 12px;
+ border: 1px dotted #7d837f;
+ margin: 12px;
+ padding: .25em;
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.err {
+ font-size: 12px;
+ border: 2px solid #d00;
+ font-family: Fixed, Monospace; 
+ color: #500;
+ padding: .5em;
+ margin: 1em 0; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.errheader {
+ font-size: 20px;
+ border: 0px;
+ font-family: Arial; 
+ color: #d00;
+ padding: .2em;
+ margin: .5em 0; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.text {
+ font-size: 13px;
+ border: 0px;
+ font-family: Arial; 
+ color: #00;
+ align: center;
+ padding: 3px;
+ margin: 12px; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.header {
+ font-size: 16px;
+ border: 0px;
+ font-weight: bold;
+ font-family: Arial;
+ color: #000; 
+ align: center;
+ padding: 2px;
+ margin: .2em; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.h1 {
+ font-size: 14px;
+/*  background: #788p8f; */
+ border: 0px;
+ font-weight: bold;
+ font-family: Arial;
+ color: #000; 
+ align: center;
+ padding: 0px;
+ margin: 12px; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.h2 {
+ font-size: 12px;
+ border: 0px;
+ font-weight: bold;
+ font-family: Arial;
+ color: #000; 
+ align: center;
+ padding: 0px;
+ margin: 12px; 
+ overflow: auto;
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+pre.comment {
+font-size: 12px;
+ border: 1px dotted #c0c0c0;
+ padding: .25em;
+ margin: 12px;
+ width: 80%;
+ overflow: auto;
+ color: green;
+ 
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      
+}
+
+pre.rem {
+font-size: 12px;
+ border: 0px;
+ color: #a0a0a0;
+ padding: .25em;
+ margin: 12px;
+ width: 70%;
+ overflow: auto;
+ 
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      
+}
+
+pre.code {
+font-size: 13px;
+ background: #ddfcfc;
+ border: 1px dotted #b7d5ff;
+ color: #000;
+ padding: .25em;
+ margin: 12px;
+ width: 70%;
+ overflow: auto;
+ 
+white-space: pre-wrap;       /* css-3 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -pre-wrap;      /* Opera 4-6 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      
+}

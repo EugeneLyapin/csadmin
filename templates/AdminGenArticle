@@ -1,0 +1,234 @@
+﻿[+ main.errline +]
+[+ IF main.a.raction == 'showart'
+    or main.a.raction == 'newart'
+    or main.a.raction == 'saveart'
+    or main.a.artform
+    +]
+
+    <form action=[+ main.program +] method="POST">
+    <br>
+    [+ IF main.a.raction != 'newart' +]
+        <table width=500>
+        <tr><td>
+        <fieldset><legend>Выбрать страницу</legend>
+        <table><tr><td>Имя &nbsp;
+
+        <select name=artid id=artid STYLE="width: 200px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.martid +][+ s = s.key +]
+            [+ val = main.martid.$s.0 +]
+            [+ name = main.martid.$s.1 +]
+            [+ IF val == main.a.artid +]
+            [+ sflag = 'selected' +]
+            [+ main.a.name = name +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+        </select>
+        <input type=hidden name=artform value=1>
+        </td>
+
+                <td valign=center><input name=showart value='showart' style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+            [+ IF main.artinfo.locked == 0 +]
+                <td valign=center><input name=deleteart value='deleteart' style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+            [+ END +]
+                <td valign=center><input name=newart value='newart' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+            [+ IF main.artinfo.locked == 0 +]
+                <td valign=center><input name=changeart value='changeart' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+            [+ END +]
+            [+ IF main.artinfo.locked == 1 +]
+                <td valign=center><input name=unlock value='unlock' style='border:0px' type=image border=0 src=/img/admin/lock-unlock.png ></td>
+            [+ END +]
+            [+ IF main.artinfo.locked == 0 +]
+                <td valign=center><input name=lock value='lock' style='border:0px' type=image border=0 src=/img/admin/lock.png ></td>
+            [+ END +]
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+                <td valign=center><a href=AdminSetObjectClass.pl?table=articles&field=name&object=[+ main.a.name +]&action=showobject>
+                <img border=0 src=/img/admin/users.png></a></td>
+                </tr></table>
+                </fieldset>
+                </td></tr>
+            </table>
+        [+ END +]
+
+    [+ IF main.a.raction == 'newart' +]
+        <table>
+        <tr>
+                <td valign=center><input name=newart value='newart' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                <td valign=center><input name=changeart value='changeart' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+        </tr>
+        </table>
+    [+ END +]
+
+
+
+                <br>
+
+        <table width=99%>
+        <tr><td>Значение:</td></tr>
+        <tr><td>
+<[+ main.textarea +] name=value rows=35 cols=12 style='width:99%'>[+ main.artinfo.value +]</[+ main.textarea +]>
+        </td></tr>
+        </table>
+
+                <table width="400">
+                <tr><td><fieldset>
+                <legend>Параметры статьи:</legend>
+            <table valign="top">
+            <tbody><tr><td>Название:</td><td width="200"><input style="width: 200px;" name="artname" value="[+ main.artinfo.artname +]" type="text"></td></tr>
+                        <tr><td>Описание:</td><td width="200"><input name="description" style="width: 200px;" value="[+ main.artinfo.description +]" type="text"></td></tr>
+                <tr>
+                <td>Страница: </td>
+                <td><select name=pageid id=pageid STYLE="width: 100px"  onchange="hideconfig()">
+                [+ FOREACH s = main.rp +][+ s = s.key +]
+                        [+ val = main.rp.$s.0 +]
+                        [+ name = main.rp.$s.1 +]
+                        [+ IF val == main.artinfo.pageid +]
+                        [+ sflag = 'selected' +]
+                        [+ ELSE +]
+                        [+ sflag = '' +]
+                        [+ END +]
+                <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+                [+ END +]
+                </select>
+            </td></tr>
+            <tr>
+                <td>Владелец: </td>
+                <td>
+                                <select name=owner id=owner STYLE="width: 100px"  onchange="hideconfig()">
+                                    [+ FOREACH s = main.muid +][+ s = s.key +]
+                                    [+ userid = main.muid.$s.userid +]
+                                    [+ login = main.muid.$s.login +]
+                                    [+ selected = main.muid.$s.selected +]
+                                <option value=[+ userid +] [+ selected +]>[+ login +]</option>
+                                [+ END +]
+                                </select>
+                                <input name=oldowner value='[+ main.artinfo.owner +]' type=hidden>
+            </td></tr>
+                <tr>
+                <td>Parse flag: </td>
+                <td><input type=checkbox name="pflag" value="pflag" [+ main.artinfo.checked +] >
+                </td></tr>
+
+            </tbody></table>
+
+            </fieldset>
+            </td></tr>
+            </table>
+
+
+            [+ IF main.artinfo.locked == 0 or main.a.raction == 'newart' +]
+                <p align=center><input name=saveart value='Save' style="background-color: transparent; border: 0px;color:transparent;"
+                type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+        [+ END +]
+
+            </form>
+
+</center>
+[+ END +]
+
+[+ IF ( main.a.raction == 'showall'
+    or main.a.raction == 'deleteart'
+    or main.a.raction == 'disable'
+    or main.a.raction == 'enable'
+    or main.a.raction == 'lock'
+    or main.a.raction == 'unlock' )
+    and main.a.artform == 0
++]
+   <center>
+    <br>
+  <style type="text/css">
+   .locked A {
+    text-decoration: none;
+   }
+   .locked A:hover {
+    color: red;
+   }
+   .lockme A {
+    text-decoration: none;
+   }
+   .lockme A:hover {
+    color: green;
+   }
+  </style>
+
+
+        <table class=wrapper>
+        <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Описание</th>
+        <th>Привязка</th>
+        <th>Parse</th>
+        <th>Действие</th>
+        </tr>
+
+    [+ FOREACH s = main.maid +][+ s = s.key +]
+    [+ artid  = main.maid.$s.artid +]
+    [+ name  = main.maid.$s.name +]
+    [+ description  = main.maid.$s.description +]
+    [+ pname  = main.maid.$s.pname +]
+    [+ pflag  = main.maid.$s.pflag +]
+    [+ pflag_action  = main.maid.$s.action +]
+    [+ locked  = main.maid.$s.locked +]
+    [+ IF pflag +]
+    [+ pic = 'i-agree.gif' +]
+    [+ ELSE +]
+    [+ pic = 'i-stop.gif' +]
+    [+ END +]
+
+
+
+            <tr>
+            <td>[+ artid +]</a></td>
+            <td><a href=[+ main.program +]?artid=[+ artid +]&action=showart>[+ name +]</a></td>
+            <td>[+ description +]</td>
+            <td>[+ pname +]</td>
+            <td align=center>
+            [+ IF locked +]
+            <img src=/img/[+ pic +]>
+            [+ ELSE +]
+            <a href=[+ main.program +]?artid=[+ artid +]&action=[+ pflag_action +]>
+            <img src=/img/[+ pic +]>
+            </a>
+            [+ END +]
+            </td>
+            <td align=center>
+            [+ IF locked +]
+            [+ bflag = 'u' +]
+            [+ baction = 'unlock' +]
+            [+ bclass = 'locked' +]
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            [+ ELSE +]
+            [+ bflag = 'b' +]
+            [+ baction = 'lock' +]
+            [+ bclass = 'lockme' +]
+            <a href=[+ main.program +]?artid=[+ artid +]&action=deleteart>
+            <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            </a>
+            [+ END +]
+            <a href=[+ main.program +]?artid=[+ artid +]&action=showart><img src=/img/i-edit.gif></a>
+            <font class=[+ bclass +]><a href=[+ main.program +]?artid=[+ artid +]&action=[+ baction +]>[[+ bflag +]]</a></font>
+            </td>
+
+            </tr>
+    [+ END +]
+
+        </TABLE>
+       <br>
+        <a href=[+ main.program +]?action=newart><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+    </center>
+[+ END +]
+
+
+
+
+
+
+

@@ -1,0 +1,169 @@
+﻿        <br>
+        [+ main.errline +]
+        [+ IF not main.action or main.action == 'showall' +]
+
+    <table class=wrapper>
+    <tr>
+    <th>ID</th>
+    <th>Название сервера</th>
+    <th>Описание</th>
+    <th>Добавлено</th>
+    <th>Обновлено</th>
+    <th colspan=2>Свойства</th>
+        [+ FOREACH ss = main.rgame +][+ t = ss.key +]
+
+            [+ gameid = main.rgame.$t.gameid +]
+            [+ description = main.rgame.$t.description +]
+            [+ name = main.rgame.$t.name +]
+            [+ ctime = main.rgame.$t.ctime +]
+            [+ mtime = main.rgame.$t.mtime +]
+
+
+        <form action=[+ main.program +] name="msid" method=POST>
+        <input type="hidden" name=gameid value=[+ gameid +]>
+        <tr>
+        <td><a href=[+ main.program +]?gameid=[+ gameid +]&action=details>[+ gameid +]</a></td>
+        <td>[+ name +]</td>
+        <td>[+ description +]</td>
+        <td>[+ ctime +]</td>
+        <td>[+ mtime +]</td>
+            <td>
+            <select name=action-[+ gameid +] id=action STYLE="width: 120px">
+            <option value=empty >----------------</option>
+            <option value=details >Редактировать</option>
+            <option value=new>Добавить сервер</option>
+            <option value=delete>Удалить сервер</option>
+            </option>
+            </td>
+        <td align=center>
+        &nbsp;&nbsp;<input name=submit-[+ gameid +] value='Go' style="background-color:transparent;border:0px;" type=image border=0 src=/img/bullet9.gif>
+            &nbsp;<a href=[+ main.program +]?gameid=[+ gameid +]&action=details><img src=/img/i-edit.gif></a>
+        &nbsp;<a href=[+ main.program +]?gameid=[+ gameid +]&action=delete><img src=/img/i-delete.gif></a>
+        </td>
+        </tr>
+    [+ END +]
+
+        </form>
+        </table>
+        <p>
+            <a href=[+ main.program +]?action=new><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+
+    [+ END +]
+
+    [+ IF main.action == 'details' +]
+    [+ gameid = main.mgsid.gameid +]
+    [+ description = main.mgsid.description +]
+    [+ name = main.mgsid.name +]
+    [+ ctime = main.mgsid.ctime +]
+    [+ mtime = main.mgsid.mtime +]
+    [+ unixexecfile = main.mgsid.unixexecfile +]
+    [+ winexecfile = main.mgsid.winexecfile +]
+    [+ exec_command = main.mgsid.exec_command +]
+    [+ uexec_command = main.mgsid.uexec_command +]
+    [+ RconProto = main.mgsid.RconProto +]
+    [+ moddir = main.mgsid.moddir +]
+    [+ mapdir = main.mgsid.mapdir +]
+    [+ unixdir = main.mgsid.unixdir +]
+    [+ windir = main.mgsid.windir +]
+    <form action=[+ main.program +] name=save method=POST>
+    <input type=hidden name=action-[+ gameid +] value=details>
+    [+ IF not gameid +]
+        <input type=hidden name=savenewgame value=savenewgame>
+    [+ END +]
+    <table border=1><tr><td>
+    <table>
+    [+ IF gameid +]
+    <tr><td>ID</td><td><input style="width: 20px" type=text name=gameid value="[+ gameid +]"></td></tr>
+    [+ END +]
+    <tr><td>Название</td><td><input style="width: 200px" type=text name=name value="[+ name +]"></td></tr>
+    <tr><td>Описание</td><td><input style="width: 200px" type=text name=description value="[+ description +]"></td></tr>
+    [+ IF gameid +]
+    <tr><td>Добавлен</td><td><input type=text name=ctime value="[+ ctime +]"></td></tr>
+    <tr><td>Обновлен</td><td><input type=text name=mtime value="[+ mtime +]"></td></tr>
+    [+ END +]
+
+    </table>
+    </td><td>
+    <table>
+    <tr><th border=1 colspan=2>Файлы сервера</th></tr>
+    <tr><td>Папка с игрой win*</td><td><input  style="width: 200px"  type=text name=windir value="[+ windir +]"></td></tr>
+    <tr><td>Папка с игрой nix*</td><td><input type=text name=unixdir value="[+ unixdir +]"></td></tr>
+    <tr><td>Папка с картами</td><td><input type=text name=mapdir value="[+ mapdir +]"></td></tr>
+
+    <tr><td>Модификации</td><td><input type=text name=moddir value="[+ moddir +]"></td></tr>
+    </table>
+    </td></tr></table>
+    <table>
+    <tr><td>Rcon протокол</td>
+    <td>
+            <select name=RconProto id=action STYLE="width: 120px">
+            <option value=halflife>Half-life</option>
+            <option value=halflife2>Half-life2</option>
+            <option value=cscource>CS:Source</option>
+        </option>
+    </td></tr>
+    <tr><td>Файл сервера win*</td><td><input  style="width: 100px" type=text name=winexecfile value="[+ winexecfile +]"></td></tr>
+    <tr><td>Строка запуска win*</td><td><textarea cols=60 rows=2 name=exec_command>[+ exec_command +]</textarea></td></tr>
+
+    <tr><td>Файл сервера nix*</td><td><input  style="width: 100px" type=text name=unixexecfile value="[+ unixexecfile +]"></td></tr>
+    <tr><td>Строка запуска nix*</td><td><textarea cols=60 rows=2 name=uexec_command>[+ uexec_command +]</textarea></td></tr>
+    </table>
+    <br>
+        <br>
+        <table class=wrapper>
+        <tr>
+
+        <th>ID</th>
+        <th>Название</th>
+        <th>Локация</th>
+        <th>IP-адрес</th>
+        <th>Слотов</th>
+        <th>Платформа</th>
+        <th>Статус</th>
+        <th>Привязка</th>
+        </tr>
+    [+ FOREACH ss = main.mhid +]
+    [+ ss = ss.key +]
+    [+ hid = main.mhid.$ss.0 +]
+    [+ name = main.mhid.$ss.1 +]
+    [+ location = main.mhid.$ss.2 +]
+    [+ ipaddr = main.mhid.$ss.4 +]
+    [+ cpuslots = main.mhid.$ss.6 +]
+    [+ ostype = main.mhid.$ss.3 +]
+    [+ enabled = main.mhid.$ss.10 +]
+
+            [+ IF enabled +]
+                [+ action = 'disable' +]
+                [+ pic = '/img/i-agree.gif' +]
+            [+ ELSE +]
+                [+ action = 'enable' +]
+                [+ pic = '/img/i-stop.gif' +]
+            [+ END +]
+
+            <tr>
+            <td>[+ hid +]</td>
+            <td><a href=AdminHardware.pl?hid=[+ hid +]&action=details>[+ name +]</a></td>
+            <td align=center>[+ location +]</td>
+            <td align=center>[+ ipaddr +]</td>
+            <td align=center>[+ cpuslots +]</td>
+            <td>[+ ostype +]</td>
+            <td align=center><img src=[+ pic +]></td>
+            <td align=center>
+
+            [+ sflag = '' +]
+            [+ FOREACH s = main.rgamehw +][+ s = s.key +]
+                [+ IF hid == main.rgamehw.$s.hid +]
+                [+ sflag = 'checked' +]
+                [+ END +]
+            [+ END +]
+            <input type=checkbox name="checkbox_hid_[+ hid +]" value="[+ hid +]" [+ sflag +]>
+            </td>
+            </tr>
+        [+ END +]
+        </TABLE>
+
+            <p align=center><input name=changegameid value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+        <center>Сохранить изменения</center>
+
+    </form>
+    [+ END +]

@@ -1,0 +1,289 @@
+﻿<script type="text/javascript" src="/js/jquery.js"></script>
+[+ IF main.status_flag == 'fail' +]
+<br>
+<center>
+[+ main.errline +]
+</center>
+[+ STOP +]
+[+ END +]
+<script type="text/javascript">
+$(document).ready(function ()
+{
+    $('#game').change(function ()
+    {
+        draw('#game', '#tarif', 'tarif_gameid', 'game');
+        draw('#game', '#ostype', 'ostype_gameid', 'game');
+        draw('#game', '#location', 'location_gameid', 'game');
+        $('#srvtype').attr('disabled', false);
+        $('#slots').attr('disabled', false);
+        rechecksum(1000);
+    });
+    $('#tarif').change(function (event, did)
+    {
+    draw('#tarif', '#period', 'tarifid', 'tarif', did);
+    });
+    $('#pass1').change(function ()
+    {
+    var pass = $('#pass1').val();
+    var l = pass.length;
+    checkpass(l);
+    });
+    $('#pass2').change(function ()
+    {
+    var pass1 = $('#pass1').val();
+    var pass2 = $('#pass2').val();
+    var l = pass2.length;
+    checkpass(l);
+    if(pass2 != pass1)
+    {
+        $('#tpass').html('Пароли не совпадают')
+    }
+    });
+});
+
+function checkdblogin()
+{
+    var login = $('#login').val();
+        var url = '/ajax/q.pl?login=' + login + '&action=findlogin';
+        $.get(
+            url,'',function(result)
+            {
+                if (result.type == 'success')
+                {
+                    $(result.h).each(function()
+                    {
+                    var login = $(this).attr('name');
+            $('#tlogin').html('* занят');
+                    });
+                }
+                else
+                {
+            $('#tlogin').html('');
+                }
+            }, "json"
+
+            );
+
+}
+
+function checkpass(l)
+{
+    var l1 = l || 0;
+    if(l1 < 8)
+    {
+    $('#tpass').html('Пароль должен быть >= 8 символов (' + l1 + ' < 8)')
+    }
+    else
+    {
+    $('#tpass').html('<br/>');
+    }
+}
+
+function rechecksum(t)
+{
+    var timeout = t || 1000;
+    setTimeout( function() {
+    var gameid = $('#game').val();
+    var tarifid = $('#tarif').val();
+    var locationid = $('#location').val();
+    var periodid = $('#period').val();
+    var slots = $('#slots').val();
+    var srvtype = $('#srvtype').val();
+        var url = '/ajax/q.pl?gameid=' + gameid + '&tarifid=' + tarifid + '&locationid=' + locationid + '&periodid=' + periodid + '&slots=' + slots + '&srvtype=' + srvtype + '&action=calc';
+        $.get(
+            url,'',function(result)
+            {
+                if (result.type == 'error')
+                {
+                    alert('error');
+                    return(false);
+                }
+                else
+                {
+                    $(result.h).each(function()
+                    {
+                    var price = $(this).attr('price');
+                    var summ = $(this).attr('summ');
+            $('#price').html(price + ' руб./слот');
+            $('#summ').html('Итого: '+ summ +' руб.');
+            $('#summa').val(summ);
+                    });
+                }
+            }, "json"
+
+            );
+    }, timeout);
+}
+
+function draw(s_id, parent_id, qid, name, did)
+{
+    var field = $(s_id).val();
+    if(field == 'загрузка...')
+    {
+        field = did;
+    }
+        if (field == '0')
+        {
+            $(parent_id).html('');
+            $(parent_id).attr('disabled', true);
+            return(false);
+        }
+        $(parent_id).attr('disabled', true);
+        $(parent_id).html('<option>загрузка...</option>');
+        var url = '/ajax/q.pl?' + qid + '=' + field;
+        $.get(
+            url,'',
+            function (result)
+            {
+                if (result.type == 'error')
+                {
+                    alert('error');
+                    return(false);
+                }
+                else
+                {
+                    var options = '';
+                    var flag = 0;
+                    $(result.h).each(function()
+                    {
+                    if(flag == '0')
+                    {
+                        var fdid = $(this).attr('id');
+                $(parent_id).trigger('change', [ fdid ] );
+                $(parent_id).val(fdid);
+                        flag = 1;
+                    }
+                        options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('name') + '</option>';
+                        if( $(this).attr('id') )
+                        {
+                        $(parent_id).attr('disabled', false);
+                        }
+                    });
+                    $(parent_id).html(options);
+                }
+            }, "json"
+        );
+}
+
+</script>
+
+
+        <p align=center>
+        [+ IF main.errline +]
+        <font size=3 color=red>[+ main.errline +]</font><br>
+        [+ END +]
+        [+ IF main.success +]
+        <font size=3 color=green>[+ main.success +]</font>
+          [+ IF main.profile.userpayment +]
+            [+ url = '/CP/CPpayment.pl' +]
+          [+ ELSE +]
+          [+ url = '/admin/AdminPayment.pl' +]
+          [+ END +]
+        <p align=center>Для перехода к оплате жми <a href=[+ url +]>сюда</a>
+        [+ STOP +]
+        [+ END +]
+       <center>
+                <div class="popup" id="mess"></div>
+                [+ IF main.addlogin +]
+                [+ IF main.program != 'AdminCreateProfile.pl' +]
+                <h1>Регистрация</h1>
+                [+ END +]
+                [+ ELSE +]
+                <h1>Калькулятор тарифов</h1>
+                [+ END +]
+                <p>
+                <form action=[+ main.program +] name=frmValidate method="POST" id=frmValidate>
+                        <input type="hidden" name="action" value="adduser">
+                        <input type="hidden" name="srvname" value="Counter strike 1.6 server">
+                [+ IF main.addlogin +]
+                        <font style="font-size:12px;text-align:left;color:red" id="tpass"><br/></font>
+                [+ END +]
+            <table>
+                [+ IF main.addlogin +]
+                    <tr>
+                        <td>login</td><td>
+                        <input type="text" id=login
+                        name="login"
+                        onchange="this.value=this.value.replace(/([^0-9a-zA-z])/g,''); checkdblogin()"
+                        onkeyup="var n=this.value.replace(/([^0-9A-z])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9a-zA-z])/g,'');"
+                        onmouseover="tooltip(this,'Длина логина не более 50 символов')" onmouseout="hide_info(this)"
+                        value=""> <font style="font-size:12px;text-align:left;color:red" id="tlogin"></font>
+
+                        </td></tr>
+                        <tr><td>Пароль:</td><td><input id=pass1 type="password" name="pass1" value=""
+                        onmouseover="tooltip(this,'Длина пароля не менее 8 символов и не более 50 символов')" onmouseout="hide_info(this)">
+                        </td></tr>
+                        <tr><td>Повторите пароль:</td><td><input id=pass2 type="password" name="pass2" value=""
+                        onmouseover="tooltip(this,'Длина пароля не менее 8 символов и не более 50 символов')" onmouseout="hide_info(this)">
+                        </td></tr>
+                [+ IF main.program != 'AdminCreateProfile.pl' +]
+                        <tr><td>Ваш e-mail</td><td><input type="text" name="email" value=""></td></tr>
+                [+ END +]
+                [+ END +]
+                        <tr><td>Игровой сервер:</td>
+                        <input type="hidden" name="sid" value="[+ main.profile.sid +]">
+                                <td>
+                                <select name=game id=game width=230 STYLE="width: 230px">
+                                <option value="0">- выберите игру -</option>
+                                [+ FOREACH g = main.rgame +][+ g = g.key +]
+                                    [+ gameid = main.rgame.$g.0 +]
+                                    [+ gamename = main.rgame.$g.1 +]
+                                    <option value=[+ gameid +]>[+ gamename +]</option>
+                                [+ END +]
+                                </select></td>
+                                </tr>
+                    <tr>
+                        <td>Тариф:</td>
+                            <td><select name=tarif id=tarif STYLE="width: 230px" disabled="disabled" onchange="rechecksum()">
+                             <option value="0"> </option>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Платформа:</td>
+                        <td><select name=ostype id=ostype STYLE="width: 230px" onchange="rechecksum()">
+                        </select></td></tr>
+                    <tr><td>Период:</td>
+                        <td><select name=period id=period STYLE="width: 230px" disabled="disabled" onchange="rechecksum()">
+                    </select></td></tr>
+                    <tr><td>Тип сервера:</td>
+                    <td><select name=srvtype id=srvtype STYLE="width: 230px" disabled="disabled" onchange="rechecksum()">
+                            [+ FOREACH p = main.rsrvtype +][+ p = p.key +]
+                            [+ pid = main.rsrvtype.$p.0 +]
+                            [+ pname = main.rsrvtype.$p.1 +]
+                            <option value=[+ pid +]>[+ pname +]</option>
+                            [+ END +]
+                    </select></td></tr>
+                    <tr><td>Локация:</td>
+                    <td><select name=location id=location STYLE="width: 230px" disabled="disabled" onchange="rechecksum()">
+                    </select>
+                    </td></tr>
+                    <tr><td>Кол-во слотов:</td>
+                        <td><select name=slots id=slots STYLE="width: 230px" disabled="disabled" onchange="rechecksum()">
+                        [+ slots = 10 +]
+                        [+ WHILE slots < 31 +]
+                            [+ IF slots == main.profile.slots +]
+                            [+ selected = 'selected' +]
+                            [+ ELSE +]
+                            [+ selected = '' +]
+                            [+ END +]
+                        <option value=[+ slots +] [+ selected +]>[+ slots +]</option>
+                        [+ slots = slots + 1 +]
+                        [+ END +]
+                    </select></td></tr>
+                <tr><td></td><td id="price">25 руб./слот</td></tr>
+            <tr><td colspan=2>
+            <HR>
+            <div style="padding:2px;font-weight:bold;font-size:16px;text-align:right;color:#939494;margin-bottom:10px" id="summ">Итого: 250 руб.</div>
+            <input type=hidden name=summa id=summa value="250">
+            <input type=hidden name=userid id=userid value="[+ main.userid +]">
+                <br> Для работы калькулятора цены нужна поддержка Javascript
+                <br>в браузере включите Разрешение на выполнение скриптов
+            <p align=center><input name=submit value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </td></tr>
+        </table>
+    </form>
+</center>

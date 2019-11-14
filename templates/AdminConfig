@@ -1,0 +1,89 @@
+﻿  <style type="text/css">
+   .locked A {
+    text-decoration: none;
+   }
+   .locked A:hover {
+    color: red;
+   }
+   .lockme A {
+    text-decoration: none;
+   }
+   .lockme A:hover {
+    color: green;
+   }
+  </style>
+
+
+
+      <center>    <br>
+      [+ main.errline +]
+        <table class=wrapper>
+        <tr>
+        <th>Имя</th>
+        <th>Значение</th>
+        <th>Действие</th>
+        </tr>
+        [+ FOREACH ss = main.arrckey +][+ ss = ss.key +]
+        [+ ssckey = main.arrckey.$ss.0 +]
+        [+ sscvalue = main.arrckey.$ss.1 +]
+        [+ locked = main.arrckey.$ss.2 +]
+    <form action=[+ main.program +] name="ckeyinfo" method=POST>
+        <tr>
+        [+ IF main.action == 'editckey' and main.ckey == ssckey +]
+                <td align=left><input type=text name="ckey" value="[+ ssckey +]" style="width: 80px"></td>
+            <td align=center><input type=text name="cvalue" value="[+ sscvalue +]" style="width: 300px"></td>
+            <input type=hidden name="ckeyold" value="[+ ssckey +]">
+            <td align=center>
+                &nbsp;<input name="saveckey" value=saveckey style="background-color:transparent;border:0px;" type=image border=0 src=/img/admin/bullet_disk.png>
+                </td>
+        [+ ELSE +]
+        <td align=left>
+        [+ IF locked +]
+        [+ ssckey +]
+        [+ ELSE +]
+        <a href=[+ main.program +]?ckey=[+ ssckey +]&action=editckey >
+        [+ ssckey +]
+        </a>
+        [+ END +]
+        </td>
+        <td align=left width=300>[+ sscvalue +]</td>
+        <td align=center>
+        &nbsp;
+            [+ IF locked +]
+                [+ bflag = 'u' +]
+                [+ baction = 'unlock' +]
+                [+ bclass = 'locked' +]
+                <img style="background-color:transparent;border:0px;" src=/img/i-delete.gif>
+            <img style="background-color:transparent;border:0px;" border=0 src=/img/i-edit.gif>
+            [+ ELSE +]
+                [+ bflag = 'b' +]
+                [+ baction = 'lock' +]
+                [+ bclass = 'lockme' +]
+            <a href=[+ main.program +]?ckey=[+ ssckey +]&action=delckey>
+            <img style="background-color:transparent;border:0px;" border=0 src=/img/i-delete.gif>
+                </a>
+            <a href=[+ main.program +]?ckey=[+ ssckey +]&action=editckey><img style="background-color:transparent;border:0px;" border=0 src=/img/i-edit.gif></a>
+            [+ END +]
+            <font class=[+ bclass +]><a href=[+ main.program +]?ckey=[+ ssckey +]&action=[+ baction +]>[[+ bflag +]]</a></font>
+        </td>
+        [+ END +]
+        </tr>
+        </form>
+        [+ END +]
+        [+ IF main.action == 'addckey' +]
+            <form action=[+ main.program +] name="ckeyadd" method=POST>
+            <tr>
+            <td><input type=text name="ckey-new" value="" style="width: 80px"></td>
+            <td width=300><input type=text name="cvalue-new" value="" style="width: 300px"></td>
+            <td align=center>
+            &nbsp;<input name=saveckey-new value=saveckey style="background-color:transparent;border:0px;" type=image border=0 src=/img/admin/bullet_disk.png>
+            </td>
+            </tr>
+            </form>
+        [+ END +]
+    </TABLE>
+    <br>
+    <a href=[+ main.program +]?action=addckey><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+    </center>
+
+

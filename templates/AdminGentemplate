@@ -1,0 +1,207 @@
+﻿[+ main.errline +]
+[+ IF main.tt.raction == 'showtt'
+    or main.tt.raction == 'newtt'
+    or main.tt.raction == 'Save'
+    or main.tt.raction == 'changett'
+    or main.tt.ttform
+    +]
+
+    <form action=[+ main.program +] method="POST">
+    <br>
+    [+ IF main.tt.raction != 'newtt' +]
+        <table width=500>
+        <tr><td>
+        <fieldset><legend>Выбрать темплайт</legend>
+        <table><tr><td>Имя &nbsp;
+
+        <select name=regtid id=regtid STYLE="width: 200px"  onchange="hideconfig()">
+
+            [+ FOREACH s = main.rtt +][+ s = s.key +]
+            [+ val = main.rtt.$s.0 +]
+            [+ name = main.rtt.$s.1 +]
+            [+ IF val == main.tt.regtid +]
+            [+ sflag = 'selected' +]
+            [+ main.tt.name = name +]
+            [+ ELSE +]
+            [+ sflag = '' +]
+            [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+            [+ END +]
+
+        </select>
+        <input type=hidden name=ttform value=1>
+        </td>
+
+
+
+                <td valign=center><input name=showtt value='showtt' style='border:0px' type=image border=0 src=/img/admin/old-edit-find.png></td>
+            [+ IF main.ttinfo.locked == 0 +]
+                <td valign=center><input name=deltt value='deltt' style='border:0px' type=image border=0 src=/img/admin/dialog-close.png></td>
+            [+ END +]
+                <td valign=center><input name=newtt value='newtt' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+            [+ IF main.ttinfo.locked == 0 +]
+                <td valign=center><input name=changett value='changett' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+            [+ END +]
+            [+ IF main.ttinfo.locked == 1 +]
+                <td valign=center><input name=unlocktt value='unlocktt' style='border:0px' type=image border=0 src=/img/admin/lock-unlock.png ></td>
+            [+ END +]
+            [+ IF main.ttinfo.locked == 0 +]
+                <td valign=center><input name=locktt value='locktt' style='border:0px' type=image border=0 src=/img/admin/lock.png ></td>
+            [+ END +]
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+                <td valign=center><a href=AdminSetObjectClass.pl?table=regtemplates&field=rname&object=[+ main.tt.name +]&action=showobject>
+                    <img border=0 src=/img/admin/users.png></a></td>
+                        </tr></table>
+                </fieldset>
+                </td></tr>
+            </table>
+        [+ END +]
+
+    [+ IF main.tt.raction == 'newtt' +]
+        <table>
+        <tr>
+                <td valign=center><input name=newtt value='newtt' style='border:0px' type=image border=0 src=/img/admin/document-new.png></td>
+                <td valign=center><input name=changett value='changett' style='border:0px' type=image border=0 src=/img/admin/stock_save.png></td>
+                <td valign=center><input name=view value=view style="background-color:transparent; border: 0px;" type=image border=0 src=/img/admin/view_list_with_thumbnail.png></td>
+        </tr>
+        </table>
+    [+ END +]
+            <table width=200>
+                        <tr><td align=center>
+                <fieldset><legend>Параметры</legend>
+            <table valign=top><tr valign=top><td border=0 valign=top>
+            <tr><td>Название: </td>
+            <td><input type="text" style='width:100px' name="rname" value="[+ main.ttinfo.rname +]">
+            </td>
+            </tr>
+            <tr>
+            <td>Категория</td><td>
+                <select name=regcatid id=regcatid STYLE="width: 100px"  onchange="hideconfig()">
+
+                    [+ FOREACH s = main.regcatid +][+ s = s.key +]
+                        [+ val = main.regcatid.$s.0 +]
+                        [+ name = main.regcatid.$s.1 +]
+                        [+ IF val == main.ttinfo.regcatid +]
+                        [+ sflag = 'selected' +]
+                        [+ ELSE +]
+                        [+ sflag = '' +]
+                        [+ END +]
+                <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+                [+ END +]
+
+                </select>
+                </td>
+                    <td>
+            </td></tr>
+            <tr>
+                            <td>Владелец: </td>
+                            <td>
+                                <select name=owner id=owner STYLE="width: 100px"  onchange="hideconfig()">
+                                    [+ FOREACH s = main.muid +][+ s = s.key +]
+                                    [+ userid = main.muid.$s.userid +]
+                                    [+ login = main.muid.$s.login +]
+                                    [+ selected = main.muid.$s.selected +]
+                                <option value=[+ userid +] [+ selected +]>[+ login +]</option>
+                                [+ END +]
+                                </select>
+                                <input name=oldowner value='[+ main.ttinfo.owner +]' type=hidden>
+                        </td></tr>
+            </table>
+            </td></tr>
+            </table>
+        <fieldset><legend>Описание шаблона</legend>
+        <table width=99%>
+        <tr><td>
+<[+ main.textarea +] name=regname rows=2 cols=12 style='width:200px'>[+ main.ttinfo.regname +]</[+ main.textarea +]>
+        </td></tr>
+        <tr><td>Значение:</td></tr>
+        <tr><td>
+<[+ main.textarea +] name=value rows=35 cols=12 style='width:99%'>[+ main.ttinfo.value +]</[+ main.textarea +]>
+        </td></tr>
+        </table>
+        </fieldset>
+            [+ IF main.ttinfo.locked == 0 +]
+                <p align=center><input name=savebutton value='Save' style="background-color: transparent; border: 0px;color:transparent;" type=image border=0 src=/img/admin/document-save.png></p>
+            <center>Сохранить изменения</center>
+            </p>
+        [+ END +]
+
+            </form>
+
+</center>
+[+ END +]
+
+[+ IF ( main.tt.raction == 'showall'
+    or main.tt.raction == 'deltt'
+    or main.tt.raction == 'locktt'
+    or main.tt.raction == 'unlocktt' )
+    and main.tt.ttform == 0
++]
+   <center>
+    <br>
+  <style type="text/css">
+   .locked A {
+    text-decoration: none;
+   }
+   .locked A:hover {
+    color: red;
+   }
+   .lockme A {
+    text-decoration: none;
+   }
+   .lockme A:hover {
+    color: green;
+   }
+  </style>
+
+        <table class=wrapper>
+        <tr>
+        <th>ID</th>
+        <th>Имя</th>
+
+        <th>Описание</th>
+        <th>Привязка</th>
+        <th>Действие</th>
+        </tr>
+
+
+    [+ FOREACH r = main.mrtid +][+ r = r.key +]
+    [+ regtid  = main.mrtid.$r.regtid +]
+    [+ rname  = main.mrtid.$r.rname +]
+    [+ cname  = main.mrtid.$r.cname +]
+    [+ regname  = main.mrtid.$r.regname +]
+    [+ locked  = main.mrtid.$r.locked +]
+
+            <tr>
+            <td align=left><a href=[+ main.program +]?regtid=[+ regtid +]&action=showtt >[+ regtid +]</a></td>
+            <td align=left><a href=[+ main.program +]?regtid=[+ regtid +]&action=showtt >[+ rname +]</a></td>
+            <td align=left width=300>[+ regname +]</td>
+            <td align=center>[+ cname +]</td>
+            <td align=center>
+            [+ IF locked +]
+            [+ bflag = 'u' +]
+            [+ baction = 'unlocktt' +]
+            [+ bclass = 'locked' +]
+            <img src=/img/i-delete.gif>
+            [+ ELSE +]
+            <a href=[+ main.program +]?regtid=[+ regtid +]&action=deltt>
+            [+ bflag = 'b' +]
+            [+ baction = 'locktt' +]
+            [+ bclass = 'lockme' +]
+            <img src=/img/i-delete.gif>
+            </a>
+            [+ END +]
+            <a href=[+ main.program +]?regtid=[+ regtid +]&action=showtt><img src=/img/i-edit.gif></a>
+            <font class=[+ bclass +]><a href=[+ main.program +]?regtid=[+ regtid +]&action=[+ baction +]>[[+ bflag +]]</a></font>
+            </td>
+            </td>
+            </tr>
+            [+ END +]
+        </TABLE>
+       <br>
+        <a href=[+ main.program +]?action=newtt><img style="background-color:transparent; border: 0px;" border=0 src=/img/admin/document-new.png></a>
+    </center>
+[+ END +]
+
+
+

@@ -1,0 +1,114 @@
+﻿        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+    <select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+    [+ FOREACH s = main.srvs +][+ s = s.key +]
+        [+ val = main.srvs.$s.0 +]
+        [+ name = main.srvs.$s.1 +]
+        [+ IF val == main.srvid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+        [+ END +]
+    </select>
+    &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+    <hr>
+
+
+    <table width=300>
+
+    <tr><td>
+    <fieldset><table><tr><td>
+
+    [+ IF main.srv.status +]
+    [+ status = 'Включен' +]
+    [+ pic = '/img/i-agree.gif' +]
+    [+ action = 'stop' +]
+    [+ altaction = 'Выключить' +]
+    [+ ELSE +]
+    [+ status = 'Выключен' +]
+    [+ pic = '/img/i-stop.gif' +]
+    [+ action = 'start' +]
+    [+ END +]
+    Статус сервера:  [+ status +]&nbsp;&nbsp;<a href=[+ main.program +]?srvid=[+ main.srvid +]&action=[+ action +]><img alt="[+ altaction +]" src=[+ pic +]></a><br>
+
+    [+ IF main.srv.rconstatus +]
+    [+ rconstatus = 'Включен' +]
+    [+ pic = '/img/i-agree.gif' +]
+    [+ ELSE +]
+    [+ rconstatus = 'Выключен' +]
+    [+ pic = '/img/i-stop.gif' +]
+    [+ END +]
+
+    Rcon статус: [+ rconstatus +] &nbsp;&nbsp;<img src=[+ pic +]>
+    </td></tr></table></fieldset>
+    </td></tr>
+    </table>
+
+    [+ main.errline +]
+
+    <table>
+    <tr>
+    <td>
+    <fieldset><legend>Параметры</legend>
+    <table><tr><td>
+    Название в игре: [+ main.rhltv.name +]<br>
+    Название сервера: [+ main.rhltv.hostname +]<br>
+    Пароль для входа в сервер: [+ main.rhltv.serverpassword +]<br>
+    Rcon пароль для входа в hltv: [+ main.rhltv.adminpassword +]<br>
+    IP HLTV: [+ main.srv.ipaddr +]:[+ main.srv.HLTVport +]
+    </td></tr></table>
+    </fieldset>
+    </td>
+    <td>
+    <fieldset><legend>Контроль</legend>
+
+    <table><tr><td>
+    <a href=[+ main.program +]?srvid=[+ main.srvid +]&rconstatus=[+ main.srv.rconstatus +]&action=record>Запуск</a>/
+    <a href=[+ main.program +]?srvid=[+ main.srvid +]&rconstatus=[+ main.srv.rconstatus +]&action=stop>Остановка</a><br>
+    </td></tr></table></fieldset>
+        </td>
+        <td>
+            <fieldset><legend>Статус</legend>
+            <table><tr><td>
+            [+ recstatus = 'Остановлено' +]
+            [+ recaction = 'record' +]
+            [+ recpic = '/img/i-stop.gif' +]
+            [+ IF main.rconresult and main.getform.action == 'record' +]
+            [+ recstatus = 'Идет запись' +]
+            [+ recaction = 'stop' +]
+            [+ recpic = '/img/i-agree.gif' +]
+            [+ END +]
+        [+ recstatus +]: <a href=[+ main.program +]?srvid=[+ main.srvid +]&rconstatus=[+ main.srv.rconstatus +]&action=[+ recaction +]><img src=[+ recpic +]></a>
+        </td></tr></table></fieldset>
+        </td>
+        </tr>
+    </table>
+
+    <br>
+
+    Rcon HLTV
+    [+ IF main.form.addhltvrcon == 'expand' or main.form.submitrconcmd +]
+    [+ val = 'close' +]
+    [+ buttonpic = '/img/bullet91.gif' +]
+    [+ ELSE +]
+    [+ val = 'expand' +]
+    [+ buttonpic = '/img/bullet9.gif' +]
+    [+ END +]
+    &nbsp;&nbsp;<input name=addhltvrcon value="[+ val +]" style="background-color:transparent;border: 0px;" type=image border=0 src="[+ buttonpic +]" >
+    [+ IF val == 'close' +]
+    <fieldset><legend>Rcon: [+ main.form.rconcmd +]</legend>
+    <[+ main.textarea +] cols=60 rows=25 name=rconresult readonly=readonly>[+ main.rconresult +]</[+ main.textarea +]><br>
+    <input type=text name=rconcmd value="" style='width:310px'>
+    <input type=hidden name=rconstatus value=[+ main.srv.rconstatus +]>
+    <input type=submit value="Отправить" name=submitrconcmd>
+    </fieldset>
+    [+ END +]
+
+    <fieldset><legend>Дэмки</legend>
+    <br><br><br> <br>  <br>  <br>  <br>  <br>
+    </fieldset>
+    </form>

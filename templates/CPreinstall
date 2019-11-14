@@ -1,0 +1,92 @@
+﻿        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+    <select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+    [+ FOREACH s = main.srvs +][+ s = s.key +]
+        [+ val = main.srvs.$s.0 +]
+        [+ name = main.srvs.$s.1 +]
+        [+ IF val == main.srvid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+        [+ END +]
+    </select>
+    &nbsp;&nbsp;<input name=submitsid value=submitsid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+    <hr>
+    <center><table>
+    <tr>
+    <td>
+
+    [+ IF main.errline +]
+
+    <h2>Переустановка сервера [+ main.srvid +]</h2>
+    [+ main.errline +]
+    <br>Дата текущей переустановки: [+ main.rtime +]
+
+    [+ ELSE +]
+
+    <table><tr><td>
+    <font size=2 color=orange>
+        В каких случаях нужно пользоваться переустановкой<br>
+    * Сервер не запускается<br>
+        * Сервер постоянно зависает<br>
+    * Сервер постоянно глючит<br>
+        * В результате неправильно установленных модов и плагинов<br>
+    </font>
+    </td></tr></table>
+    </td>
+    </tr>
+    </table></center>
+    <br>
+
+    <center><table>
+    <tr>
+    <td>
+    <table><tr><td>
+    Дата последней установки: [+ main.rtime +]
+    [+ IF main.reinstall_status != 1 +]
+    <br>Осталось: [+ main.diff +] минут
+    [+ END +]
+    </td></tr></table>
+    </td>
+    </tr>
+    [+ IF main.reinstall_status +]
+    </table></center>
+
+    <br>
+        <center><table border=1>
+        <tr>
+            <td>
+        <center><br><a href=[+ main.program +]?sid=[+ main.srvid +]&action=reinstall>
+        <img valign=center style='background-color:transparent;border:0px;' src=/img/admin/gnome-session-reboot1.png></a>
+        <h2>Переустановить</h2></center>
+        </td>
+        </tr>
+        </table></center>
+
+        <br>
+
+    <center><table>
+    [+ END +]
+    <tr>
+    <td>
+    <table><tr><td>
+
+    <font size=2 color=red>Внимание!<br>
+    * Переустановить сервер можно один раз в сутки.<br>
+    * При переустановке все настройки и файлы текущего сервера будут удалены.<br>
+    </font>
+    </td></tr></table>
+
+    [+ END +]
+    </td>
+    </tr>
+
+    </table>
+    </center>
+    <br>
+
+

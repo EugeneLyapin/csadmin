@@ -1,0 +1,48 @@
+﻿        <br>
+
+        <form action=[+ main.program +] name="searchlog" method=POST>
+            <table>
+            </tr>
+                <td>Выражение:</td>
+                <td><input type=text style='width:100px' name=regexp value=""></td>
+                <td>Error:</td>
+                <td><input type=checkbox name="checkbox_error" checked></td>
+                <td>Debug:</td>
+                <td><input type=checkbox name="checkbox_debug"></td>
+                <td>Период: с </td>
+                [+ FOREACH s = [ 'year', 'month', 'day' ] +]
+                [+ val = main.pdates.f.$s.val +]
+                <td>
+            <input type=text name=f_[+ s +] value="[+ val +]"
+                        onchange="this.value=this.value.replace(/([^0-9])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9])/g,'');"
+                        style='width: [+ main.curdate.$s.w +]'>
+                </td>
+                [+ END +]
+                <td>по </td>
+                [+ FOREACH s = [ 'year', 'month', 'day' ] +]
+                [+ val = main.pdates.t.$s.val +]
+                <td>
+            <input type=text name=t_[+ s +] value="[+ val +]"
+                        onchange="this.value=this.value.replace(/([^0-9])/g,'');"
+                        onkeyup="var n=this.value.replace(/([^0-9])/g,'');
+                        if(n!=this.value) this.value=n;"
+                        onmousedown="this.value=this.value.replace(/([^0-9])/g,'');"
+                        style='width: [+ main.curdate.$s.w +]'>
+                </td>
+                [+ END +]
+                <td><input name=search value='search' style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+            </tr>
+            </table>
+
+    </form>
+            <table>
+            <tr><td>
+            <font class=log>
+            [+ main.logdata +]
+            </font>
+            </td></tr>
+            </table>
+

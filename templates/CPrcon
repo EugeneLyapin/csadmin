@@ -1,0 +1,150 @@
+﻿        <br/><strong>Пользователь</strong>: [+ main.user +]
+    <br/><form action="[+ main.program +]" name=srv method=post>
+    <img src=/img/i-comp.gif> Сервер ID
+    <select name=srvid id=srvid STYLE="width: 180px"  onchange="hideconfig()">
+    [+ FOREACH s = main.srvs +][+ s = s.key +]
+        [+ val = main.srvs.$s.0 +]
+        [+ name = main.srvs.$s.1 +]
+        [+ IF val == main.srvid +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ val +] [+ sflag +]>[+ name +]</option>
+        [+ END +]
+    </select>
+    &nbsp;&nbsp;<input name=submitsrvid value=submitsrvid style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <br/>
+    <hr>
+
+    [+ IF main.srv.status +]
+    [+ status = 'Включен' +]
+    [+ pic = '/img/i-agree.gif' +]
+    [+ action = 'stop' +]
+    [+ altaction = 'Выключить' +]
+    [+ ELSE +]
+    [+ status = 'Выключен' +]
+    [+ pic = '/img/i-stop.gif' +]
+    [+ action = 'start' +]
+    [+ END +]
+    Статус сервера:  [+ status +]&nbsp;&nbsp;<a href=[+ main.program +]?srvid=[+ main.srvid +]&action=[+ action +]><img alt="[+ altaction +]" src=[+ pic +]></a><br>
+
+    [+ IF main.srv.rconstatus +]
+    [+ rconstatus = 'Включен' +]
+    [+ pic = '/img/i-agree.gif' +]
+    [+ ELSE +]
+    [+ rconstatus = 'Выключен' +]
+    [+ pic = '/img/i-stop.gif' +]
+    [+ END +]
+
+    Rcon статус: [+ rconstatus +] &nbsp;&nbsp;<img src=[+ pic +]><br>
+
+    [+ main.errline +]
+
+    <br/>
+    <table><tr class=wrapper>
+    <td>
+        <center> Консоль </center>
+    </td>
+    <td>
+        <center> Команды </center>
+    </td>
+    </tr>
+    <tr>
+    <td>
+    <table width=400><tr><td>
+    <fieldset><legend>Rcon: [+ main.form.rconcmd +]</legend>
+    <table><tr><td>
+    <[+ main.textarea +] cols=60 rows=25 name=rconresult readonly=readonly>[+ main.rconresult +]</[+ main.textarea +]><br>
+    <input type=text name=rconcmd value="" style='width:310px'>
+    <input type=hidden name=rconstatus value=[+ main.srv.rconstatus +]>
+    <input type=submit value="Отправить" name=submitrconcmd>
+    </td></tr></table>
+    </fieldset>
+    </td></tr></table>
+    </form>
+
+    </td><td>
+
+    <fieldset><legend>Выберите карту</legend>
+    <table><tr><td>
+    <form action="[+ main.program +]" name=rconform1 method=post>
+        <select name=mapname id=mapname STYLE="width: 150px"  onchange="hideconfig()">
+        [+ FOREACH m = main.rmapstxt +][+ m = m.key +]
+        [+ mapval = main.rmapstxt.$m.0 +]
+        [+ mapname = main.rmapstxt.$m.1 +]
+        [+ IF mapval == main.mapname +]
+        [+ sflag = 'selected' +]
+        [+ ELSE +]
+        [+ sflag = '' +]
+        [+ END +]
+        <option value=[+ mapval +] [+ sflag +]>[+ mapname +]</option>
+        [+ END +]
+        </select>
+        &nbsp;<input id=map name=selectmap value=selectmap style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif >
+    <p>
+
+    <select name=userid id=userid STYLE="width: 150px"  onchange="hideconfig()">
+        [+ FOREACH m = main.rp +][+ m = m.key +]
+        [+ pval = main.rp.$m.0 +]
+        [+ pname = main.rp.$m.1 +]
+        <option value=[+ pval +]>[+ pname +]</option>
+        [+ END +]
+    </select>
+    <input type=submit value="Кикнуть" name=kickcmd>
+    </td></tr></table>
+    </fieldset>
+
+    <br>
+    <fieldset>
+    <table align=center><tr>
+    <td>Рестарт сервера</td>
+    <td align=center><input name=restartcmd value=restartcmd style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+    </tr>
+
+    <tr>
+    <td>Запрос статуса</td>
+    <td align=center><input name=statuscmd value=statuscmd style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+    </tr>
+
+    <tr>
+    <td>Отключить VAC</td>
+    <td align=center><a href=[+ main.program +]?srvid=[+ main.srvid +]&rconstatus=[+ main.srv.rconstatus +]&action=stopvaccmd><img src=/img/i-agree.gif></a></td>
+    </tr>
+
+    <tr>
+    <td>Отключить AMXMOD</td>
+    <td align=center><a href=[+ main.program +]?srvid=[+ main.srvid +]&rconstatus=[+ main.srv.rconstatus +]&action=stopamxmodcmd><img src=/img/i-agree.gif></a></td>
+    </tr>
+
+    <tr>
+    <td>Список плагинов</td>
+    <td align=center><input name=pluginscmd value=pluginscmd style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+    </tr>
+
+    <tr>
+    <td>Список модулей </td>
+    <td align=center><input name=modulescmd value=modulescmd style="background-color:transparent;border: 0px;" type=image border=0 src=/img/bullet9.gif ></td>
+    </tr>
+    </table>
+    </fieldset>
+
+    <br>
+    <fieldset><table><tr><td>
+    Сменить пароль RCON<br>
+    <input type=text value="" name=rconpass>
+    <input type=submit value="Сменить" name=rconpasscmd><br>
+    </td></tr></table></fieldset>
+
+    <br>
+    <fieldset><table><tr><td>
+    Установить пароль на сервер<br>
+    <input type=text value="" name=srvpass>
+    <input type=submit value="Сменить" name=srvpasscmd><br>
+    <input type=hidden value=[+ main.srvid +] name=srvid>
+    <input type=hidden name=rconstatus value=[+ main.srv.rconstatus +]>
+    </td></tr></table></fieldset>
+    </form>
+    </td></tr></table>
+
+

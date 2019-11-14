@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <title>ERROR :: Ошибка</title>
+        <meta name="Keywords" content="бесплатный игровой хостинг, бесплатная аренда игровых серверов,аренда игровых серверов, cs 1.6, counter strike" />
+        <meta name="Description" content="Бесплатный игровой хостинг, бесплатная аренда игровых серверов,аренда игровых серверов, cs 1.6, counter strike. Универсальные тарифные планы, тех.поддержка 24*7" />
+        <link rel="stylesheet" href="/css/admin/header.css" type="text/css" />
+        <link rel="stylesheet" href="/css/admin/main.css" type="text/css" />
+        <link rel="stylesheet" href="/css/admin/pre.css" type="text/css" />
+        <link href="/img/counter-strike1.6.gif" rel="shortcut icon" />
+
+        <meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+        <script type="text/javascript" src="/js/valid.js"></script>
+        <script type="text/javascript" src="/js/tooltip.js"></script>
+</head>
+<body>
+        <div id="g-wrapper">
+        <div id="g-header">
+        <div id="g-m-logo" class='mainlogo'>
+        <img src="/img/admin/alert.png"  alt=".error" /></div>
+
+                       <div id="g-buttons">
+              <table><tr>
+                <td align=center><a href=#><img src=/img/admin/search.png style="border: 0px;"></a><br><a href=#>Поиск</a></td>
+               <td align=center><a href=/help/><img src=/img/admin/help.png style="border: 0px;"></a><br><a href=/help/>Помощь</a></td>
+               <td align=center><a href=/exit/><img src=/img/admin/exit.png style="border: 0px;"></a><br><a href=/exit/>Выход</a></td>
+            </tr></table>
+      </div>
+
+<h1><font color=red>Ошибка</font></h1>
+      </div>
+<div id="g-main-nav">
+<div class="mainmenu">
+<div class=padheader>   error :: Ошибка --
+User: everyone </div>
+</div>
+</div>
+  <div id="g-page">
+   <div id="g-page-material">
+<style type="text/css">
+.errheader {
+ font-size: 22px;
+ border: 0px;
+ font-weight: bold;
+ font-family: Arial;
+ color: #d00;
+ align: center;
+ padding: 0px;
+ margin: .0em;
+ overflow: auto;
+}
+</style>
+
+   <center>
+   <table width=350><tr><td align=center>
+   <fieldset><legend>description</legend>
+   <table><tr><td align=justify>
+   <font class=errheader><br>User disabled
+   </font><br><br>
+   Недостаточно прав для завершения операции<br>
+   Обратитесь к администратору сайта<br>
+   <br>
+   <a href=/>Главная</a> | <a href=/login/>Войти</a>
+   <br><br></td></tr></table>
+   </td></tr>
+   </table>
+   </fieldset>
+
+   </center>
+   </div>
+   </div>
+</div>
+    <div id="footer-bottom">
+    <ul id="footer-buttons">
+        <li>copyright © 2010 <br />Все права защищены</li>
+    </ul>
+
+   <div>
+</body>
+</html>

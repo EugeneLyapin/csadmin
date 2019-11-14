@@ -1,0 +1,164 @@
+
+
+
+
+
+	/* @@@@@@@@ search block*/
+
+		TD.searchblock{
+			padding-top: 9px;
+			padding-left: 5px;
+			/* white-space:nowrap; */
+			font-size:0.75em;
+			font-weight:bold;
+			}
+		td.searchblock,
+		TD.searchblock A{
+			text-decoration:none;
+			color: #ccc;
+			}
+		td.searchblock A:HOVER{color: #788p8f;}
+
+		div.searchblock{
+			margin:5px 0 2px 0;
+			width:100%;
+			background-color: #bababa;
+			}
+
+		.searchblock .block-tr{background: url('/img/search_tr.gif') top right no-repeat;}
+		.searchblock .block-br{background: url('/img/search_br.gif') bottom right no-repeat;}
+		.searchblock .block-bl{background: url('/img/search_bl.gif') bottom left no-repeat;}
+		.searchblock .block-tl{background: url('/img/search_tl.gif') top left no-repeat;}
+		.searchblock .block-cont{padding: 5px 9px;}
+		.searchblock .block-cont INPUT{
+			vertical-align:middle;
+			}
+		TR.headline DIV.searchblock TABLE TD{
+			padding:0;
+			vertical-align: middle;
+			}
+			TR.headline DIV.searchblock TABLE TD.searchblock{
+				padding-right:7px;
+				width:90%;
+				}
+			TR.headline DIV.searchblock TABLE TD.searchblock INPUT{
+				margin:0;
+				padding:0;
+				width:100%;
+				}
+
+			TR.headline .accent{
+				color:#313131;
+				}
+
+
+/* @@@@@@@ subhead styles */
+
+
+        div.phones{
+                margin:12px 0;
+                padding:0;
+                text-align:center;
+                white-space:nowrap;
+                font-size:0.9em;
+                color:#737373;
+                }
+                .phones UL{
+                        margin:0;
+                        padding:0;
+                        list-style:none;
+                        }
+                        .phones LI{
+                                display:inline;
+                                margin:0 3em 0 0;
+                                }
+                        .phones LI.last{
+                                margin-right:0;
+                                }
+                div.phones SPAN.phone{
+                        padding-right:2.25em;
+                        }
+                        div.phones SPAN.phone.last{
+                                padding-right:0;
+                                }
+                div.phones  A{
+                        text-decoration:underline;
+                        color: #737373;
+                        }
+                        div.phones A:HOVER{
+                                color: #313131;
+                                }
+
+
+
+
+	/* @@@@@@@ top menu styles*/
+
+	.mainmenu{
+		margin:0;
+		padding:1px 0;
+		
+		-webkit-border-radius:4px;
+		-moz-border-radius:4px;
+		border-radius:4px;
+
+		background-color:#ccc;
+		text-align:center;
+		font-size:11px;
+		font-weight:bold;
+		}
+		.mainmenu UL{
+			display:block;
+			margin:0 auto;
+			line-height:1.5;
+			padding:3px 0;
+			list-style:none;
+			}
+			.mainmenu LI{
+				display:inline;
+				margin:0 4px 0 0px;
+				
+				
+				}
+				.mainmenu LI a{
+					padding:3px 8px;
+					
+				}
+			.mainmenu LI.last{
+				border-right-width: 0;
+				}
+			.mainmenu LI.active{
+				
+				}
+				.mainmenu LI.active A{
+					color:#000;
+					background-color:#fff;
+					border-radius:10px;
+					-webkit-border-radius:10px;
+					-moz-border-radius:10px;
+					}
+					.mainmenu LI.active A:hover{
+						color:#000
+						}
+
+	.mainmenu A{
+		color: #777;
+		text-decoration:none;
+		}
+		.mainmenu A:HOVER{
+			text-decoration:underline;
+			color: #000;
+			}
+
+	.mainmenu.bottom{
+		background:none;
+		}
+	.mainmenu.bottom A{
+		margin:0;
+		padding:0 9px 0 10px;
+		border-color:#313131;
+		color:#313131;
+		}
+		.mainmenu.bottom A:HOVER{
+			color:#313131;
+			}
