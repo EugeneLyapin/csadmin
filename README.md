@@ -1,13 +1,21 @@
 # csadmin
-counter strike 1.6 control panel
+Counter Strike 1.6 Web Control panel
 
-## Usage
-This Web interface helps to create/delete/launch/stop/modify counter strike servers.
+## Features
+* Create/delete/launch/stop/modify counter strike servers
+* Billing and payments
+* Windows platform as backend for CS servers
+* CPU affinity for CS servers
+* MySQL as data backend
+* Apache2+mod_perl frontend
+* Logging
+* Global authorization system based on roles
+* Add/delete counter strike modes and maps
 
 ## Prerequisites
 * Perl5
 * MySQL server and client
-* Apache2+PERL5LIB
+* Apache2+mod_perl
 
 Perl modules:
 * Template
